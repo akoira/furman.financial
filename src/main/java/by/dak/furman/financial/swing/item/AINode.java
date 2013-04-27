@@ -1,12 +1,11 @@
 package by.dak.furman.financial.swing.item;
 
-import by.dak.common.persistence.SearchFilter;
 import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.common.swing.treetable.Property;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.ItemType;
-import by.dak.furman.financial.service.IItemService;
+import by.dak.furman.financial.Period;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,9 +17,11 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 11:49 AM
  */
-public abstract class AItemNode<V> extends ATreeTableNode<V>
+public abstract class AINode<V> extends ATreeTableNode<V, AINode>
 {
-    private IItemService itemService;
+    private Category category;
+    private ItemType itemType;
+    private Period period;
 
     public abstract void setName(String name);
 
@@ -34,28 +35,6 @@ public abstract class AItemNode<V> extends ATreeTableNode<V>
 
     public abstract void setCreated(Date created);
 
-    public IItemService getItemService()
-    {
-        return itemService;
-    }
-
-    public void setItemService(IItemService itemService)
-    {
-        this.itemService = itemService;
-    }
-
-    public SearchFilter getSearchFilter()
-    {
-        AItemNode parent = (AItemNode) getParent();
-        SearchFilter searchFilter;
-        if (parent != null)
-            searchFilter = SearchFilter.valueOf(parent.getSearchFilter());
-        else
-            searchFilter = SearchFilter.instanceUnbound();
-        return searchFilter;
-    }
-
-
     public static List<Property> createProperties(Object value)
     {
         ArrayList<Property> properties = new ArrayList<Property>();
@@ -65,7 +44,13 @@ public abstract class AItemNode<V> extends ATreeTableNode<V>
             properties.add(Property.valueOf(Item.PROPERTY_amount, true));
             properties.add(Property.valueOf(Item.PROPERTY_created, true));
         }
-        else if (value == null || value instanceof ItemType || value instanceof Category)
+        else if (value instanceof ItemType)
+        {
+            properties.add(Property.valueOf(Item.PROPERTY_name, true));
+            properties.add(Property.valueOf(Item.PROPERTY_amount, false));
+            properties.add(Property.valueOf(Item.PROPERTY_created, false));
+        }
+        else if (value == null || value instanceof Category)
         {
             properties.add(Property.valueOf(Item.PROPERTY_name, false));
             properties.add(Property.valueOf(Item.PROPERTY_amount, false));
@@ -76,4 +61,42 @@ public abstract class AItemNode<V> extends ATreeTableNode<V>
         return properties;
     }
 
+
+    public Category getCategory()
+    {
+        return category;
+    }
+
+    public void setCategory(Category category)
+    {
+        this.category = category;
+    }
+
+    public ItemType getItemType()
+    {
+        return itemType;
+    }
+
+    public void setItemType(ItemType itemType)
+    {
+        this.itemType = itemType;
+    }
+
+    public void fillChildNode(AINode child)
+    {
+        child.setCategory(getCategory());
+        child.setItemType(getItemType());
+        child.setPeriod(getPeriod());
+        child.setProperties(createProperties(child.getValue()));
+    }
+
+    public void setPeriod(Period period)
+    {
+        this.period = period;
+    }
+
+    public Period getPeriod()
+    {
+        return period;
+    }
 }

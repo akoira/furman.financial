@@ -11,7 +11,7 @@ import java.util.List;
  * Date: 4/24/13
  * Time: 8:47 PM
  */
-public abstract class ATreeTableNode<V> extends AbstractMutableTreeTableNode
+public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends AbstractMutableTreeTableNode
 {
     private List<Property> properties = new ArrayList<Property>();
 
@@ -75,4 +75,6 @@ public abstract class ATreeTableNode<V> extends AbstractMutableTreeTableNode
         this.properties.clear();
         this.properties.addAll(properties);
     }
+
+    public abstract void fillChildNode(C child);
 }

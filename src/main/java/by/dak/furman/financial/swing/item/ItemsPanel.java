@@ -1,7 +1,8 @@
 package by.dak.furman.financial.swing.item;
 
 import by.dak.furman.financial.ItemType;
-import by.dak.furman.financial.service.IItemTypeService;
+import by.dak.furman.financial.app.AppConfig;
+import by.dak.furman.financial.swing.item.action.SaveItemType;
 import com.jgoodies.common.collect.LinkedListModel;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTreeTable;
@@ -9,6 +10,8 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.TreeTableCellEditor;
 
 import javax.swing.*;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import java.awt.*;
 
 /**
@@ -25,7 +28,7 @@ public class ItemsPanel extends JXPanel
 
     private LinkedListModel<ItemType> itemTypes;
 
-    private IItemTypeService itemTypeService;
+    private AppConfig appConfig;
 
 
     private RootNode createRoot()
@@ -47,6 +50,7 @@ public class ItemsPanel extends JXPanel
         model = new DefaultTreeTableModel(createRoot());
         treeTable.setTreeTableModel(model);
 
+
         Runnable runnable = new Runnable()
         {
             @Override
@@ -63,6 +67,39 @@ public class ItemsPanel extends JXPanel
         };
 
         SwingUtilities.invokeLater(runnable);
+
+        model.addTreeModelListener(new TreeModelListener()
+        {
+            @Override
+            public void treeNodesChanged(TreeModelEvent e)
+            {
+                Object[] children = e.getChildren();
+                if (children != null && children.length > 0 && children[0] instanceof ItemTypeNode)
+                {
+                    ItemTypeNode itemTypeNode = (ItemTypeNode) children[0];
+                    SaveItemType action = new SaveItemType();
+                    action.setItemsPanel(ItemsPanel.this);
+                    action.setParentNode((AINode) itemTypeNode.getParent());
+                    action.setItemType(itemTypeNode.getItemType());
+                    action.action();
+                }
+            }
+
+            @Override
+            public void treeNodesInserted(TreeModelEvent e)
+            {
+            }
+
+            @Override
+            public void treeNodesRemoved(TreeModelEvent e)
+            {
+            }
+
+            @Override
+            public void treeStructureChanged(TreeModelEvent e)
+            {
+            }
+        });
         return this;
     }
 
@@ -85,18 +122,18 @@ public class ItemsPanel extends JXPanel
     {
         if (itemTypes == null)
         {
-            itemTypes = new LinkedListModel<ItemType>(itemTypeService.getAll());
+            itemTypes = new LinkedListModel<ItemType>(appConfig.getItemTypeService().getAll());
         }
         return itemTypes;
     }
 
-    public IItemTypeService getItemTypeService()
+    public AppConfig getAppConfig()
     {
-        return itemTypeService;
+        return appConfig;
     }
 
-    public void setItemTypeService(IItemTypeService itemTypeService)
+    public void setAppConfig(AppConfig appConfig)
     {
-        this.itemTypeService = itemTypeService;
+        this.appConfig = appConfig;
     }
 }

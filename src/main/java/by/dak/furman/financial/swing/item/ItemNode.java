@@ -10,7 +10,7 @@ import java.util.Date;
  * Date: 4/25/13
  * Time: 7:06 PM
  */
-public class ItemNode extends AItemNode<Item>
+public class ItemNode extends AINode<Item>
 {
     public void setName(String string)
     {

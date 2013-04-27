@@ -7,5 +7,5 @@ package by.dak.furman.financial.swing.category;
  */
 public interface ICategoriesPanelDelegate
 {
-    public void selectNode(ACategoryNode node);
+    public void selectNode(ACNode node);
 }

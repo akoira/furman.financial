@@ -1,8 +1,10 @@
 package by.dak.furman.financial.service;
 
 import by.dak.common.persistence.SearchFilter;
+import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.ItemType;
+import by.dak.furman.financial.Period;
 import by.dak.furman.financial.dao.IItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,4 +41,20 @@ public class ItemService extends AService<Item> implements IItemService
     {
         return getDao().getSumBy(searchFilter);
     }
+
+    public SearchFilter getSearchFilter(Category category, ItemType itemType, Period period)
+    {
+        SearchFilter searchFilter = SearchFilter.instanceUnbound();
+        if (category != null)
+            searchFilter.eq(Item.PROPERTY_category, category);
+        if (itemType != null)
+            searchFilter.eq(Item.PROPERTY_itemType, itemType);
+        if (period != null)
+        {
+            searchFilter.ge(Item.PROPERTY_created, period.getStartDate());
+            searchFilter.lt(Item.PROPERTY_created, period.getEndDate());
+        }
+        return searchFilter;
+    }
+
 }

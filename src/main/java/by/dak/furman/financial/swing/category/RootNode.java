@@ -9,7 +9,7 @@ import javax.swing.tree.TreePath;
  * Date: 4/25/13
  * Time: 1:27 PM
  */
-public class RootNode extends PeriodNode
+public class RootNode extends APeriodNode
 {
 
     public TreePath getCurrentPeriodPath()
@@ -24,7 +24,7 @@ public class RootNode extends PeriodNode
         for (int i = 0; i < count; i++)
         {
             TreeTableNode child = node.getChildAt(i);
-            if (child instanceof PeriodNode && ((PeriodNode) child).getValue().isCurrent())
+            if (child instanceof APeriodNode && ((APeriodNode) child).getValue().isCurrent())
             {
                 path = path.pathByAddingChild(child);
                 path = initPath(child, path);

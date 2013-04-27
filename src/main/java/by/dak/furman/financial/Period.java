@@ -3,6 +3,7 @@ package by.dak.furman.financial;
 import by.dak.common.lang.StringValue;
 import by.dak.furman.financial.converter.Period2StringConverter;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -56,5 +57,13 @@ public class Period
     public void setCurrent(boolean current)
     {
         this.current = current;
+    }
+
+    public static void resetTime(Calendar calendar)
+    {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
     }
 }

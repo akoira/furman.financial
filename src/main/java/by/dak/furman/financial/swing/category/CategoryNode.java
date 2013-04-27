@@ -1,9 +1,7 @@
 package by.dak.furman.financial.swing.category;
 
 import by.dak.common.lang.StringValue;
-import by.dak.common.persistence.SearchFilter;
 import by.dak.furman.financial.Category;
-import by.dak.furman.financial.Item;
 import by.dak.furman.financial.converter.Category2StringConverter;
 
 /**
@@ -12,7 +10,7 @@ import by.dak.furman.financial.converter.Category2StringConverter;
  * Time: 4:39 PM
  */
 @StringValue(converterClass = Category2StringConverter.class)
-public class CategoryNode extends ACategoryNode<Category>
+public class CategoryNode extends ACNode<Category>
 {
 
     public CategoryNode()
@@ -28,13 +26,5 @@ public class CategoryNode extends ACategoryNode<Category>
     public void setName(String value)
     {
         getValue().setName(value);
-    }
-
-    @Override
-    public SearchFilter getSearchFilter()
-    {
-        SearchFilter searchFilter = super.getSearchFilter();
-        searchFilter.eq(Item.PROPERTY_category, getValue());
-        return searchFilter;
     }
 }

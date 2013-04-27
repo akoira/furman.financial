@@ -1,5 +1,6 @@
 package by.dak.furman.financial.swing.item.action;
 
+import by.dak.furman.financial.swing.item.AINode;
 import by.dak.furman.financial.swing.item.ItemsPanel;
 import by.dak.furman.financial.swing.item.RootNode;
 import org.jdesktop.application.Application;
@@ -11,8 +12,10 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
  * Date: 4/25/13
  * Time: 1:09 PM
  */
-public abstract class AItemAction
+public abstract class AIAction
 {
+    private AINode parentNode;
+
     private ItemsPanel itemsPanel;
 
     private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
@@ -68,5 +71,15 @@ public abstract class AItemAction
     public void setItemsPanel(ItemsPanel itemsPanel)
     {
         this.itemsPanel = itemsPanel;
+    }
+
+    public AINode getParentNode()
+    {
+        return parentNode;
+    }
+
+    public void setParentNode(AINode parentNode)
+    {
+        this.parentNode = parentNode;
     }
 }

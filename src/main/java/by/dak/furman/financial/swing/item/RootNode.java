@@ -10,7 +10,7 @@ import java.util.Date;
  * Date: 4/25/13
  * Time: 8:55 PM
  */
-public class RootNode extends AItemNode<Item>
+public class RootNode extends AINode<Item>
 {
     private BigDecimal amount;
     private Date created;

@@ -1,8 +1,10 @@
 package by.dak.furman.financial.service;
 
 import by.dak.common.persistence.SearchFilter;
+import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.ItemType;
+import by.dak.furman.financial.Period;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -20,4 +22,6 @@ public interface IItemService extends IService<Item>
 
     @Transactional(readOnly = true)
     BigDecimal getSumBy(SearchFilter searchFilter);
+
+    SearchFilter getSearchFilter(Category category, ItemType itemType, Period period);
 }

@@ -10,7 +10,7 @@ import java.util.Date;
  * Date: 4/25/13
  * Time: 7:06 PM
  */
-public class ItemTypeNode extends AItemNode<ItemType>
+public class ItemTypeNode extends AINode<ItemType>
 {
     private BigDecimal amount;
     private Date created;
@@ -23,6 +23,7 @@ public class ItemTypeNode extends AItemNode<ItemType>
     @Override
     public void setName(String name)
     {
+        getValue().setName(name);
     }
 
     @Override

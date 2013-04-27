@@ -1,36 +1,32 @@
 package by.dak.furman.financial.swing.category;
 
+import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.furman.financial.Category;
-import by.dak.furman.financial.swing.category.action.AddCategory;
-import by.dak.furman.financial.swing.category.action.ChangeCategory;
+import by.dak.furman.financial.Period;
+import by.dak.furman.financial.PeriodType;
+import by.dak.furman.financial.swing.ATreeTablePanel;
 import by.dak.furman.financial.swing.category.action.DeleteCategory;
-import by.dak.furman.financial.swing.category.action.RefreshCategories;
-import org.jdesktop.swingx.JXPanel;
+import by.dak.furman.financial.swing.category.action.SaveCategory;
 import org.jdesktop.swingx.JXTextField;
-import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import javax.swing.*;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * User: akoyro
  * Date: 4/22/13
  * Time: 11:23 AM
  */
-public class CategoriesPanel extends JXPanel
+public class CategoriesPanel extends ATreeTablePanel
 {
     public static final String ACTION_deleteCategory = "deleteCategory";
-
-    private JScrollPane scrollPane;
-    private JXTreeTable tree;
-    private DefaultTreeTableModel model;
 
     private ICategoriesPanelDelegate delegate;
 
@@ -39,40 +35,43 @@ public class CategoriesPanel extends JXPanel
 
     private Action actionDelete;
 
-    public CategoriesPanel init()
+    @Override
+    public ATreeTableNode createRootNode()
     {
-        setLayout(new BorderLayout());
-        tree = new JXTreeTable();
-        tree.setTreeCellRenderer(new DefaultTreeTableRenderer());
-        tree.setScrollsOnExpand(true);
-        tree.setExpandsSelectedPaths(true);
-        tree.setDefaultEditor(Category.class, new DefaultCellEditor(new JXTextField()));
+        Period period = new Period();
+        period.setPeriodType(PeriodType.ALL);
+        period.setCurrent(true);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 1);
+        period.setEndDate(calendar.getTime());
+        period.setStartDate(new Date(0));
 
-        scrollPane = new JScrollPane(tree);
-        add(scrollPane, BorderLayout.CENTER);
+        RootNode rootNode = new RootNode();
+        rootNode.setPeriod(period);
+        rootNode.setValue(period);
+        rootNode.setProperties(RootNode.createProperties(period));
 
-        model = new DefaultTreeTableModel();
-        tree.setTreeTableModel(model);
-        refresh();
-
-        model.addTreeModelListener(getTreeModelListener());
-        tree.getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionListener());
-        return this;
+        return rootNode;
     }
 
-    private void refresh()
+    public void init()
     {
-        RefreshCategories refreshCategories = new RefreshCategories();
-        refreshCategories.setCategoriesPanel(this);
-        refreshCategories.action();
+        super.init();
+
+        getTreeTable().setDefaultEditor(Category.class, new DefaultCellEditor(new JXTextField()));
+
+        getModel().addTreeModelListener(getTreeModelListener());
+        getTreeTable().getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionListener());
+
+        initActions();
     }
 
     private void initActions()
     {
 
-        tree.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,
+        getTreeTable().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,
                 0), ACTION_deleteCategory);
-        tree.getActionMap().put(ACTION_deleteCategory, getActionDelete());
+        getTreeTable().getActionMap().put(ACTION_deleteCategory, getActionDelete());
     }
 
     private TreeModelListener getTreeModelListener()
@@ -87,10 +86,10 @@ public class CategoriesPanel extends JXPanel
                     if (node instanceof CategoryNode)
                     {
                         CategoryNode cNode = (CategoryNode) node;
-                        if (cNode.getParent() == getModel().getRoot())
-                            AddCategory.valueOf(cNode, CategoriesPanel.this).action();
-                        else
-                            ChangeCategory.valueOf(cNode, CategoriesPanel.this).action();
+                        SaveCategory saveCategory = new SaveCategory();
+                        saveCategory.setNode(cNode);
+                        saveCategory.setPanel(CategoriesPanel.this);
+                        saveCategory.action();
                     }
                 }
 
@@ -126,7 +125,7 @@ public class CategoriesPanel extends JXPanel
                     {
                         if (e.getNewLeadSelectionPath() != null)
                         {
-                            ACategoryNode node = (ACategoryNode) e.getNewLeadSelectionPath().getLastPathComponent();
+                            ACNode node = (ACNode) e.getNewLeadSelectionPath().getLastPathComponent();
                             delegate.selectNode(node);
                         }
                     }
@@ -134,16 +133,6 @@ public class CategoriesPanel extends JXPanel
             };
         return treeSelectionListener;
 
-    }
-
-    public DefaultTreeTableModel getModel()
-    {
-        return model;
-    }
-
-    public JXTreeTable getTree()
-    {
-        return tree;
     }
 
     private Action getActionDelete()
@@ -155,8 +144,8 @@ public class CategoriesPanel extends JXPanel
                 public void actionPerformed(ActionEvent e)
                 {
                     DeleteCategory deleteCategory = new DeleteCategory();
-                    deleteCategory.setCategoriesPanel(CategoriesPanel.this);
-                    Object node = getTree().getTreeSelectionModel().getLeadSelectionPath().getLastPathComponent();
+                    deleteCategory.setPanel(CategoriesPanel.this);
+                    Object node = getTreeTable().getTreeSelectionModel().getLeadSelectionPath().getLastPathComponent();
                     if (node instanceof CategoryNode)
                     {
                         deleteCategory.setCategoryNode((CategoryNode) node);

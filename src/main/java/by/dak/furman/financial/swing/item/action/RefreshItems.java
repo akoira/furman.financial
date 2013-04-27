@@ -5,12 +5,11 @@ import by.dak.furman.financial.app.AppConfig;
 import by.dak.furman.financial.service.ICategoryService;
 import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IItemTypeService;
-import by.dak.furman.financial.swing.category.ACategoryNode;
-import by.dak.furman.financial.swing.item.AItemNode;
+import by.dak.furman.financial.swing.category.ACNode;
+import by.dak.furman.financial.swing.item.AINode;
 import by.dak.furman.financial.swing.item.CategoryNode;
+import by.dak.furman.financial.swing.item.RootNode;
 
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -18,17 +17,19 @@ import java.util.List;
  * Date: 4/25/13
  * Time: 1:03 PM
  */
-public class RefreshItems extends AItemAction
+public class RefreshItems extends ARefreshAction<RootNode>
 {
     private ICategoryService categoryService = AppConfig.getAppConfig().getCategoryService();
     private IItemService itemService = AppConfig.getAppConfig().getItemService();
     private IItemTypeService iItemTypeService = AppConfig.getAppConfig().getItemTypeService();
 
-    private ACategoryNode categoryNode;
+    private ACNode categoryNode;
 
     protected void makeAction()
     {
         removeNodes();
+
+        getRootNode().setCategory(categoryNode != null ? categoryNode.getCategory() : null);
 
         if (needCategoryNode())
         {
@@ -36,12 +37,15 @@ public class RefreshItems extends AItemAction
             for (Category category : list)
             {
                 CategoryNode node = createCategoryNode(category);
-                getModel().insertNodeInto(node, getRootNode(), getRootNode().getChildCount());
-                addNewItem(node);
+
+                RefereshCategoryNode refereshCategoryNode = new RefereshCategoryNode();
+                refereshCategoryNode.setItemsPanel(this.getItemsPanel());
+                refereshCategoryNode.setParentNode(node);
+                refereshCategoryNode.action();
             }
         }
 
-/*        addNewItem();
+/*        addNewItemNode();
 
         List<ItemType> itemTypes = iItemTypeService.getAll();
         for (ItemType itemType : itemTypes)
@@ -64,25 +68,26 @@ public class RefreshItems extends AItemAction
         } */
     }
 
-    private void removeNodes()
+    private void addNewItemTypeNode(CategoryNode node)
     {
-        List<AItemNode> nodes = Collections.list((Enumeration<AItemNode>) getRootNode().children());
-        for (AItemNode node : nodes)
-        {
-            getModel().removeNodeFromParent(node);
-        }
+        AddNewItemType addNewItemType = new AddNewItemType();
+        addNewItemType.setParentNode(node);
+        addNewItemType.setItemsPanel(getItemsPanel());
+        addNewItemType.action();
     }
 
     private CategoryNode createCategoryNode(Category category)
     {
         CategoryNode node = new CategoryNode();
-        node.setItemService(itemService);
         node.setValue(category);
-        node.setProperties(AItemNode.createProperties(category));
+        getParentNode().fillChildNode(node);
+
+        node.setCategory(category);
+        getModel().insertNodeInto(node, getParentNode(), getParentNode().getChildCount());
         return node;
     }
 
-    private void addNewItem(AItemNode parent)
+    private void addNewItemNode(AINode parent)
     {
         AddNewItem addNewItem = new AddNewItem();
         addNewItem.setParentNode(parent);
@@ -91,12 +96,12 @@ public class RefreshItems extends AItemAction
 
     }
 
-    public ACategoryNode getCategoryNode()
+    public ACNode getCategoryNode()
     {
         return categoryNode;
     }
 
-    public void setCategoryNode(ACategoryNode categoryNode)
+    public void setCategoryNode(ACNode categoryNode)
     {
         this.categoryNode = categoryNode;
     }

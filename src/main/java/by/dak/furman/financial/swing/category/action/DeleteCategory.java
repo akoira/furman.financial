@@ -11,7 +11,7 @@ import by.dak.furman.financial.swing.category.CategoryNode;
  * Date: 4/25/13
  * Time: 1:59 PM
  */
-public class DeleteCategory extends ACategoryAction
+public class DeleteCategory extends ACAction
 {
     private CategoryNode categoryNode;
     private Category category;

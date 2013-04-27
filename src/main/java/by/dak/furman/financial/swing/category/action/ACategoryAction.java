@@ -5,7 +5,7 @@ import by.dak.furman.financial.AObject;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Period;
 import by.dak.furman.financial.service.ICategoryService;
-import by.dak.furman.financial.swing.category.AAmountNode;
+import by.dak.furman.financial.swing.category.ACategoryNode;
 import by.dak.furman.financial.swing.category.CategoriesPanel;
 import by.dak.furman.financial.swing.category.RootNode;
 import org.jdesktop.application.Application;
@@ -70,12 +70,12 @@ public abstract class ACategoryAction
         if (value instanceof Period)
         {
             properties.add(Property.valueOf(AObject.PROPERTY_name, false));
-            properties.add(Property.valueOf(AAmountNode.PROPERTY_amount, false));
+            properties.add(Property.valueOf(ACategoryNode.PROPERTY_amount, false));
         }
         else if (value instanceof Category)
         {
             properties.add(Property.valueOf(AObject.PROPERTY_name, true));
-            properties.add(Property.valueOf(AAmountNode.PROPERTY_amount, false));
+            properties.add(Property.valueOf(ACategoryNode.PROPERTY_amount, false));
         }
         else
             throw new IllegalArgumentException();

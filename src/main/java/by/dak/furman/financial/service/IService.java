@@ -25,5 +25,7 @@ public interface IService<O extends AObject>
 
     O getById(Long id);
 
+    O getByName(String name);
+
     BigDecimal getSum(String property);
 }

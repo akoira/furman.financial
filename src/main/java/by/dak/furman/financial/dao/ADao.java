@@ -94,6 +94,14 @@ public abstract class ADao<O extends AObject> implements IDao<O>
         return result != null ? result : BigDecimal.ZERO;
     }
 
+    @Override
+    public O getByName(String name)
+    {
+        SearchFilter searchFilter = SearchFilter.instanceSingle();
+        searchFilter.ilike(AObject.PROPERTY_name, name);
+        return null;
+    }
+
     protected void fillFilter(Criteria execCriteria, SearchFilter filter)
     {
         CriteriaFiller filler = new CriteriaFiller(execCriteria, filter);

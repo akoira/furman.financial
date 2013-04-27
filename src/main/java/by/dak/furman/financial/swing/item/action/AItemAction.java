@@ -1,16 +1,10 @@
 package by.dak.furman.financial.swing.item.action;
 
-import by.dak.common.swing.treetable.Property;
-import by.dak.furman.financial.Item;
-import by.dak.furman.financial.ItemType;
 import by.dak.furman.financial.swing.item.ItemsPanel;
 import by.dak.furman.financial.swing.item.RootNode;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User: akoyro
@@ -54,26 +48,6 @@ public abstract class AItemAction
     public RootNode getRootNode()
     {
         return (RootNode) getModel().getRoot();
-    }
-
-    public static List<Property> createProperties(Object value)
-    {
-        ArrayList<Property> properties = new ArrayList<Property>();
-        if (value instanceof Item)
-        {
-            properties.add(Property.valueOf(Item.PROPERTY_itemType, true));
-            properties.add(Property.valueOf(Item.PROPERTY_amount, true));
-            properties.add(Property.valueOf(Item.PROPERTY_created, true));
-        }
-        else if (value == null || value instanceof ItemType)
-        {
-            properties.add(Property.valueOf(Item.PROPERTY_itemType, false));
-            properties.add(Property.valueOf(Item.PROPERTY_amount, false));
-            properties.add(Property.valueOf(Item.PROPERTY_created, false));
-        }
-        else
-            throw new IllegalArgumentException();
-        return properties;
     }
 
     public ResourceMap getResourceMap()

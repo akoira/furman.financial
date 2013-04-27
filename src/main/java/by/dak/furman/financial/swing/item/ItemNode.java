@@ -1,8 +1,6 @@
 package by.dak.furman.financial.swing.item;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.furman.financial.Item;
-import by.dak.furman.financial.ItemType;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,16 +10,15 @@ import java.util.Date;
  * Date: 4/25/13
  * Time: 7:06 PM
  */
-public class ItemNode extends ATreeTableNode<Item>
+public class ItemNode extends AItemNode<Item>
 {
-    public void setItemType(ItemType itemType)
+    public void setName(String string)
     {
-        getValue().setItemType(itemType);
     }
 
-    public ItemType getItemType()
+    public String getName()
     {
-        return getValue().getItemType();
+        return getValue().getItemType() != null ? getValue().getItemType().getName() : null;
     }
 
     public BigDecimal getAmount()

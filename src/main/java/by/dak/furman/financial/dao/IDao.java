@@ -26,4 +26,6 @@ public interface IDao<O extends AObject>
     O getById(Long id);
 
     BigDecimal getSum(String property);
+
+    O getByName(String name);
 }

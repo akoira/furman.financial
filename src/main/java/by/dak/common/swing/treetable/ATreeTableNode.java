@@ -35,7 +35,7 @@ public abstract class ATreeTableNode<V> extends AbstractMutableTreeTableNode
         }
         catch (Exception e)
         {
-            return getUserObject();
+            throw new IllegalArgumentException(e);
         }
     }
 

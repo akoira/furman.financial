@@ -63,6 +63,13 @@ public abstract class AService<O extends AObject> implements IService<O>
     {
         return getDao().getSum(property);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public O getByName(String name)
+    {
+        return getDao().getByName(name);
+    }
 }
 
 

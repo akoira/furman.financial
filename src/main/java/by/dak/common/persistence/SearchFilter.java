@@ -148,6 +148,12 @@ public class SearchFilter implements Serializable
         }
     }
 
+
+    public void ilike(String property, Object value)
+    {
+        addExpression(Expression.ge, property, value);
+    }
+
     public void ge(String property, Object value)
     {
         addExpression(Expression.ge, property, value);

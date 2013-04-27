@@ -1,6 +1,9 @@
 package by.dak.furman.financial.dao;
 
+import by.dak.common.persistence.SearchFilter;
 import by.dak.furman.financial.Item;
+
+import java.math.BigDecimal;
 
 /**
  * User: akoyro
@@ -9,4 +12,5 @@ import by.dak.furman.financial.Item;
  */
 public interface IItemDao extends IDao<Item>
 {
+    public BigDecimal getSumBy(SearchFilter filter);
 }

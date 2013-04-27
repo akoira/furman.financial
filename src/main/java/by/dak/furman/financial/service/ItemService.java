@@ -7,6 +7,7 @@ import by.dak.furman.financial.dao.IItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -31,5 +32,11 @@ public class ItemService extends AService<Item> implements IItemService
         filter.eq(Item.PROPERTY_itemType, itemType);
         filter.addAscOrder(Item.PROPERTY_created);
         return getAll(filter);
+    }
+
+    @Override
+    public BigDecimal getSumBy(SearchFilter searchFilter)
+    {
+        return getDao().getSumBy(searchFilter);
     }
 }

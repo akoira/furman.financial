@@ -13,6 +13,8 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import javax.swing.*;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -25,9 +27,17 @@ import java.awt.event.KeyEvent;
 public class CategoriesPanel extends JXPanel
 {
     public static final String ACTION_deleteCategory = "deleteCategory";
+
     private JScrollPane scrollPane;
     private JXTreeTable tree;
     private DefaultTreeTableModel model;
+
+    private ICategoriesPanelDelegate delegate;
+
+    private TreeSelectionListener treeSelectionListener;
+    private TreeModelListener treeModelListener;
+
+    private Action actionDelete;
 
     public CategoriesPanel init()
     {
@@ -41,56 +51,89 @@ public class CategoriesPanel extends JXPanel
         scrollPane = new JScrollPane(tree);
         add(scrollPane, BorderLayout.CENTER);
 
-
         model = new DefaultTreeTableModel();
         tree.setTreeTableModel(model);
+        refresh();
 
+        model.addTreeModelListener(getTreeModelListener());
+        tree.getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionListener());
+        return this;
+    }
+
+    private void refresh()
+    {
         RefreshCategories refreshCategories = new RefreshCategories();
         refreshCategories.setCategoriesPanel(this);
         refreshCategories.action();
+    }
 
+    private void initActions()
+    {
 
-        DeleteCategory deleteCategory = new DeleteCategory();
-        deleteCategory.setCategoriesPanel(this);
         tree.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,
                 0), ACTION_deleteCategory);
-        tree.getActionMap().put(ACTION_deleteCategory, createDeleteCategoryAction());
+        tree.getActionMap().put(ACTION_deleteCategory, getActionDelete());
+    }
 
-        model.addTreeModelListener(new TreeModelListener()
-        {
-            @Override
-            public void treeNodesChanged(TreeModelEvent e)
+    private TreeModelListener getTreeModelListener()
+    {
+        if (treeModelListener == null)
+            treeModelListener = new TreeModelListener()
             {
-                Object node = e.getChildren()[0];
-                if (node instanceof CategoryNode)
+                @Override
+                public void treeNodesChanged(TreeModelEvent e)
                 {
-                    CategoryNode cNode = (CategoryNode) node;
-                    if (cNode.getParent() == getModel().getRoot())
-                        AddCategory.valueOf(cNode, CategoriesPanel.this).action();
-                    else
-                        ChangeCategory.valueOf(cNode, CategoriesPanel.this).action();
+                    Object node = e.getChildren()[0];
+                    if (node instanceof CategoryNode)
+                    {
+                        CategoryNode cNode = (CategoryNode) node;
+                        if (cNode.getParent() == getModel().getRoot())
+                            AddCategory.valueOf(cNode, CategoriesPanel.this).action();
+                        else
+                            ChangeCategory.valueOf(cNode, CategoriesPanel.this).action();
+                    }
                 }
-            }
 
-            @Override
-            public void treeNodesInserted(TreeModelEvent e)
+                @Override
+                public void treeNodesInserted(TreeModelEvent e)
+                {
+                }
+
+                @Override
+                public void treeNodesRemoved(TreeModelEvent e)
+                {
+                }
+
+                @Override
+                public void treeStructureChanged(TreeModelEvent e)
+                {
+                }
+            };
+        return treeModelListener;
+
+
+    }
+
+    private TreeSelectionListener getTreeSelectionListener()
+    {
+        if (treeSelectionListener == null)
+            treeSelectionListener = new TreeSelectionListener()
             {
-            }
+                @Override
+                public void valueChanged(TreeSelectionEvent e)
+                {
+                    if (delegate != null)
+                    {
+                        if (e.getNewLeadSelectionPath() != null)
+                        {
+                            ACategoryNode node = (ACategoryNode) e.getNewLeadSelectionPath().getLastPathComponent();
+                            delegate.selectNode(node);
+                        }
+                    }
+                }
+            };
+        return treeSelectionListener;
 
-            @Override
-            public void treeNodesRemoved(TreeModelEvent e)
-            {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void treeStructureChanged(TreeModelEvent e)
-            {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
-        return this;
     }
 
     public DefaultTreeTableModel getModel()
@@ -103,23 +146,34 @@ public class CategoriesPanel extends JXPanel
         return tree;
     }
 
-    private Action createDeleteCategoryAction()
+    private Action getActionDelete()
     {
-        AbstractAction result = new AbstractAction()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
+        if (actionDelete == null)
+            actionDelete = new AbstractAction()
             {
-                DeleteCategory deleteCategory = new DeleteCategory();
-                deleteCategory.setCategoriesPanel(CategoriesPanel.this);
-                Object node = getTree().getTreeSelectionModel().getLeadSelectionPath().getLastPathComponent();
-                if (node instanceof CategoryNode)
+                @Override
+                public void actionPerformed(ActionEvent e)
                 {
-                    deleteCategory.setCategoryNode((CategoryNode) node);
-                    deleteCategory.action();
+                    DeleteCategory deleteCategory = new DeleteCategory();
+                    deleteCategory.setCategoriesPanel(CategoriesPanel.this);
+                    Object node = getTree().getTreeSelectionModel().getLeadSelectionPath().getLastPathComponent();
+                    if (node instanceof CategoryNode)
+                    {
+                        deleteCategory.setCategoryNode((CategoryNode) node);
+                        deleteCategory.action();
+                    }
                 }
-            }
-        };
-        return result;
+            };
+        return actionDelete;
+    }
+
+    public ICategoriesPanelDelegate getDelegate()
+    {
+        return delegate;
+    }
+
+    public void setDelegate(ICategoriesPanelDelegate delegate)
+    {
+        this.delegate = delegate;
     }
 }

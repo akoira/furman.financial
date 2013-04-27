@@ -17,5 +17,6 @@ public enum Expression
     isNull,
     isNotNull,
     and,
-    in, or
+    in, or,
+    ilike,
 }

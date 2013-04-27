@@ -47,4 +47,16 @@ public class CategoryNode extends AINode<Category>
     public void setCreated(Date created)
     {
     }
+
+    @Override
+    public Category getCategory()
+    {
+        return getValue();
+    }
+
+    @Override
+    public void setCategory(Category category)
+    {
+        setValue(category);
+    }
 }

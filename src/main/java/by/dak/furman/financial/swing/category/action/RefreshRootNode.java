@@ -21,7 +21,7 @@ import java.util.List;
 public class RefreshRootNode extends ARefreshAction<CategoriesPanel, RootNode, Period, YearNode>
 {
     @Override
-    public List<Period> getValues()
+    public List<Period> getChildValues()
     {
         ArrayList<Period> periods = new ArrayList<Period>();
         periods.add(createYearPeriod(new Date()));

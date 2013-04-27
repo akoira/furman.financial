@@ -19,7 +19,5 @@ public abstract class APeriodNode extends ACNode<Period>
     {
         return StringValueAnnotationProcessor.getProcessor().convert(getValue());
     }
-
-
 }
 

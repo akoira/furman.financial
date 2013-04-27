@@ -57,8 +57,7 @@ public class AutoCompleter<V>
             }
         });
 
-        ArrayListModel<V> model = new ArrayListModel<V>(getValues());
-        popupList = new JXList(model);
+        popupList = new JXList();
         popupList.setFocusable(false);
 
         popupPanel = new JXPanel(new BorderLayout());
@@ -179,40 +178,57 @@ public class AutoCompleter<V>
 
     private void registrate()
     {
-        textField.getDocument().addDocumentListener(documentListener);
+        Runnable runnable = new Runnable()
+        {
+            public void run()
+            {
 
-        textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "showPopup");
-        textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "hidePopup");
+                ArrayListModel<V> model = new ArrayListModel<V>(getValues());
+                popupList.setModel(model);
+                textField.getDocument().addDocumentListener(documentListener);
 
-        textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "selectNextValue");
-        textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "selectPrevValue");
+                textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "showPopup");
+                textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "hidePopup");
 
-        textField.getActionMap().put("showPopup", actionShow);
-        textField.getActionMap().put("hidePopup", actionHide);
-        textField.getActionMap().put("selectNextValue", actionNext);
-        textField.getActionMap().put("selectPrevValue", actionPrev);
+                textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "selectNextValue");
+                textField.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "selectPrevValue");
+
+                textField.getActionMap().put("showPopup", actionShow);
+                textField.getActionMap().put("hidePopup", actionHide);
+                textField.getActionMap().put("selectNextValue", actionNext);
+                textField.getActionMap().put("selectPrevValue", actionPrev);
 
 
-        popupList.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "hidePopup");
-        popupList.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true), "hidePopup");
-        popupList.getActionMap().put("hidePopup", actionHide);
-        registrated = true;
+                popupList.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "hidePopup");
+                popupList.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true), "hidePopup");
+                popupList.getActionMap().put("hidePopup", actionHide);
+                registrated = true;
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     private void unregistrate()
     {
-        textField.getDocument().removeDocumentListener(documentListener);
+        Runnable runnable = new Runnable()
+        {
+            public void run()
+            {
+                textField.getDocument().removeDocumentListener(documentListener);
 
-        textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true));
-        textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true));
-        textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true));
-        textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true));
-        textField.getActionMap().remove("showPopup");
-        textField.getActionMap().remove("hidePopup");
+                textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true));
+                textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true));
+                textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true));
+                textField.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true));
+                textField.getActionMap().remove("showPopup");
+                textField.getActionMap().remove("hidePopup");
 
-        popupList.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true));
-        popupList.getActionMap().remove("hidePopup");
-        registrated = false;
+                popupList.getInputMap(JComponent.WHEN_FOCUSED).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true));
+                popupList.getActionMap().remove("hidePopup");
+                registrated = false;
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     private void updateSelection()
@@ -242,7 +258,7 @@ public class AutoCompleter<V>
     private void hide()
     {
         popupWindow.setVisible(false);
-        textField.getDocument().addDocumentListener(documentListener);
+        textField.getDocument().removeDocumentListener(documentListener);
         if (registrated)
             unregistrate();
     }

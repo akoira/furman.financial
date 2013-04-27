@@ -73,7 +73,6 @@ public class SaveCategory extends ACAction<CategoryNode>
         CategoryNode categoryNode = new CategoryNode();
         categoryNode.setValue(category);
         parent.fillChildNode(categoryNode);
-        parent.setCategory(category);
         return categoryNode;
     }
 }

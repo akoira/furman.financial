@@ -1,5 +1,6 @@
 package by.dak.furman.financial.swing.item;
 
+import by.dak.furman.financial.Category;
 import by.dak.furman.financial.ItemType;
 
 import java.math.BigDecimal;
@@ -18,6 +19,12 @@ public class ItemTypeNode extends AINode<ItemType>
     public ItemTypeNode()
     {
         setAllowsChildren(true);
+    }
+
+    @Override
+    public Object getUserObject()
+    {
+        return super.getUserObject();
     }
 
     @Override
@@ -50,5 +57,29 @@ public class ItemTypeNode extends AINode<ItemType>
     public void setCreated(Date created)
     {
         this.created = created;
+    }
+
+    @Override
+    public ItemType getItemType()
+    {
+        return super.getValue();
+    }
+
+    @Override
+    public void setItemType(ItemType itemType)
+    {
+        super.setValue(itemType);
+    }
+
+    @Override
+    public Category getCategory()
+    {
+        return getValue().getCategory();
+    }
+
+    @Override
+    public void setCategory(Category category)
+    {
+        getValue().setCategory(category);
     }
 }

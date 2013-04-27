@@ -31,9 +31,9 @@ public abstract class AService<O extends AObject> implements IService<O>
     }
 
     @Transactional(readOnly = true)
-    public List<O> getAll(SearchFilter filter)
+    public List<O> getAllBy(SearchFilter filter)
     {
-        return getDao().getAll(filter);
+        return getDao().getAllBy(filter);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package by.dak.furman.financial.swing.item;
 
-import by.dak.furman.financial.Item;
+import by.dak.furman.financial.swing.category.ACNode;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.Date;
  * Date: 4/25/13
  * Time: 8:55 PM
  */
-public class RootNode extends AINode<Item>
+public class RootNode extends AINode<ACNode>
 {
     private BigDecimal amount;
     private Date created;

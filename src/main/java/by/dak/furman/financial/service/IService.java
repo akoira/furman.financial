@@ -15,7 +15,7 @@ public interface IService<O extends AObject>
 {
     List<O> getAll();
 
-    List<O> getAll(SearchFilter filter);
+    List<O> getAllBy(SearchFilter filter);
 
     void add(O object);
 

@@ -2,8 +2,6 @@ package by.dak.furman.financial.swing.category;
 
 import org.jdesktop.swingx.treetable.TreeTableNode;
 
-import javax.swing.tree.TreePath;
-
 /**
  * User: akoyro
  * Date: 4/25/13
@@ -12,13 +10,12 @@ import javax.swing.tree.TreePath;
 public class RootNode extends APeriodNode
 {
 
-    public TreePath getCurrentPeriodPath()
+    public APeriodNode getCurrentNode()
     {
-        TreePath path = new TreePath(this);
-        return initPath(this, path);
+        return getCurrentNode(this);
     }
 
-    private TreePath initPath(TreeTableNode node, TreePath path)
+    private APeriodNode getCurrentNode(APeriodNode node)
     {
         int count = node.getChildCount();
         for (int i = 0; i < count; i++)
@@ -26,10 +23,9 @@ public class RootNode extends APeriodNode
             TreeTableNode child = node.getChildAt(i);
             if (child instanceof APeriodNode && ((APeriodNode) child).getValue().isCurrent())
             {
-                path = path.pathByAddingChild(child);
-                path = initPath(child, path);
+                return getCurrentNode((APeriodNode) child);
             }
         }
-        return path;
+        return node;
     }
 }

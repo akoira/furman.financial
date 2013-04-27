@@ -12,7 +12,7 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 4:14 PM
  */
-public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeTableNode, V, C extends ATreeTableNode<V, ?>> extends AAction<P, N>
+public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeTableNode, V, C extends ATreeTableNode> extends AAction<P, N>
 {
 
     @Override
@@ -24,7 +24,7 @@ public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeT
     @Override
     protected void makeAction()
     {
-        List<V> values = getValues();
+        List<V> values = getChildValues();
         for (V value : values)
         {
             C childNode = createChildNode();
@@ -49,7 +49,7 @@ public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeT
         return getPanel().getAppConfig().getItemService();
     }
 
-    public abstract List<V> getValues();
+    public abstract List<V> getChildValues();
 
     public abstract C createChildNode();
 

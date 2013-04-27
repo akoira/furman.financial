@@ -1,6 +1,7 @@
 package by.dak.furman.financial.swing.item.action;
 
 import by.dak.furman.financial.ItemType;
+import by.dak.furman.financial.swing.item.CategoryNode;
 import by.dak.furman.financial.swing.item.ItemTypeNode;
 
 /**
@@ -8,19 +9,18 @@ import by.dak.furman.financial.swing.item.ItemTypeNode;
  * Date: 4/27/13
  * Time: 2:05 PM
  */
-public class AddNewItemType extends AIAction
+public class AddNewItemType extends AIAction<CategoryNode>
 {
     @Override
     protected void makeAction()
     {
         ItemType itemType = new ItemType();
+        itemType.setCategory(getNode().getValue());
 
         ItemTypeNode itemTypeNode = new ItemTypeNode();
-        getParentNode().fillChildNode(itemTypeNode);
         itemTypeNode.setValue(itemType);
-        itemTypeNode.setItemType(itemType);
-
-        getModel().insertNodeInto(itemTypeNode, getParentNode(), getParentNode().getChildCount());
+        getNode().fillChildNode(itemTypeNode);
+        getModel().insertNodeInto(itemTypeNode, getNode(), getNode().getChildCount());
     }
 
 

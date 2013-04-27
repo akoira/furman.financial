@@ -46,7 +46,7 @@ public abstract class ATreeTablePanel extends JXPanel
         return model;
     }
 
-    public abstract ATreeTableNode createRootNode();
+    protected abstract ATreeTableNode createRootNode();
 
     public AppConfig getAppConfig()
     {

@@ -16,13 +16,8 @@ import java.math.BigDecimal;
 public class Item extends AObject
 {
     public static String PROPERTY_amount = "amount";
-    public static String PROPERTY_category = "category";
     public static String PROPERTY_itemType = "itemType";
 
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Category category;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -30,16 +25,6 @@ public class Item extends AObject
 
     @Column(nullable = false)
     private BigDecimal amount;
-
-    public Category getCategory()
-    {
-        return category;
-    }
-
-    public void setCategory(Category category)
-    {
-        this.category = category;
-    }
 
     public ItemType getItemType()
     {

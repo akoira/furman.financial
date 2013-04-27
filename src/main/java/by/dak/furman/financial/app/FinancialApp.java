@@ -10,10 +10,9 @@ import by.dak.furman.financial.swing.category.CategoriesPanel;
 import by.dak.furman.financial.swing.category.ICategoriesPanelDelegate;
 import by.dak.furman.financial.swing.category.RootNode;
 import by.dak.furman.financial.swing.category.action.AddNewCategory;
-import by.dak.furman.financial.swing.category.action.RefreshRootNode;
-import by.dak.furman.financial.swing.item.AINode;
+import by.dak.furman.financial.swing.category.action.ExpandNode;
 import by.dak.furman.financial.swing.item.ItemsPanel;
-import by.dak.furman.financial.swing.item.action.RefreshItems;
+import by.dak.furman.financial.swing.item.action.RefreshRootNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.derby.drda.NetworkServerControl;
 import org.jdesktop.application.Application;
@@ -102,19 +101,19 @@ public class FinancialApp extends SingleFrameApplication
                 @Override
                 public void selectNode(ACNode node)
                 {
-                    RefreshItems refreshItems = new RefreshItems();
-                    refreshItems.setItemsPanel(getItemsPanel());
-                    refreshItems.setParentNode((AINode) getItemsPanel().getModel().getRoot());
+                    RefreshRootNode refreshRootNode = new RefreshRootNode();
+                    refreshRootNode.setPanel(getItemsPanel());
+                    refreshRootNode.setNode((by.dak.furman.financial.swing.item.RootNode) getItemsPanel().getModel().getRoot());
                     if (node != null)
                     {
-                        refreshItems.setCategoryNode(node);
+                        refreshRootNode.setACNode(node);
                     }
-                    refreshItems.action();
+                    refreshRootNode.action();
                 }
             });
             categoriesPanel.init();
 
-            RefreshRootNode action = new RefreshRootNode();
+            by.dak.furman.financial.swing.category.action.RefreshRootNode action = new by.dak.furman.financial.swing.category.action.RefreshRootNode();
             action.setPanel(categoriesPanel);
             action.setNode((RootNode) action.getRootNode());
             action.action();
@@ -123,6 +122,11 @@ public class FinancialApp extends SingleFrameApplication
             addNewCategory.setPanel(categoriesPanel);
             addNewCategory.setNode((RootNode) addNewCategory.getRootNode());
             addNewCategory.action();
+
+            ExpandNode expandNode = new ExpandNode();
+            expandNode.setPanel(categoriesPanel);
+            expandNode.setNode(((RootNode) expandNode.getRootNode()).getCurrentNode());
+            expandNode.action();
         }
         return categoriesPanel;
     }

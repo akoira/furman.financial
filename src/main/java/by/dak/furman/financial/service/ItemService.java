@@ -33,7 +33,7 @@ public class ItemService extends AService<Item> implements IItemService
         SearchFilter filter = new SearchFilter();
         filter.eq(Item.PROPERTY_itemType, itemType);
         filter.addAscOrder(Item.PROPERTY_created);
-        return getAll(filter);
+        return getAllBy(filter);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ItemService extends AService<Item> implements IItemService
     {
         SearchFilter searchFilter = SearchFilter.instanceUnbound();
         if (category != null)
-            searchFilter.eq(Item.PROPERTY_category, category);
+            searchFilter.eq(category, Item.PROPERTY_itemType, ItemType.PROPERTY_category);
         if (itemType != null)
             searchFilter.eq(Item.PROPERTY_itemType, itemType);
         if (period != null)

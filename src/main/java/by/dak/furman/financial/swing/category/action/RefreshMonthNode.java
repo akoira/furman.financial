@@ -17,7 +17,7 @@ import java.util.List;
 public class RefreshMonthNode extends ARefreshAction<CategoriesPanel, MonthNode, Category, CategoryNode>
 {
     @Override
-    public List<Category> getValues()
+    public List<Category> getChildValues()
     {
         return getPanel().getAppConfig().getCategoryService().getAll();
     }

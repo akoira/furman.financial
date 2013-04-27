@@ -15,7 +15,7 @@ public interface IDao<O extends AObject>
 {
     List<O> getAll();
 
-    List<O> getAll(SearchFilter filter);
+    List<O> getAllBy(SearchFilter filter);
 
     void add(O object);
 
@@ -28,4 +28,6 @@ public interface IDao<O extends AObject>
     BigDecimal getSum(String property);
 
     O getByName(String name);
+
+    O getBy(SearchFilter searchFilter);
 }

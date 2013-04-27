@@ -84,9 +84,12 @@ public abstract class AINode<V> extends ATreeTableNode<V, AINode>
 
     public void fillChildNode(AINode child)
     {
-        child.setCategory(getCategory());
-        child.setItemType(getItemType());
-        child.setPeriod(getPeriod());
+        if (getCategory() != null)
+            child.setCategory(getCategory());
+        if (getItemType() != null)
+            child.setItemType(getItemType());
+        if (getPeriod() != null)
+            child.setPeriod(getPeriod());
         child.setProperties(createProperties(child.getValue()));
     }
 

@@ -78,7 +78,7 @@ public abstract class ADao<O extends AObject> implements IDao<O>
     }
 
     @Override
-    public List<O> getAll(final SearchFilter filter)
+    public List<O> getAllBy(final SearchFilter filter)
     {
         Criteria execCriteria = createCriteria(getObjectClass());
         fillFilter(execCriteria, filter);
@@ -99,7 +99,14 @@ public abstract class ADao<O extends AObject> implements IDao<O>
     {
         SearchFilter searchFilter = SearchFilter.instanceSingle();
         searchFilter.ilike(AObject.PROPERTY_name, name);
-        return null;
+        return getBy(searchFilter);
+    }
+
+    @Override
+    public O getBy(SearchFilter searchFilter)
+    {
+        List<O> list = getAllBy(searchFilter);
+        return list.size() > 0 ? list.get(0) : null;
     }
 
     protected void fillFilter(Criteria execCriteria, SearchFilter filter)

@@ -20,7 +20,7 @@ import java.util.List;
 public class RefreshYearNode extends ARefreshAction<CategoriesPanel, YearNode, Period, MonthNode>
 {
     @Override
-    public List<Period> getValues()
+    public List<Period> getChildValues()
     {
         ArrayList<Period> periods = new ArrayList<Period>();
 
@@ -31,7 +31,7 @@ public class RefreshYearNode extends ARefreshAction<CategoriesPanel, YearNode, P
             Calendar calendar = Calendar.getInstance();
             int current = calendar.get(Calendar.MONTH);
             period.setCurrent(current == month);
-            calendar.setTime(getNode().getPeriod().getStartDate());
+            calendar.setTime(getNode().getValue().getStartDate());
             Period.resetTime(calendar);
             calendar.set(Calendar.MONTH, month);
             period.setStartDate(calendar.getTime());

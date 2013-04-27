@@ -11,21 +11,22 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 3:14 PM
  */
-public class RefreshItemTypeNode extends ARefreshAction<ItemTypeNode>
+public class RefreshItemTypeNode extends AIRefreshAction<ItemTypeNode, Item, ItemNode>
 {
     @Override
-    protected void makeAction()
+    public List<Item> getChildValues()
     {
-        removeNodes();
+        return getItemService().getAllBy(getSearchFilter(getNode()));
+    }
 
-        List<Item> items = getItemsPanel().getAppConfig().getItemService().getAll();
-        for (Item item : items)
-        {
-            ItemNode itemNode = new ItemNode();
-            getParentNode().fillChildNode(itemNode);
-            itemNode.setValue(item);
+    @Override
+    public ItemNode createChildNode()
+    {
+        return new ItemNode();
+    }
 
-            getModel().insertNodeInto(itemNode, getParentNode(), getParentNode().getChildCount());
-        }
+    @Override
+    public void refreshChildNode(ItemNode childNode)
+    {
     }
 }

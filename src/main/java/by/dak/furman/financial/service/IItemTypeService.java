@@ -1,6 +1,9 @@
 package by.dak.furman.financial.service;
 
+import by.dak.furman.financial.Category;
 import by.dak.furman.financial.ItemType;
+
+import java.util.List;
 
 /**
  * User: akoyro
@@ -9,4 +12,7 @@ import by.dak.furman.financial.ItemType;
  */
 public interface IItemTypeService extends IService<ItemType>
 {
+    List<ItemType> getAllBy(Category value);
+
+    ItemType getBy(Category category, String name);
 }

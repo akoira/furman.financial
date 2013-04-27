@@ -57,8 +57,10 @@ public abstract class ACNode<V> extends ATreeTableNode<V, ACNode>
 
     public void fillChildNode(ACNode child)
     {
-        child.setCategory(getCategory());
-        child.setPeriod(getPeriod());
+        if (getCategory() != null)
+            child.setCategory(getCategory());
+        if (getParent() != null)
+            child.setPeriod(getPeriod());
         child.setProperties(createProperties(child.getValue()));
     }
 

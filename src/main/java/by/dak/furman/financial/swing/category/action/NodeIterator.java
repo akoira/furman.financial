@@ -9,8 +9,6 @@ import by.dak.furman.financial.swing.ATreeTableNode;
  */
 public abstract class NodeIterator
 {
-    private ATreeTableNode node;
-
     public void iterate(ATreeTableNode node)
     {
         int count = node.getChildCount();

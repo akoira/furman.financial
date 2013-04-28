@@ -14,11 +14,13 @@ import java.util.Date;
  */
 public class AddNewItem extends AIAction<ItemTypeNode>
 {
+    private ItemNode result;
 
     @Override
     protected void makeAction()
     {
         Item item = new Item();
+        item.setName(getNode().getItemType().getName());
         item.setItemType(getNode().getItemType());
         item.setCreated(new Date());
         item.setAmount(BigDecimal.ZERO);
@@ -27,7 +29,14 @@ public class AddNewItem extends AIAction<ItemTypeNode>
         node.setValue(item);
         getNode().fillChildNode(node);
         getModel().insertNodeInto(node, getNode(), getNode().getChildCount());
+
+        result = node;
     }
 
+
+    public ItemNode getResult()
+    {
+        return result;
+    }
 }
 

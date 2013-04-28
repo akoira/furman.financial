@@ -1,7 +1,9 @@
 package by.dak.furman.financial.swing.item.action;
 
+import by.dak.furman.financial.Item;
 import by.dak.furman.financial.ItemType;
 import by.dak.furman.financial.swing.item.AINode;
+import by.dak.furman.financial.swing.item.ItemNode;
 import by.dak.furman.financial.swing.item.ItemTypeNode;
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,6 +33,7 @@ public class SaveItemType extends AIAction<ItemTypeNode>
             refreshItemTypeNode.setNode(getNode());
             refreshItemTypeNode.setPanel(getPanel());
             refreshItemTypeNode.action();
+            selectNewItemNode();
 
             AddNewItemType addNewItemType = new AddNewItemType();
             addNewItemType.setPanel(getPanel());
@@ -39,6 +42,12 @@ public class SaveItemType extends AIAction<ItemTypeNode>
         }
         else
             getItemTypeService().save(itemType);
+    }
+
+    private void selectNewItemNode()
+    {
+        ItemNode itemNode = (ItemNode) getNode().getChildAt(getNode().getChildCount() - 1);
+        selectColumn(itemNode, Item.PROPERTY_amount);
     }
 
     @Override

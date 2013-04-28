@@ -6,6 +6,7 @@ import by.dak.furman.financial.PeriodType;
 import by.dak.furman.financial.swing.ATreeTableNode;
 import by.dak.furman.financial.swing.ATreeTablePanel;
 import by.dak.furman.financial.swing.category.action.DeleteCategory;
+import by.dak.furman.financial.swing.category.action.RefreshActionFactory;
 import by.dak.furman.financial.swing.category.action.SaveCategory;
 import org.jdesktop.swingx.JXTextField;
 
@@ -15,7 +16,6 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,7 +26,9 @@ import java.util.Date;
  */
 public class CategoriesPanel extends ATreeTablePanel
 {
-    public static final String ACTION_deleteCategory = "deleteCategory";
+
+
+    private RefreshActionFactory refreshActionFactory;
 
     private ICategoriesPanelDelegate delegate;
 
@@ -58,21 +60,15 @@ public class CategoriesPanel extends ATreeTablePanel
     {
         super.init();
 
+        refreshActionFactory = new RefreshActionFactory();
+        refreshActionFactory.setPanel(this);
+
         getTreeTable().setDefaultEditor(Category.class, new DefaultCellEditor(new JXTextField()));
 
         getModel().addTreeModelListener(getTreeModelListener());
         getTreeTable().getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionListener());
-
-        initActions();
     }
 
-    private void initActions()
-    {
-
-        getTreeTable().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,
-                0), ACTION_deleteCategory);
-        getTreeTable().getActionMap().put(ACTION_deleteCategory, getActionDelete());
-    }
 
     private TreeModelListener getTreeModelListener()
     {
@@ -82,14 +78,17 @@ public class CategoriesPanel extends ATreeTablePanel
                 @Override
                 public void treeNodesChanged(TreeModelEvent e)
                 {
-                    Object node = e.getChildren()[0];
-                    if (node instanceof CategoryNode)
+                    if (e.getChildren() != null && e.getChildren().length > 0)
                     {
-                        CategoryNode cNode = (CategoryNode) node;
-                        SaveCategory saveCategory = new SaveCategory();
-                        saveCategory.setNode(cNode);
-                        saveCategory.setPanel(CategoriesPanel.this);
-                        saveCategory.action();
+                        Object node = e.getChildren()[0];
+                        if (node instanceof CategoryNode)
+                        {
+                            CategoryNode cNode = (CategoryNode) node;
+                            SaveCategory saveCategory = new SaveCategory();
+                            saveCategory.setNode(cNode);
+                            saveCategory.setPanel(CategoriesPanel.this);
+                            saveCategory.action();
+                        }
                     }
                 }
 
@@ -135,7 +134,7 @@ public class CategoriesPanel extends ATreeTablePanel
 
     }
 
-    private Action getActionDelete()
+    protected Action getActionDelete()
     {
         if (actionDelete == null)
             actionDelete = new AbstractAction()
@@ -166,8 +165,8 @@ public class CategoriesPanel extends ATreeTablePanel
         this.delegate = delegate;
     }
 
-    @Override
-    protected void initEditors()
+    public RefreshActionFactory getRefreshActionFactory()
     {
+        return refreshActionFactory;
     }
 }

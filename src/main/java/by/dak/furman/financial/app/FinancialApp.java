@@ -11,6 +11,8 @@ import by.dak.furman.financial.swing.category.ICategoriesPanelDelegate;
 import by.dak.furman.financial.swing.category.RootNode;
 import by.dak.furman.financial.swing.category.action.AddNewCategory;
 import by.dak.furman.financial.swing.category.action.ExpandNode;
+import by.dak.furman.financial.swing.category.action.RefreshHierarchy;
+import by.dak.furman.financial.swing.item.IItemsPanelDelegate;
 import by.dak.furman.financial.swing.item.ItemsPanel;
 import by.dak.furman.financial.swing.item.action.RefreshRootNode;
 import org.apache.commons.lang3.StringUtils;
@@ -82,7 +84,7 @@ public class FinancialApp extends SingleFrameApplication
     @Override
     protected void shutdown()
     {
-        super.shutdown();    //To change body of overridden methods use File | Settings | File Templates.
+        super.shutdown();
     }
 
     public static void main(String[] args)
@@ -137,6 +139,17 @@ public class FinancialApp extends SingleFrameApplication
         {
             itemsPanel = new ItemsPanel();
             itemsPanel.setAppConfig(appConfig);
+            itemsPanel.setDelegate(new IItemsPanelDelegate()
+            {
+                @Override
+                public void refreshACNode(ACNode acNode)
+                {
+                    RefreshHierarchy action = new RefreshHierarchy();
+                    action.setPanel(getCategoriesPanel());
+                    action.setNode(acNode);
+                    action.action();
+                }
+            });
             itemsPanel.init();
         }
         return itemsPanel;

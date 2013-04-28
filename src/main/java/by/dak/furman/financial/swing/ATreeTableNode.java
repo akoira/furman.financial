@@ -4,6 +4,7 @@ import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.Period;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;
 
 import java.math.BigDecimal;
@@ -43,7 +44,7 @@ public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends Abstra
         try
         {
             Property property = properties.get(column);
-            return BeanUtilsBean.getInstance().getProperty(this, property.getKey());
+            return new PropertyUtilsBean().getProperty(this, property.getKey());
         }
         catch (Exception e)
         {

@@ -6,6 +6,8 @@ import by.dak.furman.financial.service.ICategoryService;
 import by.dak.furman.financial.swing.ATreeTableNode;
 import by.dak.furman.financial.swing.category.CategoryNode;
 
+import java.util.ArrayList;
+
 /**
  * User: akoyro
  * Date: 4/25/13
@@ -35,17 +37,22 @@ public class DeleteCategory extends ACAction
     @Override
     protected void makeAction()
     {
+        final ArrayList<ATreeTableNode> result = new ArrayList<ATreeTableNode>();
         NodeIterator iterator = new NodeIterator()
         {
             @Override
             protected boolean action(ATreeTableNode child)
             {
                 if (child.getValue() == category)
-                    getModel().removeNodeFromParent(child);
+                    result.add(child);
                 return true;
             }
         };
         iterator.iterate(getRootNode());
+        for (ATreeTableNode node : result)
+        {
+            getModel().removeNodeFromParent(node);
+        }
     }
 
     public CategoryNode getCategoryNode()

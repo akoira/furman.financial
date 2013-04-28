@@ -72,6 +72,18 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode>
         }
     }
 
+    @Override
+    protected void after()
+    {
+        if (getNode().getCategory() != null)
+        {
+            AddNewItemType addNewItemType = new AddNewItemType();
+            addNewItemType.setNode(getNode());
+            addNewItemType.setPanel(getPanel());
+            addNewItemType.action();
+        }
+    }
+
     public ACNode getACNode()
     {
         return acNode;

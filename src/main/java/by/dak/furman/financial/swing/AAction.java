@@ -5,7 +5,6 @@ import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IItemTypeService;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 /**
  * User: akoyro
@@ -28,7 +27,7 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
         after();
     }
 
-    public DefaultTreeTableModel getModel()
+    public FTreeTableModel getModel()
     {
         return getPanel().getModel();
     }

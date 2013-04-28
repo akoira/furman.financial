@@ -1,7 +1,7 @@
 package by.dak.furman.financial.swing.item.action;
 
 import by.dak.furman.financial.ItemType;
-import by.dak.furman.financial.swing.item.CategoryNode;
+import by.dak.furman.financial.swing.item.AINode;
 import by.dak.furman.financial.swing.item.ItemTypeNode;
 
 /**
@@ -9,13 +9,13 @@ import by.dak.furman.financial.swing.item.ItemTypeNode;
  * Date: 4/27/13
  * Time: 2:05 PM
  */
-public class AddNewItemType extends AIAction<CategoryNode>
+public class AddNewItemType extends AIAction<AINode>
 {
     @Override
     protected void makeAction()
     {
         ItemType itemType = new ItemType();
-        itemType.setCategory(getNode().getValue());
+        itemType.setCategory(getNode().getCategory());
 
         ItemTypeNode itemTypeNode = new ItemTypeNode();
         itemTypeNode.setValue(itemType);

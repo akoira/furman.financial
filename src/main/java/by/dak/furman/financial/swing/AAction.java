@@ -1,6 +1,5 @@
 package by.dak.furman.financial.swing;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.furman.financial.service.ICategoryService;
 import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IItemTypeService;

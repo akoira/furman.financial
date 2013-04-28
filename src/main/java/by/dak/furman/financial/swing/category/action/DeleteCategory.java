@@ -1,9 +1,9 @@
 package by.dak.furman.financial.swing.category.action;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.app.AppConfig;
 import by.dak.furman.financial.service.ICategoryService;
+import by.dak.furman.financial.swing.ATreeTableNode;
 import by.dak.furman.financial.swing.category.CategoryNode;
 
 /**

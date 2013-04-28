@@ -1,6 +1,6 @@
 package by.dak.furman.financial.swing.category.action;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
+import by.dak.furman.financial.swing.ATreeTableNode;
 
 /**
  * User: akoyro

@@ -3,9 +3,6 @@ package by.dak.furman.financial.swing.item;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.ItemType;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * User: akoyro
  * Date: 4/25/13
@@ -13,18 +10,9 @@ import java.util.Date;
  */
 public class ItemTypeNode extends AINode<ItemType>
 {
-    private BigDecimal amount;
-    private Date created;
-
     public ItemTypeNode()
     {
         setAllowsChildren(true);
-    }
-
-    @Override
-    public Object getUserObject()
-    {
-        return super.getUserObject();
     }
 
     @Override
@@ -37,26 +25,6 @@ public class ItemTypeNode extends AINode<ItemType>
     public String getName()
     {
         return getValue().getName();
-    }
-
-    public BigDecimal getAmount()
-    {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount)
-    {
-        this.amount = amount;
-    }
-
-    public Date getCreated()
-    {
-        return created;
-    }
-
-    public void setCreated(Date created)
-    {
-        this.created = created;
     }
 
     @Override

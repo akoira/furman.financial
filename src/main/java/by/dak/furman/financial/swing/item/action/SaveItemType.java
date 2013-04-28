@@ -1,6 +1,7 @@
 package by.dak.furman.financial.swing.item.action;
 
 import by.dak.furman.financial.ItemType;
+import by.dak.furman.financial.swing.item.AINode;
 import by.dak.furman.financial.swing.item.ItemTypeNode;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 public class SaveItemType extends AIAction<ItemTypeNode>
 {
     private ItemType itemType;
+    private boolean isNew;
 
     @Override
     protected void before()
@@ -23,7 +25,18 @@ public class SaveItemType extends AIAction<ItemTypeNode>
     protected void makeAction()
     {
         if (itemType.getId() == null)
+        {
             getItemTypeService().add(itemType);
+            RefreshItemTypeNode refreshItemTypeNode = new RefreshItemTypeNode();
+            refreshItemTypeNode.setNode(getNode());
+            refreshItemTypeNode.setPanel(getPanel());
+            refreshItemTypeNode.action();
+
+            AddNewItemType addNewItemType = new AddNewItemType();
+            addNewItemType.setPanel(getPanel());
+            addNewItemType.setNode((AINode) getNode().getParent());
+            addNewItemType.action();
+        }
         else
             getItemTypeService().save(itemType);
     }

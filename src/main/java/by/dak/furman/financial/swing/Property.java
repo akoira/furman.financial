@@ -1,4 +1,4 @@
-package by.dak.common.swing.treetable;
+package by.dak.furman.financial.swing;
 
 /**
  * User: akoyro

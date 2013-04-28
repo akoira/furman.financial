@@ -1,6 +1,5 @@
 package by.dak.furman.financial.swing;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.furman.financial.app.AppConfig;
 import by.dak.furman.financial.swing.category.DefaultTreeTableRenderer;
 import org.jdesktop.swingx.JXPanel;
@@ -8,6 +7,7 @@ import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import javax.swing.*;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
 /**
@@ -28,12 +28,25 @@ public abstract class ATreeTablePanel extends JXPanel
         getTreeTable().setTreeCellRenderer(new DefaultTreeTableRenderer());
         getTreeTable().setScrollsOnExpand(true);
         getTreeTable().setExpandsSelectedPaths(true);
+        getTreeTable().getTreeSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        getTreeTable().getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(getTreeTable());
         add(scrollPane, BorderLayout.CENTER);
 
         model = new DefaultTreeTableModel(createRootNode());
+        model.setColumnIdentifiers(((ATreeTableNode) model.getRoot()).getColumnIdentifiers());
         getTreeTable().setTreeTableModel(getModel());
+
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                initEditors();
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     public JXTreeTable getTreeTable()
@@ -47,6 +60,8 @@ public abstract class ATreeTablePanel extends JXPanel
     }
 
     protected abstract ATreeTableNode createRootNode();
+
+    protected abstract void initEditors();
 
     public AppConfig getAppConfig()
     {

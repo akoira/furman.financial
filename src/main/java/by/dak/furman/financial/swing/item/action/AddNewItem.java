@@ -4,6 +4,9 @@ import by.dak.furman.financial.Item;
 import by.dak.furman.financial.swing.item.ItemNode;
 import by.dak.furman.financial.swing.item.ItemTypeNode;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * User: akoyro
  * Date: 4/25/13
@@ -17,11 +20,12 @@ public class AddNewItem extends AIAction<ItemTypeNode>
     {
         Item item = new Item();
         item.setItemType(getNode().getItemType());
+        item.setCreated(new Date());
+        item.setAmount(BigDecimal.ZERO);
 
         ItemNode node = new ItemNode();
         node.setValue(item);
         getNode().fillChildNode(node);
-
         getModel().insertNodeInto(node, getNode(), getNode().getChildCount());
     }
 

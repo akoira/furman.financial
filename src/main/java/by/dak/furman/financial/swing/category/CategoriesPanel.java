@@ -1,9 +1,9 @@
 package by.dak.furman.financial.swing.category;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Period;
 import by.dak.furman.financial.PeriodType;
+import by.dak.furman.financial.swing.ATreeTableNode;
 import by.dak.furman.financial.swing.ATreeTablePanel;
 import by.dak.furman.financial.swing.category.action.DeleteCategory;
 import by.dak.furman.financial.swing.category.action.SaveCategory;
@@ -49,7 +49,7 @@ public class CategoriesPanel extends ATreeTablePanel
         RootNode rootNode = new RootNode();
         rootNode.setPeriod(period);
         rootNode.setValue(period);
-        rootNode.setProperties(RootNode.createProperties(period));
+        rootNode.setProperties(rootNode.createProperties(period));
 
         return rootNode;
     }
@@ -164,5 +164,10 @@ public class CategoriesPanel extends ATreeTablePanel
     public void setDelegate(ICategoriesPanelDelegate delegate)
     {
         this.delegate = delegate;
+    }
+
+    @Override
+    protected void initEditors()
+    {
     }
 }

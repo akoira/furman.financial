@@ -2,9 +2,6 @@ package by.dak.furman.financial.swing.item;
 
 import by.dak.furman.financial.swing.category.ACNode;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * User: akoyro
  * Date: 4/25/13
@@ -12,42 +9,8 @@ import java.util.Date;
  */
 public class RootNode extends AINode<ACNode>
 {
-    private BigDecimal amount;
-    private Date created;
-    private String name;
-
     public RootNode()
     {
         setAllowsChildren(true);
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public BigDecimal getAmount()
-    {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount)
-    {
-        this.amount = amount;
-    }
-
-    public Date getCreated()
-    {
-        return created;
-    }
-
-    public void setCreated(Date created)
-    {
-        this.created = created;
     }
 }

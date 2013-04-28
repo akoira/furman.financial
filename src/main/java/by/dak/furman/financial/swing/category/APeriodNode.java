@@ -19,5 +19,17 @@ public abstract class APeriodNode extends ACNode<Period>
     {
         return StringValueAnnotationProcessor.getProcessor().convert(getValue());
     }
+
+    @Override
+    public Period getPeriod()
+    {
+        return getValue();
+    }
+
+    @Override
+    public void setPeriod(Period period)
+    {
+        super.setValue(period);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }
 

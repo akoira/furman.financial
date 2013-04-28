@@ -12,13 +12,16 @@ import java.util.Date;
  */
 public class ItemNode extends AINode<Item>
 {
+    private String name;
+
     public void setName(String string)
     {
+        getValue().getItemType().setName(string);
     }
 
     public String getName()
     {
-        return getValue().getItemType() != null ? getValue().getItemType().getName() : null;
+        return getValue().getName();
     }
 
     public BigDecimal getAmount()
@@ -40,6 +43,5 @@ public class ItemNode extends AINode<Item>
     {
         getValue().setCreated(created);
     }
-
 }
 

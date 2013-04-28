@@ -29,7 +29,10 @@ public class RefreshCategoryNode extends AIRefreshAction<CategoryNode, ItemType,
     @Override
     public void refreshChildNode(ItemTypeNode childNode)
     {
-        super.refreshChildNode(childNode);
+        RefreshItemTypeNode refreshItemTypeNode = new RefreshItemTypeNode();
+        refreshItemTypeNode.setNode(childNode);
+        refreshItemTypeNode.setPanel(getPanel());
+        refreshItemTypeNode.action();
     }
 
     @Override

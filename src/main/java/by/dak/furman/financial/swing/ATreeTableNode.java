@@ -1,8 +1,12 @@
-package by.dak.common.swing.treetable;
+package by.dak.furman.financial.swing;
 
+import by.dak.furman.financial.Category;
+import by.dak.furman.financial.Item;
+import by.dak.furman.financial.Period;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +17,15 @@ import java.util.List;
  */
 public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends AbstractMutableTreeTableNode
 {
+    public static final String PROPERTY_amount = Item.PROPERTY_amount;
+
     private List<Property> properties = new ArrayList<Property>();
+
+    private Category category;
+    private Period period;
+    private String name;
+    private BigDecimal amount = BigDecimal.ZERO;
+
 
     public V getValue()
     {
@@ -76,5 +88,56 @@ public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends Abstra
         this.properties.addAll(properties);
     }
 
-    public abstract void fillChildNode(C child);
+    public Category getCategory()
+    {
+        return category;
+    }
+
+    public void setCategory(Category category)
+    {
+        this.category = category;
+    }
+
+    public Period getPeriod()
+    {
+        return period;
+    }
+
+    public void setPeriod(Period period)
+    {
+        this.period = period;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public BigDecimal getAmount()
+    {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount)
+    {
+        this.amount = amount;
+    }
+
+    public void fillChildNode(ATreeTableNode child)
+    {
+        if (child.getCategory() == null)
+            child.setCategory(getCategory());
+        if (child.getPeriod() == null)
+            child.setPeriod(getPeriod());
+        child.setProperties(createProperties(child.getValue()));
+    }
+
+    protected abstract List<Property> createProperties(Object value);
+
+    public abstract List<String> getColumnIdentifiers();
 }

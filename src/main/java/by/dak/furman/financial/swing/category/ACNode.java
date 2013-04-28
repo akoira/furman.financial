@@ -1,13 +1,13 @@
 package by.dak.furman.financial.swing.category;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
-import by.dak.common.swing.treetable.Property;
 import by.dak.furman.financial.AObject;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Period;
+import by.dak.furman.financial.swing.ATreeTableNode;
+import by.dak.furman.financial.swing.Property;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,55 +17,7 @@ import java.util.List;
  */
 public abstract class ACNode<V> extends ATreeTableNode<V, ACNode>
 {
-    public static final String PROPERTY_amount = "amount";
-
-    private BigDecimal amount = BigDecimal.ZERO;
-
-    private Category category;
-    private Period period;
-    private String name;
-
-    public BigDecimal getAmount()
-    {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount)
-    {
-        this.amount = amount;
-    }
-
-    public Category getCategory()
-    {
-        return category;
-    }
-
-    public void setCategory(Category category)
-    {
-        this.category = category;
-    }
-
-    public Period getPeriod()
-    {
-        return period;
-    }
-
-    public void setPeriod(Period period)
-    {
-        this.period = period;
-    }
-
-    public void fillChildNode(ACNode child)
-    {
-        if (getCategory() != null)
-            child.setCategory(getCategory());
-        if (getParent() != null)
-            child.setPeriod(getPeriod());
-        child.setProperties(createProperties(child.getValue()));
-    }
-
-
-    public static List<Property> createProperties(Object value)
+    protected List<Property> createProperties(Object value)
     {
         ArrayList<Property> properties = new ArrayList<Property>();
         if (value instanceof Period)
@@ -83,13 +35,9 @@ public abstract class ACNode<V> extends ATreeTableNode<V, ACNode>
         return properties;
     }
 
-    public String getName()
+    @Override
+    public List<String> getColumnIdentifiers()
     {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
+        return Arrays.asList(AObject.PROPERTY_name, ACNode.PROPERTY_amount);
     }
 }

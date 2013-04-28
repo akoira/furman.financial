@@ -1,10 +1,7 @@
 package by.dak.furman.financial.swing.category.action;
 
-import by.dak.common.persistence.SearchFilter;
 import by.dak.furman.financial.Period;
 import by.dak.furman.financial.PeriodType;
-import by.dak.furman.financial.swing.ARefreshAction;
-import by.dak.furman.financial.swing.category.CategoriesPanel;
 import by.dak.furman.financial.swing.category.MonthNode;
 import by.dak.furman.financial.swing.category.YearNode;
 
@@ -17,7 +14,7 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 3:59 PM
  */
-public class RefreshYearNode extends ARefreshAction<CategoriesPanel, YearNode, Period, MonthNode>
+public class RefreshYearNode extends ACRefreshAction<YearNode, Period, MonthNode>
 {
     @Override
     public List<Period> getChildValues()
@@ -45,10 +42,7 @@ public class RefreshYearNode extends ARefreshAction<CategoriesPanel, YearNode, P
     @Override
     public MonthNode createChildNode()
     {
-        MonthNode node = new MonthNode();
-        SearchFilter searchFilter = getItemService().getSearchFilter(getNode().getCategory(), null, getNode().getPeriod());
-        node.setAmount(getItemService().getSumBy(searchFilter));
-        return node;
+        return new MonthNode();
     }
 
     @Override

@@ -7,5 +7,4 @@ package by.dak.furman.financial.swing.category;
  */
 public class YearNode extends APeriodNode
 {
-
 }

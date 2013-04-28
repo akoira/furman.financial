@@ -5,6 +5,8 @@ import by.dak.furman.financial.ItemType;
 import by.dak.furman.financial.swing.ATreeTablePanel;
 import by.dak.furman.financial.swing.item.action.SaveItemType;
 import com.jgoodies.common.collect.LinkedListModel;
+import org.jdesktop.swingx.JXFormattedTextField;
+import org.jdesktop.swingx.table.DatePickerCellEditor;
 import org.jdesktop.swingx.treetable.TreeTableCellEditor;
 
 import javax.swing.*;
@@ -12,8 +14,13 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 import javax.swing.tree.TreePath;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * User: akoyro
@@ -29,30 +36,13 @@ public class ItemsPanel extends ATreeTablePanel
     protected RootNode createRootNode()
     {
         RootNode root = new RootNode();
-        root.setProperties(RootNode.createProperties(null));
+        root.setProperties(root.createProperties(null));
         return root;
     }
 
     public void init()
     {
         super.init();
-        Runnable runnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                TreeTableCellEditor editor = (TreeTableCellEditor) getTreeTable().getCellEditor(0, getTreeTable().getHierarchicalColumn());
-                autoCompleter = new AutoCompleter();
-                autoCompleter.setCellEditor(editor);
-                autoCompleter.setParentWindow(SwingUtilities.getWindowAncestor(ItemsPanel.this));
-                autoCompleter.setOpacity(0.9f);
-                autoCompleter.setValues(Collections.emptyList());
-                autoCompleter.init();
-            }
-        };
-
-        SwingUtilities.invokeLater(runnable);
-
         getModel().addTreeModelListener(new TreeModelListener()
         {
             @Override
@@ -110,5 +100,27 @@ public class ItemsPanel extends ATreeTablePanel
             itemTypes.add(itemType.getName());
         }
         return itemTypes;
+    }
+
+    @Override
+    protected void initEditors()
+    {
+        TreeTableCellEditor editor = (TreeTableCellEditor) getTreeTable().getCellEditor(0, getTreeTable().getHierarchicalColumn());
+        autoCompleter = new AutoCompleter();
+        autoCompleter.setCellEditor(editor);
+        autoCompleter.setParentWindow(SwingUtilities.getWindowAncestor(ItemsPanel.this));
+        autoCompleter.setOpacity(0.9f);
+        autoCompleter.setValues(Collections.emptyList());
+        autoCompleter.init();
+
+
+        getTreeTable().getColumnModel().getColumns();
+        getTreeTable().setDefaultEditor(Date.class, new DatePickerCellEditor());
+        NumberFormat moneyFormat = NumberFormat.getNumberInstance();
+        moneyFormat.setMinimumFractionDigits(2);
+        JXFormattedTextField field = new JXFormattedTextField();
+        field.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(
+                moneyFormat)));
+        getTreeTable().setDefaultEditor(BigDecimal.class, new DefaultCellEditor(field));
     }
 }

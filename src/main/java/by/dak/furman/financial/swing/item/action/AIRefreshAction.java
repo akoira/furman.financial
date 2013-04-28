@@ -20,9 +20,8 @@ public abstract class AIRefreshAction<N extends AINode, V, C extends AINode> ext
     }
 
     @Override
-    public void refreshChildNode(C childNode)
+    public void reloadNode()
     {
-        childNode.setAmount(getItemService().getSumBy(getSearchFilter(childNode)));
+        getNode().setAmount(getItemService().getSumBy(getItemService().getSearchFilter(getNode().getCategory(), getNode().getItemType(), getNode().getPeriod())));
     }
-
 }

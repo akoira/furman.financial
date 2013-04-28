@@ -1,6 +1,5 @@
 package by.dak.furman.financial.swing;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
 import by.dak.furman.financial.service.IItemService;
 
 import java.util.Collections;
@@ -19,6 +18,7 @@ public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeT
     protected void before()
     {
         removeNodes();
+        reloadNode();
     }
 
     @Override
@@ -54,4 +54,6 @@ public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeT
     public abstract C createChildNode();
 
     public abstract void refreshChildNode(C childNode);
+
+    public abstract void reloadNode();
 }

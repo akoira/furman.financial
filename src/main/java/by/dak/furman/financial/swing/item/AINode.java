@@ -1,14 +1,13 @@
 package by.dak.furman.financial.swing.item;
 
-import by.dak.common.swing.treetable.ATreeTableNode;
-import by.dak.common.swing.treetable.Property;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.ItemType;
-import by.dak.furman.financial.Period;
+import by.dak.furman.financial.swing.ATreeTableNode;
+import by.dak.furman.financial.swing.Property;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -19,28 +18,16 @@ import java.util.List;
  */
 public abstract class AINode<V> extends ATreeTableNode<V, AINode>
 {
-    private Category category;
     private ItemType itemType;
-    private Period period;
+    private Date created;
 
-    public abstract void setName(String name);
 
-    public abstract String getName();
-
-    public abstract BigDecimal getAmount();
-
-    public abstract void setAmount(BigDecimal amount);
-
-    public abstract Date getCreated();
-
-    public abstract void setCreated(Date created);
-
-    public static List<Property> createProperties(Object value)
+    protected List<Property> createProperties(Object value)
     {
         ArrayList<Property> properties = new ArrayList<Property>();
         if (value instanceof Item)
         {
-            properties.add(Property.valueOf(Item.PROPERTY_name, true));
+            properties.add(Property.valueOf(Item.PROPERTY_name, false));
             properties.add(Property.valueOf(Item.PROPERTY_amount, true));
             properties.add(Property.valueOf(Item.PROPERTY_created, true));
         }
@@ -61,15 +48,10 @@ public abstract class AINode<V> extends ATreeTableNode<V, AINode>
         return properties;
     }
 
-
-    public Category getCategory()
+    @Override
+    public List<String> getColumnIdentifiers()
     {
-        return category;
-    }
-
-    public void setCategory(Category category)
-    {
-        this.category = category;
+        return Arrays.asList(Item.PROPERTY_name, Item.PROPERTY_amount, Item.PROPERTY_created);
     }
 
     public ItemType getItemType()
@@ -84,22 +66,22 @@ public abstract class AINode<V> extends ATreeTableNode<V, AINode>
 
     public void fillChildNode(AINode child)
     {
-        if (getCategory() != null)
+        if (child.getCategory() == null)
             child.setCategory(getCategory());
-        if (getItemType() != null)
+        if (child.getItemType() == null)
             child.setItemType(getItemType());
-        if (getPeriod() != null)
+        if (child.getPeriod() == null)
             child.setPeriod(getPeriod());
         child.setProperties(createProperties(child.getValue()));
     }
 
-    public void setPeriod(Period period)
+    public Date getCreated()
     {
-        this.period = period;
+        return created;
     }
 
-    public Period getPeriod()
+    public void setCreated(Date created)
     {
-        return period;
+        this.created = created;
     }
 }

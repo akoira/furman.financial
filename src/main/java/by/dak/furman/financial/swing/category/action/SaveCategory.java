@@ -45,8 +45,7 @@ public class SaveCategory extends ACAction<CategoryNode>
 
     protected boolean validate()
     {
-        return StringUtils.stripToNull(category.getName()) != null &&
-                !category.getName().equals(getResourceMap(AddNewCategory.class).getString(AddNewCategory.RESOURCE_KEY_newCategoryName));
+        return StringUtils.stripToNull(category.getName()) != null && getCategoryService().getByName(category.getName()) == null;
     }
 
     private void addCategoryNode()
@@ -63,6 +62,14 @@ public class SaveCategory extends ACAction<CategoryNode>
                     APeriodNode monthNode = (APeriodNode) yearNode.getChildAt(k);
                     CategoryNode categoryNode = createCategoryNode(category, monthNode);
                     getModel().insertNodeInto(categoryNode, monthNode, monthNode.getChildCount());
+
+                    if (monthNode.getPeriod().isCurrent())
+                    {
+                        ExpandNode expandNode = new ExpandNode();
+                        expandNode.setPanel(getPanel());
+                        expandNode.setNode(categoryNode);
+                        expandNode.action();
+                    }
                 }
             }
         }

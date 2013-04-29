@@ -20,4 +20,17 @@ public class FTreeTableModel extends DefaultTreeTableModel
     {
         return modelSupport;
     }
+
+    @Override
+    public String getColumnName(int column)
+    {
+        String id = super.getColumnName(column);
+        return ((ATreeTableNode) getRoot()).getColumnName(id);
+    }
+
+
+    public Object getColumnIdentifier(int modelIndex)
+    {
+        return ((ATreeTableNode) getRoot()).getColumnIdentifiers().get(modelIndex);
+    }
 }

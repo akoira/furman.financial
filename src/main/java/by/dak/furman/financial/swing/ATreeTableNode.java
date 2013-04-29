@@ -5,6 +5,8 @@ import by.dak.furman.financial.Item;
 import by.dak.furman.financial.Period;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;
 
 import java.math.BigDecimal;
@@ -19,6 +21,8 @@ import java.util.List;
 public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends AbstractMutableTreeTableNode
 {
     public static final String PROPERTY_amount = Item.PROPERTY_amount;
+
+    private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
 
     private List<Property> properties = new ArrayList<Property>();
 
@@ -141,4 +145,15 @@ public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends Abstra
     protected abstract List<Property> createProperties(Object value);
 
     public abstract List<String> getColumnIdentifiers();
+
+    public String getColumnName(String id)
+    {
+        return getResourceMap().getString(String.format("column.%s", id));
+    }
+
+
+    public ResourceMap getResourceMap()
+    {
+        return resourceMap;
+    }
 }

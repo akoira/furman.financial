@@ -9,9 +9,12 @@ import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.StringValue;
+import org.jdesktop.swingx.table.ColumnFactory;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
+import org.jdesktop.swingx.table.TableColumnExt;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import javax.swing.tree.TreeSelectionModel;
@@ -46,6 +49,15 @@ public abstract class ATreeTablePanel extends JXPanel
         getTreeTable().setShowHorizontalLines(true);
         getTreeTable().setColumnControlVisible(true);
         getTreeTable().addHighlighter(HighlighterFactory.createAlternateStriping());
+        getTreeTable().setColumnFactory(new ColumnFactory()
+        {
+            @Override
+            public void configureTableColumn(TableModel model, TableColumnExt columnExt)
+            {
+                super.configureTableColumn(model, columnExt);
+                columnExt.setIdentifier(ATreeTablePanel.this.model.getColumnIdentifier(columnExt.getModelIndex()));
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(getTreeTable());
         add(scrollPane, BorderLayout.CENTER);

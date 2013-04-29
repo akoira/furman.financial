@@ -1,7 +1,7 @@
 package by.dak.furman.financial;
 
 import by.dak.common.lang.StringValue;
-import by.dak.furman.financial.converter.Item2StringConverter;
+import by.dak.furman.financial.converter.ItemRenderer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 
 @Entity
-@StringValue(converterClass = Item2StringConverter.class)
+@StringValue(converterClass = ItemRenderer.class)
 public class Item extends AObject
 {
     public static String PROPERTY_amount = "amount";

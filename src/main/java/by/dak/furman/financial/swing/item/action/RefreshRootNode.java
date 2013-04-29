@@ -43,6 +43,7 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode>
             return Collections.emptyList();
     }
 
+
     @Override
     public AINode createChildNode()
     {
@@ -75,8 +76,10 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode>
     @Override
     protected void after()
     {
-        if (getNode().getCategory() != null)
+        if (getNode().getCategory() != null && getNode().getCategory().getId() != null)
         {
+            reloadNode();
+
             AddNewItemType addNewItemType = new AddNewItemType();
             addNewItemType.setNode(getNode());
             addNewItemType.setPanel(getPanel());

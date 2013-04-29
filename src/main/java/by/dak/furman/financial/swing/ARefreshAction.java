@@ -18,7 +18,6 @@ public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeT
     protected void before()
     {
         removeNodes();
-        reloadNode();
     }
 
     @Override
@@ -47,6 +46,12 @@ public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeT
     public IItemService getItemService()
     {
         return getPanel().getAppConfig().getItemService();
+    }
+
+    @Override
+    protected void after()
+    {
+        reloadNode();
     }
 
     public abstract List<V> getChildValues();

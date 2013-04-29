@@ -1,7 +1,7 @@
 package by.dak.furman.financial;
 
 import by.dak.common.lang.StringValue;
-import by.dak.furman.financial.converter.Category2StringConverter;
+import by.dak.furman.financial.converter.CategoryRenderer;
 
 import javax.persistence.Entity;
 
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
  * Time: 11:00 AM
  */
 @Entity
-@StringValue(converterClass = Category2StringConverter.class)
+@StringValue(converterClass = CategoryRenderer.class)
 public class Category extends AObject
 {
 }

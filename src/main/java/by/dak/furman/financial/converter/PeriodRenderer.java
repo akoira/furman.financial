@@ -1,8 +1,8 @@
 package by.dak.furman.financial.converter;
 
-import by.dak.common.lang.ToStringConverter;
 import by.dak.furman.financial.Period;
 
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 
 /**
@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
  * Date: 4/22/13
  * Time: 4:54 PM
  */
-public class Period2StringConverter implements ToStringConverter<Period>
+public class PeriodRenderer extends AObjectRenderer<Period>
 {
     @Override
     public String convert(Period period)
@@ -19,16 +19,21 @@ public class Period2StringConverter implements ToStringConverter<Period>
         {
 
             case YEAR:
-                SimpleDateFormat format = new SimpleDateFormat("YYYY");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy");
                 return format.format(period.getStartDate());
-
             case MONTH:
                 format = new SimpleDateFormat("MMMM");
                 return format.format(period.getStartDate());
             case ALL:
-                return "ALL";
+                return getResourceMap().getString("label.all");
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public Icon convert2Icon(Period entity)
+    {
+        return getResourceMap().getIcon("icon");
     }
 }

@@ -1,7 +1,7 @@
 package by.dak.furman.financial;
 
 import by.dak.common.lang.StringValue;
-import by.dak.furman.financial.converter.Period2StringConverter;
+import by.dak.furman.financial.converter.PeriodRenderer;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,8 +11,8 @@ import java.util.Date;
  * Date: 4/22/13
  * Time: 4:52 PM
  */
-@StringValue(converterClass = Period2StringConverter.class)
-public class Period
+@StringValue(converterClass = PeriodRenderer.class)
+public class Period extends AObject
 {
     private Date startDate;
     private Date endDate;

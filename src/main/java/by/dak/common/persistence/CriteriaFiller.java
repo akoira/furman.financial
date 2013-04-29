@@ -27,7 +27,7 @@ public class CriteriaFiller
 
     public void fillForCount()
     {
-        fillСriterions();
+        fillCriterions();
     }
 
     public void fill()
@@ -38,7 +38,7 @@ public class CriteriaFiller
         {
             rootCriteria.setResultTransformer(searchFilter.getResultTransformer());
         }
-        fillСriterions();
+        fillCriterions();
         fillOrders();
     }
 
@@ -57,7 +57,7 @@ public class CriteriaFiller
     }
 
 
-    private void fillСriterions()
+    private void fillCriterions()
     {
         List<SearchFilter.DCriterion<Criterion>> criterions = searchFilter.getCriterions();
         if (criterions != null)

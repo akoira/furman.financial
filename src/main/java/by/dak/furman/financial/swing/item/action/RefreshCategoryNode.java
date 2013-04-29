@@ -38,6 +38,7 @@ public class RefreshCategoryNode extends AIRefreshAction<CategoryNode, ItemType,
     @Override
     protected void after()
     {
+        super.after();
         AddNewItemType addNewItemType = new AddNewItemType();
         addNewItemType.setNode(getNode());
         addNewItemType.setPanel(getPanel());

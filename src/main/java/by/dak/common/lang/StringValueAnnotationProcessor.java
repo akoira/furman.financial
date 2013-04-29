@@ -1,7 +1,10 @@
 package by.dak.common.lang;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
 
+import javax.swing.*;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 
@@ -24,6 +27,24 @@ public class StringValueAnnotationProcessor
 
             return entity != null ? entity.toString() : StringUtils.EMPTY;
         }
+
+        @Override
+        public Icon convert2Icon(Object entity)
+        {
+            return null;
+        }
+
+        @Override
+        public ResourceMap getResourceMap()
+        {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public void setResourceMap(ResourceMap resourceMap)
+        {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
     }
 
     public <T> String convert(T entity)
@@ -35,6 +56,18 @@ public class StringValueAnnotationProcessor
         else
         {
             return Converter.NULL_STRING;
+        }
+    }
+
+    public <T> Icon convert2Icon(T entity)
+    {
+        if (entity != null)
+        {
+            return getEntityToStringConverter(entity.getClass()).convert2Icon(entity);
+        }
+        else
+        {
+            return null;
         }
     }
 
@@ -67,6 +100,7 @@ public class StringValueAnnotationProcessor
             {
                 Class converter = ((StringValue) annotation).converterClass();
                 ToStringConverter toStringConverter = (ToStringConverter) converter.newInstance();
+                toStringConverter.setResourceMap(Application.getInstance().getContext().getResourceMap(converter));
                 return toStringConverter;
             }
             catch (InstantiationException e)

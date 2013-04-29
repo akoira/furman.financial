@@ -23,8 +23,11 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
     {
         before();
         if (validate())
+        {
             makeAction();
-        after();
+            after();
+        }
+
     }
 
     public FTreeTableModel getModel()

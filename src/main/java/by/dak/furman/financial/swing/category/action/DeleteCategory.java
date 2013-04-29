@@ -53,6 +53,7 @@ public class DeleteCategory extends ACAction
         {
             getModel().removeNodeFromParent(node);
         }
+        getPanel().getTreeTable().repaint();
     }
 
     public CategoryNode getCategoryNode()

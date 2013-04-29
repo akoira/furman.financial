@@ -14,10 +14,10 @@ import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 import org.jdesktop.swingx.table.TableColumnExt;
 
 import javax.swing.*;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
-import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
@@ -39,11 +39,21 @@ public abstract class ATreeTablePanel extends JXPanel
     public void init()
     {
         setLayout(new BorderLayout());
-        treeTable = new JXTreeTable();
+        treeTable = new JXTreeTable()
+        {
+            @Override
+            public Component prepareEditor(TableCellEditor editor, int row, int column)
+            {
+                Component component = super.prepareEditor(editor, row, column);
+                if (component instanceof JTextField)
+                    ((JTextField) component).selectAll();
+                return component;
+            }
+        };
         getTreeTable().setTreeCellRenderer(new DefaultTreeTableRenderer());
         getTreeTable().setScrollsOnExpand(true);
         getTreeTable().setExpandsSelectedPaths(true);
-        getTreeTable().getTreeSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        getTreeTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         getTreeTable().getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         getTreeTable().setShowVerticalLines(true);
         getTreeTable().setShowHorizontalLines(true);

@@ -14,21 +14,18 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 @StringValue(converterClass = ItemTypeRenderer.class)
-public class ItemType extends AObject
-{
-    public static String PROPERTY_category = "category";
+public class ItemType extends AObject {
+	public static String PROPERTY_category = "category";
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Category category;
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Category category;
 
-    public Category getCategory()
-    {
-        return category;
-    }
+	public Category getCategory() {
+		return category;
+	}
 
-    public void setCategory(Category category)
-    {
-        this.category = category;
-    }
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 }

@@ -1,8 +1,8 @@
 package by.dak.furman.financial.swing.category.action;
 
 import by.dak.common.persistence.SearchFilter;
-import by.dak.furman.financial.Category;
-import by.dak.furman.financial.swing.category.CategoryNode;
+import by.dak.furman.financial.Department;
+import by.dak.furman.financial.swing.category.DepartmentNode;
 import by.dak.furman.financial.swing.category.MonthNode;
 
 import java.util.List;
@@ -12,29 +12,29 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 3:59 PM
  */
-public class RefreshMonthNode extends ACRefreshAction<MonthNode, Category, CategoryNode>
-{
-    @Override
-    public List<Category> getChildValues()
-    {
-        return getPanel().getAppConfig().getCategoryService().getAll();
-    }
+public class RefreshMonthNode extends ACRefreshAction<MonthNode, Department, DepartmentNode> {
+	@Override
+	public List<Department> getChildValues() {
+		return getPanel().getAppConfig().getDepartmentService().getAll();
+	}
 
-    @Override
-    public CategoryNode createChildNode()
-    {
-        CategoryNode categoryNode = new CategoryNode();
-        SearchFilter searchFilter = getItemService().getSearchFilter(getNode().getCategory(), null, getNode().getPeriod());
-        categoryNode.setAmount(getItemService().getSumBy(searchFilter));
-        return categoryNode;
-    }
+	@Override
+	public DepartmentNode createChildNode() {
+		DepartmentNode node = new DepartmentNode();
+		SearchFilter searchFilter = getItemService().getSearchFilter(
+				getNode().getDepartment(),
+				getNode().getCategory(),
+				null,
+				getNode().getPeriod());
+		node.setAmount(getItemService().getSumBy(searchFilter));
+		return node;
+	}
 
-    @Override
-    public void refreshChildNode(CategoryNode childNode)
-    {
-        RefreshCategoryNode refreshCategoryNode = new RefreshCategoryNode();
-        refreshCategoryNode.setNode(childNode);
-        refreshCategoryNode.setPanel(getPanel());
-        refreshCategoryNode.action();
-    }
+	@Override
+	public void refreshChildNode(DepartmentNode childNode) {
+		RefreshDepartmentNode refreshDepartmentNode = new RefreshDepartmentNode();
+		refreshDepartmentNode.setNode(childNode);
+		refreshDepartmentNode.setPanel(getPanel());
+		refreshDepartmentNode.action();
+	}
 }

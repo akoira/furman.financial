@@ -6,6 +6,9 @@ import by.dak.furman.financial.swing.category.DefaultTreeTableRenderer;
 import org.jdesktop.swingx.JXFormattedTextField;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.decorator.ColorHighlighter;
+import org.jdesktop.swingx.decorator.ComponentAdapter;
+import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.StringValue;
@@ -18,7 +21,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
+import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -28,121 +33,129 @@ import java.text.NumberFormat;
  * Date: 4/27/13
  * Time: 4:26 PM
  */
-public abstract class ATreeTablePanel extends JXPanel
-{
-    public static final String ACTION_deleteCategory = "deleteCategory";
+public abstract class ATreeTablePanel extends JXPanel {
+	public static final String ACTION_deleteCategory = "deleteCategory";
 
-    private JXTreeTable treeTable;
-    private FTreeTableModel model;
-    private AppConfig appConfig;
+	private JXTreeTable treeTable;
+	private FTreeTableModel model;
+	private AppConfig appConfig;
 
-    public void init()
-    {
-        setLayout(new BorderLayout());
-        treeTable = new JXTreeTable()
-        {
-            @Override
-            public Component prepareEditor(TableCellEditor editor, int row, int column)
-            {
-                Component component = super.prepareEditor(editor, row, column);
-                if (component instanceof JTextField)
-                    ((JTextField) component).selectAll();
-                return component;
-            }
-        };
-        getTreeTable().setTreeCellRenderer(new DefaultTreeTableRenderer());
-        getTreeTable().setScrollsOnExpand(true);
-        getTreeTable().setExpandsSelectedPaths(true);
-        getTreeTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        getTreeTable().getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        getTreeTable().setShowVerticalLines(true);
-        getTreeTable().setShowHorizontalLines(true);
-        getTreeTable().setColumnControlVisible(true);
-        getTreeTable().addHighlighter(HighlighterFactory.createAlternateStriping());
-        getTreeTable().setColumnFactory(new ColumnFactory()
-        {
-            @Override
-            public void configureTableColumn(TableModel model, TableColumnExt columnExt)
-            {
-                super.configureTableColumn(model, columnExt);
-                columnExt.setIdentifier(ATreeTablePanel.this.model.getColumnIdentifier(columnExt.getModelIndex()));
-            }
-        });
+	public void init() {
+		setLayout(new BorderLayout());
+		treeTable = new JXTreeTable() {
+			@Override
+			public Component prepareEditor(TableCellEditor editor, int row, int column) {
+				Component component = super.prepareEditor(editor, row, column);
+				if (component instanceof JTextField)
+					((JTextField) component).selectAll();
+				return component;
+			}
+		};
+		getTreeTable().setTreeCellRenderer(new DefaultTreeTableRenderer());
+		getTreeTable().setScrollsOnExpand(true);
+		getTreeTable().setExpandsSelectedPaths(true);
+		getTreeTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		getTreeTable().getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		getTreeTable().setShowVerticalLines(true);
+		getTreeTable().setShowHorizontalLines(true);
+		getTreeTable().setColumnControlVisible(true);
 
-        JScrollPane scrollPane = new JScrollPane(getTreeTable());
-        add(scrollPane, BorderLayout.CENTER);
+		getTreeTable().addHighlighter(HighlighterFactory.createAlternateStriping());
+		ColorHighlighter colorHighlighter = new ColorHighlighter();
+		colorHighlighter.setSelectedBackground(new Color(168, 200, 255));
+		colorHighlighter.setHighlightPredicate(new HighlightPredicate() {
+			@Override
+			public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
+				return getTreeTable().getSelectedColumn() == adapter.column && adapter.isEditable();
+			}
+		});
+		getTreeTable().addHighlighter(colorHighlighter);
 
-        model = new FTreeTableModel(createRootNode());
-        model.setColumnIdentifiers(((ATreeTableNode) model.getRoot()).getColumnIdentifiers());
-        getTreeTable().setTreeTableModel(getModel());
 
-        Runnable runnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                initRenderersEditors();
-            }
-        };
-        SwingUtilities.invokeLater(runnable);
-        initActions();
-    }
+		AbstractAction expendPathAction = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
-    public JXTreeTable getTreeTable()
-    {
-        return treeTable;
-    }
+				TreePath treePath = getTreeTable().getTreeSelectionModel().getLeadSelectionPath();
+				getTreeTable().expandPath(treePath);
+			}
+		};
 
-    public FTreeTableModel getModel()
-    {
-        return model;
-    }
+		getTreeTable().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "expendPath");
+		getTreeTable().getActionMap().put("expendPath", expendPathAction);
 
-    protected abstract ATreeTableNode createRootNode();
+		getTreeTable().setColumnFactory(new ColumnFactory() {
+			@Override
+			public void configureTableColumn(TableModel model, TableColumnExt columnExt) {
+				super.configureTableColumn(model, columnExt);
+				columnExt.setIdentifier(ATreeTablePanel.this.model.getColumnIdentifier(columnExt.getModelIndex()));
+			}
+		});
 
-    protected void initRenderersEditors()
-    {
-        DefaultTableColumnModelExt columnModel = (DefaultTableColumnModelExt) getTreeTable().getColumnModel();
+		JScrollPane scrollPane = new JScrollPane(getTreeTable());
+		add(scrollPane, BorderLayout.CENTER);
 
-        final NumberFormat numberFormat = NumberFormat.getNumberInstance();
-        numberFormat.setMinimumFractionDigits(2);
-        numberFormat.setMinimumIntegerDigits(1);
-        JXFormattedTextField field = new JXFormattedTextField();
-        field.setHorizontalAlignment(JTextField.RIGHT);
-        field.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(
-                numberFormat)));
-        columnModel.getColumnExt(Item.PROPERTY_amount).setCellEditor(new DefaultCellEditor(field));
-        DefaultTableRenderer renderer = new DefaultTableRenderer(new StringValue()
-        {
-            @Override
-            public String getString(Object value)
-            {
-                if (value == null)
-                    value = BigDecimal.ZERO;
+		model = new FTreeTableModel(createRootNode());
+		model.setColumnIdentifiers(((ATreeTableNode) model.getRoot()).getColumnIdentifiers());
+		getTreeTable().setTreeTableModel(getModel());
 
-                return value instanceof BigDecimal ? numberFormat.format(value) : value.toString();
-            }
-        });
-        renderer.getComponentProvider().setHorizontalAlignment(JTextField.RIGHT);
-        columnModel.getColumnExt(Item.PROPERTY_amount).setCellRenderer(renderer);
-    }
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				initRenderersEditors();
+			}
+		};
+		SwingUtilities.invokeLater(runnable);
+		initActions();
+	}
 
-    protected void initActions()
-    {
-        getTreeTable().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,
-                0), ACTION_deleteCategory);
-        getTreeTable().getActionMap().put(ACTION_deleteCategory, getActionDelete());
-    }
+	public JXTreeTable getTreeTable() {
+		return treeTable;
+	}
 
-    protected abstract Action getActionDelete();
+	public FTreeTableModel getModel() {
+		return model;
+	}
 
-    public AppConfig getAppConfig()
-    {
-        return appConfig;
-    }
+	protected abstract ATreeTableNode createRootNode();
 
-    public void setAppConfig(AppConfig appConfig)
-    {
-        this.appConfig = appConfig;
-    }
+	protected void initRenderersEditors() {
+		DefaultTableColumnModelExt columnModel = (DefaultTableColumnModelExt) getTreeTable().getColumnModel();
+
+		final NumberFormat numberFormat = NumberFormat.getNumberInstance();
+		numberFormat.setMinimumFractionDigits(2);
+		numberFormat.setMinimumIntegerDigits(1);
+		JXFormattedTextField field = new JXFormattedTextField();
+		field.setHorizontalAlignment(JTextField.RIGHT);
+		field.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(
+				numberFormat)));
+		columnModel.getColumnExt(Item.PROPERTY_amount).setCellEditor(new DefaultCellEditor(field));
+		DefaultTableRenderer renderer = new DefaultTableRenderer(new StringValue() {
+			@Override
+			public String getString(Object value) {
+				if (value == null)
+					value = BigDecimal.ZERO;
+
+				return value instanceof BigDecimal ? numberFormat.format(value) : value.toString();
+			}
+		});
+		renderer.getComponentProvider().setHorizontalAlignment(JTextField.RIGHT);
+		columnModel.getColumnExt(Item.PROPERTY_amount).setCellRenderer(renderer);
+	}
+
+	protected void initActions() {
+		getTreeTable().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,
+				0), ACTION_deleteCategory);
+		getTreeTable().getActionMap().put(ACTION_deleteCategory, getActionDelete());
+	}
+
+	protected abstract Action getActionDelete();
+
+	public AppConfig getAppConfig() {
+		return appConfig;
+	}
+
+	public void setAppConfig(AppConfig appConfig) {
+		this.appConfig = appConfig;
+	}
 }

@@ -12,31 +12,31 @@ import java.util.Date;
  * Date: 4/25/13
  * Time: 9:50 PM
  */
-public class AddNewItem extends AIAction<ItemTypeNode>
-{
-    private ItemNode result;
+public class AddNewItem extends AIAction<ItemTypeNode> {
+	private ItemNode result;
 
-    @Override
-    protected void makeAction()
-    {
-        Item item = new Item();
-        item.setName(getNode().getItemType().getName());
-        item.setItemType(getNode().getItemType());
-        item.setCreated(new Date());
-        item.setAmount(BigDecimal.ZERO);
+	@Override
+	protected void makeAction() {
+		Item item = new Item();
+		item.setName(getNode().getItemType().getName());
+		item.setItemType(getNode().getItemType());
+		if (getNode().getPeriod() == null || getNode().getPeriod().isCurrent())
+			item.setCreated(new Date());
+		else
+			item.setCreated(getNode().getPeriod().getStartDate());
+		item.setAmount(BigDecimal.ZERO);
 
-        ItemNode node = new ItemNode();
-        node.setValue(item);
-        getNode().fillChildNode(node);
-        getModel().insertNodeInto(node, getNode(), getNode().getChildCount());
+		ItemNode node = new ItemNode();
+		node.setValue(item);
+		getNode().fillChildNode(node);
+		getModel().insertNodeInto(node, getNode(), getNode().getChildCount());
 
-        result = node;
-    }
+		result = node;
+	}
 
 
-    public ItemNode getResult()
-    {
-        return result;
-    }
+	public ItemNode getResult() {
+		return result;
+	}
 }
 

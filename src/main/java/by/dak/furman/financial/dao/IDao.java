@@ -11,23 +11,22 @@ import java.util.List;
  * Date: 4/24/13
  * Time: 6:00 PM
  */
-public interface IDao<O extends AObject>
-{
-    List<O> getAll();
+public interface IDao<O extends AObject> {
+	List<O> getAll();
 
-    List<O> getAllBy(SearchFilter filter);
+	List<O> getAllBy(SearchFilter filter);
 
-    void add(O object);
+	void add(O object);
 
-    void save(O object);
+	void save(O object);
 
-    void delete(O object);
+	void delete(O object);
 
-    O getById(Long id);
+	O getById(Long id);
 
-    BigDecimal getSum(String property);
+	BigDecimal getSum(String property);
 
-    O getByName(String name);
+	O getByName(String name);
 
-    O getBy(SearchFilter searchFilter);
+	O getBy(SearchFilter searchFilter);
 }

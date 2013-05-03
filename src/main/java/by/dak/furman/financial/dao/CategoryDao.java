@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
  * Time: 5:46 PM
  */
 @Repository
-public class CategoryDao extends ADao<Category> implements ICategoryDao
-{
+public class CategoryDao extends ADao<Category> implements ICategoryDao {
 }

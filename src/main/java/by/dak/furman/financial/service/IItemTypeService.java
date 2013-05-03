@@ -10,9 +10,8 @@ import java.util.List;
  * Date: 4/25/13
  * Time: 12:30 PM
  */
-public interface IItemTypeService extends IService<ItemType>
-{
-    List<ItemType> getAllBy(Category value);
+public interface IItemTypeService extends IService<ItemType> {
+	List<ItemType> getAllBy(Category value);
 
-    ItemType getBy(Category category, String name);
+	ItemType getBy(Category category, String name);
 }

@@ -10,38 +10,31 @@ import java.util.Date;
  * Date: 4/25/13
  * Time: 7:06 PM
  */
-public class ItemNode extends AINode<Item>
-{
-    private String name;
+public class ItemNode extends AINode<Item> {
+	private String name;
 
-    public void setName(String string)
-    {
-        getValue().getItemType().setName(string);
-    }
+	public void setName(String string) {
+		getValue().getItemType().setName(string);
+	}
 
-    public String getName()
-    {
-        return getValue().getName();
-    }
+	public String getName() {
+		return getValue().getName();
+	}
 
-    public BigDecimal getAmount()
-    {
-        return getValue().getAmount();
-    }
+	public BigDecimal getAmount() {
+		return getValue().getAmount();
+	}
 
-    public void setAmount(BigDecimal amount)
-    {
-        getValue().setAmount(amount);
-    }
+	public void setAmount(BigDecimal amount) {
+		getValue().setAmount(amount);
+	}
 
-    public Date getCreated()
-    {
-        return getValue().getCreated();
-    }
+	public Date getCreated() {
+		return getValue().getCreated();
+	}
 
-    public void setCreated(Date created)
-    {
-        getValue().setCreated(created);
-    }
+	public void setCreated(Date created) {
+		getValue().setCreated(created);
+	}
 }
 

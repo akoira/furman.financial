@@ -11,12 +11,16 @@ import javax.swing.tree.TreePath;
  * Date: 4/25/13
  * Time: 1:09 PM
  */
-public abstract class AIAction<N extends AINode> extends AAction<ItemsPanel, N>
-{
-    public void selectColumn(AINode node, String property)
-    {
-        getPanel().getTreeTable().getTreeSelectionModel().setSelectionPath(new TreePath(getModel().getPathToRoot(node)));
-        int column = getPanel().getTreeTable().getColumnModel().getColumnIndex(property);
-        getPanel().getTreeTable().getColumnModel().getSelectionModel().setSelectionInterval(column, column);
-    }
+public abstract class AIAction<N extends AINode> extends AAction<ItemsPanel, N> {
+	public void selectColumn(AINode node, String property) {
+		int column = getPanel().getTreeTable().getColumnModel().getColumnIndex(property);
+		selectColumn(node, column);
+	}
+
+	public void selectColumn(AINode node, int column) {
+
+		getPanel().getTreeTable().getTreeSelectionModel().setSelectionPath(new TreePath(getModel().getPathToRoot(node)));
+		getPanel().getTreeTable().getColumnModel().getSelectionModel().setSelectionInterval(0, 0);
+		getPanel().getTreeTable().getColumnModel().getSelectionModel().setSelectionInterval(column, column);
+	}
 }

@@ -7,6 +7,5 @@ import by.dak.furman.financial.ItemType;
  * Date: 4/23/13
  * Time: 11:25 AM
  */
-public class ItemTypeRenderer extends AObjectRenderer<ItemType>
-{
+public class ItemTypeRenderer extends AObjectRenderer<ItemType> {
 }

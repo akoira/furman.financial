@@ -7,7 +7,6 @@ import by.dak.furman.financial.Category;
  * Date: 4/23/13
  * Time: 11:25 AM
  */
-public class CategoryRenderer extends AObjectRenderer<Category>
-{
+public class CategoryRenderer extends AObjectRenderer<Category> {
 
 }

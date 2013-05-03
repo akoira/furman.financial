@@ -14,43 +14,38 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 3:59 PM
  */
-public class RefreshYearNode extends ACRefreshAction<YearNode, Period, MonthNode>
-{
-    @Override
-    public List<Period> getChildValues()
-    {
-        ArrayList<Period> periods = new ArrayList<Period>();
+public class RefreshYearNode extends ACRefreshAction<YearNode, Period, MonthNode> {
+	@Override
+	public List<Period> getChildValues() {
+		ArrayList<Period> periods = new ArrayList<Period>();
 
-        for (int month = 0; month < 12; month++)
-        {
-            Period period = new Period();
-            period.setPeriodType(PeriodType.MONTH);
-            Calendar calendar = Calendar.getInstance();
-            int current = calendar.get(Calendar.MONTH);
-            period.setCurrent(current == month);
-            calendar.setTime(getNode().getValue().getStartDate());
-            Period.resetTime(calendar);
-            calendar.set(Calendar.MONTH, month);
-            period.setStartDate(calendar.getTime());
-            calendar.add(Calendar.MONTH, 1);
-            period.setEndDate(calendar.getTime());
-            periods.add(period);
-        }
-        return periods;
-    }
+		for (int month = 0; month < 12; month++) {
+			Period period = new Period();
+			period.setPeriodType(PeriodType.MONTH);
+			Calendar calendar = Calendar.getInstance();
+			int current = calendar.get(Calendar.MONTH);
+			period.setCurrent(current == month);
+			calendar.setTime(getNode().getValue().getStartDate());
+			Period.resetTime(calendar);
+			calendar.set(Calendar.MONTH, month);
+			period.setStartDate(calendar.getTime());
+			calendar.add(Calendar.MONTH, 1);
+			period.setEndDate(calendar.getTime());
+			periods.add(period);
+		}
+		return periods;
+	}
 
-    @Override
-    public MonthNode createChildNode()
-    {
-        return new MonthNode();
-    }
+	@Override
+	public MonthNode createChildNode() {
+		return new MonthNode();
+	}
 
-    @Override
-    public void refreshChildNode(MonthNode childNode)
-    {
-        RefreshMonthNode action = new RefreshMonthNode();
-        action.setNode(childNode);
-        action.setPanel(getPanel());
-        action.action();
-    }
+	@Override
+	public void refreshChildNode(MonthNode childNode) {
+		RefreshMonthNode action = new RefreshMonthNode();
+		action.setNode(childNode);
+		action.setPanel(getPanel());
+		action.action();
+	}
 }

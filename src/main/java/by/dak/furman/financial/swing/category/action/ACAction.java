@@ -9,6 +9,5 @@ import by.dak.furman.financial.swing.category.CategoriesPanel;
  * Date: 4/25/13
  * Time: 1:09 PM
  */
-public abstract class ACAction<N extends ACNode> extends AAction<CategoriesPanel, N>
-{
+public abstract class ACAction<N extends ACNode> extends AAction<CategoriesPanel, N> {
 }

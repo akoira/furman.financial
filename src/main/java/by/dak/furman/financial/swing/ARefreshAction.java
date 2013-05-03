@@ -11,54 +11,46 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 4:14 PM
  */
-public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeTableNode, V, C extends ATreeTableNode> extends AAction<P, N>
-{
+public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeTableNode, V, C extends ATreeTableNode> extends AAction<P, N> {
 
-    @Override
-    protected void before()
-    {
-        removeNodes();
-    }
+	@Override
+	protected void before() {
+		removeNodes();
+	}
 
-    @Override
-    protected void makeAction()
-    {
-        List<V> values = getChildValues();
-        for (V value : values)
-        {
-            C childNode = createChildNode();
-            childNode.setValue(value);
-            getNode().fillChildNode(childNode);
-            getModel().insertNodeInto(childNode, getNode(), getNode().getChildCount());
-            refreshChildNode(childNode);
-        }
-    }
+	@Override
+	protected void makeAction() {
+		List<V> values = getChildValues();
+		for (V value : values) {
+			C childNode = createChildNode();
+			childNode.setValue(value);
+			getNode().fillChildNode(childNode);
+			getModel().insertNodeInto(childNode, getNode(), getNode().getChildCount());
+			refreshChildNode(childNode);
+		}
+	}
 
-    protected void removeNodes()
-    {
-        List<ATreeTableNode> nodes = Collections.list((Enumeration<ATreeTableNode>) getNode().children());
-        for (ATreeTableNode node : nodes)
-        {
-            getModel().removeNodeFromParent(node);
-        }
-    }
+	protected void removeNodes() {
+		List<ATreeTableNode> nodes = Collections.list((Enumeration<ATreeTableNode>) getNode().children());
+		for (ATreeTableNode node : nodes) {
+			getModel().removeNodeFromParent(node);
+		}
+	}
 
-    public IItemService getItemService()
-    {
-        return getPanel().getAppConfig().getItemService();
-    }
+	public IItemService getItemService() {
+		return getPanel().getAppConfig().getItemService();
+	}
 
-    @Override
-    protected void after()
-    {
-        reloadNode();
-    }
+	@Override
+	protected void after() {
+		reloadNode();
+	}
 
-    public abstract List<V> getChildValues();
+	public abstract List<V> getChildValues();
 
-    public abstract C createChildNode();
+	public abstract C createChildNode();
 
-    public abstract void refreshChildNode(C childNode);
+	public abstract void refreshChildNode(C childNode);
 
-    public abstract void reloadNode();
+	public abstract void reloadNode();
 }

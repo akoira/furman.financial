@@ -7,25 +7,20 @@ import org.jdesktop.swingx.treetable.TreeTableNode;
  * Date: 4/25/13
  * Time: 1:27 PM
  */
-public class RootNode extends APeriodNode
-{
+public class RootNode extends APeriodNode {
 
-    public APeriodNode getCurrentNode()
-    {
-        return getCurrentNode(this);
-    }
+	public APeriodNode getCurrentNode() {
+		return getCurrentNode(this);
+	}
 
-    private APeriodNode getCurrentNode(APeriodNode node)
-    {
-        int count = node.getChildCount();
-        for (int i = 0; i < count; i++)
-        {
-            TreeTableNode child = node.getChildAt(i);
-            if (child instanceof APeriodNode && ((APeriodNode) child).getValue().isCurrent())
-            {
-                return getCurrentNode((APeriodNode) child);
-            }
-        }
-        return node;
-    }
+	private APeriodNode getCurrentNode(APeriodNode node) {
+		int count = node.getChildCount();
+		for (int i = 0; i < count; i++) {
+			TreeTableNode child = node.getChildAt(i);
+			if (child instanceof APeriodNode && ((APeriodNode) child).getValue().isCurrent()) {
+				return getCurrentNode((APeriodNode) child);
+			}
+		}
+		return node;
+	}
 }

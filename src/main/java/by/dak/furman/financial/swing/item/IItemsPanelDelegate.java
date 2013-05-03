@@ -7,7 +7,6 @@ import by.dak.furman.financial.swing.category.ACNode;
  * Date: 4/28/13
  * Time: 11:58 PM
  */
-public interface IItemsPanelDelegate
-{
-    public void refreshACNode(ACNode acNode);
+public interface IItemsPanelDelegate {
+	public void refreshACNode(ACNode acNode);
 }

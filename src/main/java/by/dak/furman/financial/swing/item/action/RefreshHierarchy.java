@@ -11,23 +11,19 @@ import javax.swing.tree.TreePath;
  * Date: 4/28/13
  * Time: 11:22 PM
  */
-public class RefreshHierarchy extends AIAction<AINode>
-{
-    @Override
-    protected void makeAction()
-    {
-        TreeTableNode[] tableNodes = getModel().getPathToRoot(getNode());
-        for (TreeTableNode node : tableNodes)
-        {
-            getPanel().getRefreshActionFactory().getActionBy((AINode) node).reloadNode();
+public class RefreshHierarchy extends AIAction<AINode> {
+	@Override
+	protected void makeAction() {
+		TreeTableNode[] tableNodes = getModel().getPathToRoot(getNode());
+		for (TreeTableNode node : tableNodes) {
+			getPanel().getRefreshActionFactory().getActionBy((AINode) node).reloadNode();
 
-            if (node != getNode())
-                getModel().getModelSupport().firePathChanged(new TreePath(getModel().getPathToRoot(node)));
-        }
+			if (node != getNode())
+				getModel().getModelSupport().firePathChanged(new TreePath(getModel().getPathToRoot(node)));
+		}
 
-        if (getPanel().getDelegate() != null)
-        {
-            getPanel().getDelegate().refreshACNode(((RootNode) getRootNode()).getValue());
-        }
-    }
+		if (getPanel().getDelegate() != null) {
+			getPanel().getDelegate().refreshACNode(((RootNode) getRootNode()).getValue());
+		}
+	}
 }

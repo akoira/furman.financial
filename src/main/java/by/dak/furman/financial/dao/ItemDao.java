@@ -15,18 +15,16 @@ import java.math.BigDecimal;
  * Time: 5:46 PM
  */
 @Repository
-public class ItemDao extends ADao<Item> implements IItemDao
-{
-    @Override
-    public BigDecimal getSumBy(SearchFilter filter)
-    {
-        Criteria criteria = createCriteria(getObjectClass());
-        CriteriaFiller filler = new CriteriaFiller(criteria, filter);
-        filler.fill();
+public class ItemDao extends ADao<Item> implements IItemDao {
+	@Override
+	public BigDecimal getSumBy(SearchFilter filter) {
+		Criteria criteria = createCriteria(getObjectClass());
+		CriteriaFiller filler = new CriteriaFiller(criteria, filter);
+		filler.fill();
 
-        criteria.setProjection(Projections.sum(Item.PROPERTY_amount));
-        BigDecimal result = (BigDecimal) criteria.uniqueResult();
-        return result != null ? result : BigDecimal.ZERO;
-    }
+		criteria.setProjection(Projections.sum(Item.PROPERTY_amount));
+		BigDecimal result = (BigDecimal) criteria.uniqueResult();
+		return result != null ? result : BigDecimal.ZERO;
+	}
 
 }

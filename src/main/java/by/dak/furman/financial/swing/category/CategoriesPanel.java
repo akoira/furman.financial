@@ -8,6 +8,7 @@ import by.dak.furman.financial.swing.ATreeTablePanel;
 import by.dak.furman.financial.swing.category.action.DeleteCategory;
 import by.dak.furman.financial.swing.category.action.RefreshActionFactory;
 import by.dak.furman.financial.swing.category.action.SaveCategory;
+import by.dak.furman.financial.swing.category.action.SaveDepartment;
 import org.jdesktop.swingx.JXTextField;
 
 import javax.swing.*;
@@ -24,149 +25,132 @@ import java.util.Date;
  * Date: 4/22/13
  * Time: 11:23 AM
  */
-public class CategoriesPanel extends ATreeTablePanel
-{
+public class CategoriesPanel extends ATreeTablePanel {
 
 
-    private RefreshActionFactory refreshActionFactory;
+	private RefreshActionFactory refreshActionFactory;
 
-    private ICategoriesPanelDelegate delegate;
+	private ICategoriesPanelDelegate delegate;
 
-    private TreeSelectionListener treeSelectionListener;
-    private TreeModelListener treeModelListener;
+	private TreeSelectionListener treeSelectionListener;
+	private TreeModelListener treeModelListener;
 
-    private Action actionDelete;
+	private Action actionDelete;
 
-    @Override
-    public ATreeTableNode createRootNode()
-    {
-        Period period = new Period();
-        period.setPeriodType(PeriodType.ALL);
-        period.setCurrent(true);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, 1);
-        period.setEndDate(calendar.getTime());
-        period.setStartDate(new Date(0));
+	@Override
+	public ATreeTableNode createRootNode() {
+		Period period = new Period();
+		period.setPeriodType(PeriodType.ALL);
+		period.setCurrent(true);
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.YEAR, 1);
+		period.setEndDate(calendar.getTime());
+		period.setStartDate(new Date(0));
 
-        RootNode rootNode = new RootNode();
-        rootNode.setPeriod(period);
-        rootNode.setValue(period);
-        rootNode.setProperties(rootNode.createProperties(period));
+		RootNode rootNode = new RootNode();
+		rootNode.setPeriod(period);
+		rootNode.setValue(period);
+		rootNode.setProperties(rootNode.createProperties(period));
 
-        return rootNode;
-    }
+		return rootNode;
+	}
 
-    public void init()
-    {
-        super.init();
+	public void init() {
+		super.init();
 
-        refreshActionFactory = new RefreshActionFactory();
-        refreshActionFactory.setPanel(this);
+		refreshActionFactory = new RefreshActionFactory();
+		refreshActionFactory.setPanel(this);
 
-        getTreeTable().setDefaultEditor(Category.class, new DefaultCellEditor(new JXTextField()));
+		getTreeTable().setDefaultEditor(Category.class, new DefaultCellEditor(new JXTextField()));
 
-        getModel().addTreeModelListener(getTreeModelListener());
-        getTreeTable().getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionListener());
-    }
+		getModel().addTreeModelListener(getTreeModelListener());
+		getTreeTable().getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionListener());
+	}
 
 
-    private TreeModelListener getTreeModelListener()
-    {
-        if (treeModelListener == null)
-            treeModelListener = new TreeModelListener()
-            {
-                @Override
-                public void treeNodesChanged(TreeModelEvent e)
-                {
-                    if (e.getChildren() != null && e.getChildren().length > 0)
-                    {
-                        Object node = e.getChildren()[0];
-                        if (node instanceof CategoryNode)
-                        {
-                            CategoryNode cNode = (CategoryNode) node;
-                            SaveCategory saveCategory = new SaveCategory();
-                            saveCategory.setNode(cNode);
-                            saveCategory.setPanel(CategoriesPanel.this);
-                            saveCategory.action();
-                        }
-                    }
-                }
+	private TreeModelListener getTreeModelListener() {
+		if (treeModelListener == null)
+			treeModelListener = new TreeModelListener() {
+				@Override
+				public void treeNodesChanged(TreeModelEvent e) {
+					if (e.getChildren() != null && e.getChildren().length > 0) {
+						Object node = e.getChildren()[0];
+						if (node instanceof CategoryNode) {
+							CategoryNode cNode = (CategoryNode) node;
+							SaveCategory saveCategory = new SaveCategory();
+							saveCategory.setNode(cNode);
+							saveCategory.setPanel(CategoriesPanel.this);
+							saveCategory.action();
+						} else if (node instanceof DepartmentNode) {
+							DepartmentNode dNode = (DepartmentNode) node;
+							SaveDepartment saveDepartment = new SaveDepartment();
+							saveDepartment.setNode(dNode);
+							saveDepartment.setPanel(CategoriesPanel.this);
+							saveDepartment.action();
+						}
+					}
+				}
 
-                @Override
-                public void treeNodesInserted(TreeModelEvent e)
-                {
-                }
+				@Override
+				public void treeNodesInserted(TreeModelEvent e) {
+				}
 
-                @Override
-                public void treeNodesRemoved(TreeModelEvent e)
-                {
-                }
+				@Override
+				public void treeNodesRemoved(TreeModelEvent e) {
+				}
 
-                @Override
-                public void treeStructureChanged(TreeModelEvent e)
-                {
-                }
-            };
-        return treeModelListener;
+				@Override
+				public void treeStructureChanged(TreeModelEvent e) {
+				}
+			};
+		return treeModelListener;
 
 
-    }
+	}
 
-    private TreeSelectionListener getTreeSelectionListener()
-    {
-        if (treeSelectionListener == null)
-            treeSelectionListener = new TreeSelectionListener()
-            {
-                @Override
-                public void valueChanged(TreeSelectionEvent e)
-                {
-                    if (delegate != null)
-                    {
-                        if (e.getNewLeadSelectionPath() != null)
-                        {
-                            ACNode node = (ACNode) e.getNewLeadSelectionPath().getLastPathComponent();
-                            delegate.selectNode(node);
-                        }
-                    }
-                }
-            };
-        return treeSelectionListener;
+	private TreeSelectionListener getTreeSelectionListener() {
+		if (treeSelectionListener == null)
+			treeSelectionListener = new TreeSelectionListener() {
+				@Override
+				public void valueChanged(TreeSelectionEvent e) {
+					if (delegate != null) {
+						if (e.getNewLeadSelectionPath() != null) {
+							ACNode node = (ACNode) e.getNewLeadSelectionPath().getLastPathComponent();
+							delegate.selectNode(node);
+						}
+					}
+				}
+			};
+		return treeSelectionListener;
 
-    }
+	}
 
-    protected Action getActionDelete()
-    {
-        if (actionDelete == null)
-            actionDelete = new AbstractAction()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    DeleteCategory deleteCategory = new DeleteCategory();
-                    deleteCategory.setPanel(CategoriesPanel.this);
-                    Object node = getTreeTable().getTreeSelectionModel().getLeadSelectionPath().getLastPathComponent();
-                    if (node instanceof CategoryNode)
-                    {
-                        deleteCategory.setCategoryNode((CategoryNode) node);
-                        deleteCategory.action();
-                    }
-                }
-            };
-        return actionDelete;
-    }
+	protected Action getActionDelete() {
+		if (actionDelete == null)
+			actionDelete = new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DeleteCategory deleteCategory = new DeleteCategory();
+					deleteCategory.setPanel(CategoriesPanel.this);
+					Object node = getTreeTable().getTreeSelectionModel().getLeadSelectionPath().getLastPathComponent();
+					if (node instanceof CategoryNode) {
+						deleteCategory.setCategoryNode((CategoryNode) node);
+						deleteCategory.action();
+					}
+				}
+			};
+		return actionDelete;
+	}
 
-    public ICategoriesPanelDelegate getDelegate()
-    {
-        return delegate;
-    }
+	public ICategoriesPanelDelegate getDelegate() {
+		return delegate;
+	}
 
-    public void setDelegate(ICategoriesPanelDelegate delegate)
-    {
-        this.delegate = delegate;
-    }
+	public void setDelegate(ICategoriesPanelDelegate delegate) {
+		this.delegate = delegate;
+	}
 
-    public RefreshActionFactory getRefreshActionFactory()
-    {
-        return refreshActionFactory;
-    }
+	public RefreshActionFactory getRefreshActionFactory() {
+		return refreshActionFactory;
+	}
 }

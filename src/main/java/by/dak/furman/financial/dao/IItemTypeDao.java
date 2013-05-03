@@ -7,6 +7,5 @@ import by.dak.furman.financial.ItemType;
  * Date: 4/24/13
  * Time: 6:23 PM
  */
-public interface IItemTypeDao extends IDao<ItemType>
-{
+public interface IItemTypeDao extends IDao<ItemType> {
 }

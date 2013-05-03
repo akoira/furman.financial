@@ -16,32 +16,28 @@ import java.util.List;
  * Time: 5:59 PM
  */
 @Service
-public class ItemTypeService extends AService<ItemType> implements IItemTypeService
-{
-    @Autowired
-    private IItemTypeDao dao;
+public class ItemTypeService extends AService<ItemType> implements IItemTypeService {
+	@Autowired
+	private IItemTypeDao dao;
 
-    protected IItemTypeDao getDao()
-    {
-        return dao;
-    }
+	protected IItemTypeDao getDao() {
+		return dao;
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<ItemType> getAllBy(Category value)
-    {
-        SearchFilter filter = SearchFilter.instanceUnbound();
-        filter.eq(ItemType.PROPERTY_category, value);
-        return getAllBy(filter);
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<ItemType> getAllBy(Category value) {
+		SearchFilter filter = SearchFilter.instanceUnbound();
+		filter.eq(ItemType.PROPERTY_category, value);
+		return getAllBy(filter);
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public ItemType getBy(Category category, String name)
-    {
-        SearchFilter filter = SearchFilter.instanceSingle();
-        filter.eq(ItemType.PROPERTY_category, category);
-        filter.ilike(ItemType.PROPERTY_name, name);
-        return getDao().getBy(filter);
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public ItemType getBy(Category category, String name) {
+		SearchFilter filter = SearchFilter.instanceSingle();
+		filter.eq(ItemType.PROPERTY_category, category);
+		filter.ilike(ItemType.PROPERTY_name, name);
+		return getDao().getBy(filter);
+	}
 }

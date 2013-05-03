@@ -10,14 +10,13 @@ import javax.swing.*;
  * Date: 27.12.2008
  * Time: 18:44:51
  */
-public interface ToStringConverter<E> extends Converter<E, String>
-{
-    @Override
-    String convert(E entity);
+public interface ToStringConverter<E> extends Converter<E, String> {
+	@Override
+	String convert(E entity);
 
-    Icon convert2Icon(E entity);
+	Icon convert2Icon(E entity);
 
-    public ResourceMap getResourceMap();
+	public ResourceMap getResourceMap();
 
-    public void setResourceMap(ResourceMap resourceMap);
+	public void setResourceMap(ResourceMap resourceMap);
 }

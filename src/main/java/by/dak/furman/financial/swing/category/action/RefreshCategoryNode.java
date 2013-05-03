@@ -12,22 +12,18 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 4:00 PM
  */
-public class RefreshCategoryNode extends ACRefreshAction<CategoryNode, ItemType, ACNode>
-{
-    @Override
-    public List<ItemType> getChildValues()
-    {
-        return Collections.emptyList();
-    }
+public class RefreshCategoryNode extends ACRefreshAction<CategoryNode, ItemType, ACNode> {
+	@Override
+	public List<ItemType> getChildValues() {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public ACNode createChildNode()
-    {
-        return null;
-    }
+	@Override
+	public ACNode createChildNode() {
+		return null;
+	}
 
-    @Override
-    public void refreshChildNode(ACNode childNode)
-    {
-    }
+	@Override
+	public void refreshChildNode(ACNode childNode) {
+	}
 }

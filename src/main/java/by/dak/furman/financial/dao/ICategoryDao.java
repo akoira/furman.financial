@@ -7,6 +7,5 @@ import by.dak.furman.financial.Category;
  * Date: 4/24/13
  * Time: 6:19 PM
  */
-public interface ICategoryDao extends IDao<Category>
-{
+public interface ICategoryDao extends IDao<Category> {
 }

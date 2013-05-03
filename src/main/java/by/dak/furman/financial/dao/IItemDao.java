@@ -10,7 +10,6 @@ import java.math.BigDecimal;
  * Date: 4/24/13
  * Time: 6:21 PM
  */
-public interface IItemDao extends IDao<Item>
-{
-    public BigDecimal getSumBy(SearchFilter filter);
+public interface IItemDao extends IDao<Item> {
+	public BigDecimal getSumBy(SearchFilter filter);
 }

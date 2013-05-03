@@ -10,16 +10,19 @@ import javax.swing.tree.TreePath;
  * Date: 4/28/13
  * Time: 11:22 PM
  */
-public class RefreshHierarchy extends ACAction<ACNode>
-{
-    @Override
-    protected void makeAction()
-    {
-        TreeTableNode[] tableNodes = getModel().getPathToRoot(getNode());
-        for (TreeTableNode node : tableNodes)
-        {
-            getPanel().getRefreshActionFactory().getActionBy((ACNode) node).reloadNode();
-            getModel().getModelSupport().firePathChanged(new TreePath(getModel().getPathToRoot(node)));
-        }
-    }
+public class RefreshHierarchy extends ACAction<ACNode> {
+	@Override
+	protected void makeAction() {
+		TreeTableNode[] tableNodes = getModel().getPathToRoot(getNode());
+		for (TreeTableNode node : tableNodes) {
+			ACRefreshAction action = getPanel().getRefreshActionFactory().getActionBy((ACNode) node);
+			action.reloadNode();
+			getModel().getModelSupport().firePathChanged(new TreePath(getModel().getPathToRoot(node)));
+			action.reloadChildren();
+		}
+
+
+	}
+
+
 }

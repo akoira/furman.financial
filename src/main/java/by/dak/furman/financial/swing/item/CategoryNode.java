@@ -7,29 +7,24 @@ import by.dak.furman.financial.Category;
  * Date: 4/27/13
  * Time: 11:48 AM
  */
-public class CategoryNode extends AINode<Category>
-{
-    @Override
-    public void setName(String name)
-    {
-        getValue().setName(name);
-    }
+public class CategoryNode extends AINode<Category> {
+	@Override
+	public void setName(String name) {
+		getValue().setName(name);
+	}
 
-    @Override
-    public String getName()
-    {
-        return getValue().getName();
-    }
+	@Override
+	public String getName() {
+		return getValue().getName();
+	}
 
-    @Override
-    public Category getCategory()
-    {
-        return getValue();
-    }
+	@Override
+	public Category getCategory() {
+		return getValue();
+	}
 
-    @Override
-    public void setCategory(Category category)
-    {
-        setValue(category);
-    }
+	@Override
+	public void setCategory(Category category) {
+		setValue(category);
+	}
 }

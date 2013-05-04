@@ -7,7 +7,7 @@ import by.dak.furman.financial.swing.item.ItemTypeNode;
  * Date: 4/29/13
  * Time: 12:09 AM
  */
-public class DeleteItemType extends AIAction<ItemTypeNode> {
+public class DeleteItemType extends AIDeleteAction<ItemTypeNode> {
 	@Override
 	protected void makeAction() {
 		getItemTypeService().delete(getNode().getValue());
@@ -16,7 +16,15 @@ public class DeleteItemType extends AIAction<ItemTypeNode> {
 
 	@Override
 	protected boolean validate() {
-		return getNode().getValue().getId() != null;
+		if (getNode().getValue().getId() == null) {
+			setMessage("ItemType.id is null");
+			return false;
+		}
+		if (getItemService().getAllBy(getNode().getValue()).size() > 0) {
+			setMessage(String.format("Item > 0  for itemType %s", getNode().getValue().getName()));
+			return false;
+		}
+		return true;
 	}
 
 }

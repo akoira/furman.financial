@@ -40,7 +40,16 @@ public class SaveCategory extends ACAction<CategoryNode> {
 	}
 
 	protected boolean validate() {
-		return StringUtils.stripToNull(category.getName()) != null && getCategoryService().getByName(category.getName()) == null;
+		if (StringUtils.stripToNull(category.getName()) == null) {
+			setMessage("Category.name cannot be null");
+			return false;
+		}
+		Category found = getCategoryService().getByDepartmentName(departmentNode.getDepartment(), category.getName());
+		if (found != null && (category.getId() == null || category.getId().equals(found.getId()))) {
+			setMessage(String.format("Category with name %s already exist", category.getName()));
+			return false;
+		}
+		return true;
 	}
 
 	private void addCategoryNode() {

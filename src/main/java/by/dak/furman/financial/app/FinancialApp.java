@@ -54,14 +54,28 @@ public class FinancialApp extends SingleFrameApplication {
 
 	private SplitDockStation initDocking() {
 		DockController dockController = new DockController();
+		dockController.setRootWindow(mainFrame);
 		dockController.setTheme(new EclipseTheme());
-		SplitDockStation splitDockStation = new SplitDockStation();
-		dockController.add(splitDockStation);
+
 
 		SplitDockGrid splitDockGrid = new SplitDockGrid();
-		splitDockGrid.addDockable(0, 0, 1, 1, new DefaultDockable(getCategoriesPanel(), "Категории"));
-		splitDockGrid.addDockable(2, 0, 3, 3, new DefaultDockable(getItemsPanel(), "Платежи"));
+		DefaultDockable dockable = new DefaultDockable(getCategoriesPanel(), "Отделы");
+		splitDockGrid.addDockable(0, 0, 1, 1, dockable);
+		splitDockGrid.addDockable(1, 0, 3, 3, new DefaultDockable(getItemsPanel(), "Платежи"));
+		SplitDockStation splitDockStation = new SplitDockStation();
 		splitDockStation.dropTree(splitDockGrid.toTree());
+
+
+//		splitDockGrid = new SplitDockGrid();
+//		splitDockGrid.addDockable(0, 1, 1, 5, splitDockStation);
+//		JXErrorPane errorPane = new JXErrorPane();
+//		errorPane.setErrorInfo(new ErrorInfo(StringUtils.EMPTY,StringUtils.EMPTY,
+//				StringUtils.EMPTY,StringUtils.EMPTY,null, Level.FINE, Collections.EMPTY_MAP));
+//		splitDockGrid.addDockable(0, 0, 1, 1, new DefaultDockable(errorPane, "Сообщения"));
+//		splitDockStation = new SplitDockStation();
+//		splitDockStation.dropTree(splitDockGrid.toTree());
+
+		dockController.add(splitDockStation);
 		return splitDockStation;
 	}
 

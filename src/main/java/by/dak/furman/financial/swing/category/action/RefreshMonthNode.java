@@ -1,6 +1,5 @@
 package by.dak.furman.financial.swing.category.action;
 
-import by.dak.common.persistence.SearchFilter;
 import by.dak.furman.financial.Department;
 import by.dak.furman.financial.swing.category.DepartmentNode;
 import by.dak.furman.financial.swing.category.MonthNode;
@@ -21,12 +20,6 @@ public class RefreshMonthNode extends ACRefreshAction<MonthNode, Department, Dep
 	@Override
 	public DepartmentNode createChildNode() {
 		DepartmentNode node = new DepartmentNode();
-		SearchFilter searchFilter = getItemService().getSearchFilter(
-				getNode().getDepartment(),
-				getNode().getCategory(),
-				null,
-				getNode().getPeriod());
-		node.setAmount(getItemService().getSumBy(searchFilter));
 		return node;
 	}
 

@@ -46,7 +46,11 @@ public class SaveItemType extends AIAction<ItemTypeNode> {
 
 	@Override
 	protected boolean validate() {
-		return StringUtils.trimToNull(itemType.getName()) != null
-				&& getItemTypeService().getBy(itemType.getCategory(), itemType.getName()) == null;
+		if (StringUtils.trimToNull(itemType.getName()) == null)
+			return false;
+		ItemType found = getItemTypeService().getBy(itemType.getCategory(), itemType.getName());
+		if (found != null && (itemType.getId() == null || itemType.getId().equals(found.getId())))
+			return false;
+		return true;
 	}
 }

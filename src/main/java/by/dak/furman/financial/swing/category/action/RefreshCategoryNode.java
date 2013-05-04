@@ -4,6 +4,7 @@ import by.dak.furman.financial.ItemType;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.CategoryNode;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,5 +26,13 @@ public class RefreshCategoryNode extends ACRefreshAction<CategoryNode, ItemType,
 
 	@Override
 	public void refreshChildNode(ACNode childNode) {
+	}
+
+	@Override
+	public void reloadNode() {
+		if (getNode().getValue().getId() == null)
+			getNode().setAmount(BigDecimal.ZERO);
+		else
+			super.reloadNode();
 	}
 }

@@ -30,4 +30,13 @@ public class CategoryService extends AService<Category> implements ICategoryServ
 		searchFilter.eq(Category.PROPERTY_department, department);
 		return getDao().getAllBy(searchFilter);
 	}
+
+
+	@Override
+	public Category getByDepartmentName(Department department, String name) {
+		SearchFilter searchFilter = SearchFilter.instanceSingle();
+		searchFilter.eq(Category.PROPERTY_department, department);
+		searchFilter.eq(Category.PROPERTY_name, name);
+		return getDao().getBy(searchFilter);
+	}
 }

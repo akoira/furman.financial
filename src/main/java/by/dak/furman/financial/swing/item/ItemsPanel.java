@@ -11,6 +11,7 @@ import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.StringValue;
 import org.jdesktop.swingx.table.DatePickerCellEditor;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
+import org.jdesktop.swingx.table.TableColumnExt;
 import org.jdesktop.swingx.treetable.TreeTableCellEditor;
 
 import javax.swing.*;
@@ -121,6 +122,8 @@ public class ItemsPanel extends ATreeTablePanel {
 		DefaultTableColumnModelExt columnModel = (DefaultTableColumnModelExt) getTreeTable().getColumnModel();
 
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+		TableColumnExt columnExt = columnModel.getColumnExt(Item.PROPERTY_created);
 		columnModel.getColumnExt(Item.PROPERTY_created).setCellEditor(new DatePickerCellEditor(dateFormat));
 		DefaultTableRenderer defaultTableRenderer = new DefaultTableRenderer(new StringValue() {
 			@Override

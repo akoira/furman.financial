@@ -6,6 +6,12 @@ import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IItemTypeService;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+
+import javax.swing.tree.TreePath;
+import java.util.Collections;
+import java.util.logging.Level;
 
 /**
  * User: akoyro
@@ -16,15 +22,23 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 	private P panel;
 	private N node;
 
-	private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
+	private String message;
 
+	private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
 
 	public void action() {
 		before();
 		if (validate()) {
 			makeAction();
 			after();
-		}
+		} else if (message != null)
+			JXErrorPane.showDialog(getPanel(),
+					new ErrorInfo(message,
+							message,
+							message,
+							message,
+							null,
+							Level.WARNING, Collections.EMPTY_MAP));
 
 	}
 
@@ -86,5 +100,25 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 
 	public IItemService getItemService() {
 		return getPanel().getAppConfig().getItemService();
+	}
+
+	public void selectColumn(ATreeTableNode node, int column) {
+		getPanel().getTreeTable().getTreeSelectionModel().setSelectionPath(new TreePath(getModel().getPathToRoot(node)));
+		getPanel().getTreeTable().getColumnModel().getSelectionModel().setSelectionInterval(0, 0);
+		getPanel().getTreeTable().getColumnModel().getSelectionModel().setSelectionInterval(column, column);
+	}
+
+
+	public void selectColumn(ATreeTableNode node, String property) {
+		int column = getPanel().getTreeTable().getColumnModel().getColumnIndex(property);
+		selectColumn(node, column);
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

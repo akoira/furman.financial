@@ -5,10 +5,7 @@ import by.dak.furman.financial.Period;
 import by.dak.furman.financial.PeriodType;
 import by.dak.furman.financial.swing.ATreeTableNode;
 import by.dak.furman.financial.swing.ATreeTablePanel;
-import by.dak.furman.financial.swing.category.action.DeleteCategory;
-import by.dak.furman.financial.swing.category.action.RefreshActionFactory;
-import by.dak.furman.financial.swing.category.action.SaveCategory;
-import by.dak.furman.financial.swing.category.action.SaveDepartment;
+import by.dak.furman.financial.swing.category.action.*;
 import org.jdesktop.swingx.JXTextField;
 
 import javax.swing.*;
@@ -130,13 +127,20 @@ public class CategoriesPanel extends ATreeTablePanel {
 			actionDelete = new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					DeleteCategory deleteCategory = new DeleteCategory();
-					deleteCategory.setPanel(CategoriesPanel.this);
 					Object node = getTreeTable().getTreeSelectionModel().getLeadSelectionPath().getLastPathComponent();
 					if (node instanceof CategoryNode) {
-						deleteCategory.setCategoryNode((CategoryNode) node);
+						DeleteCategory deleteCategory = new DeleteCategory();
+						deleteCategory.setPanel(CategoriesPanel.this);
+						deleteCategory.setNode((CategoryNode) node);
 						deleteCategory.action();
+					} else if (node instanceof DepartmentNode) {
+						DeleteDepartment deleteDepartment = new DeleteDepartment();
+						deleteDepartment.setPanel(CategoriesPanel.this);
+						deleteDepartment.setNode((DepartmentNode) node);
+						deleteDepartment.action();
 					}
+
+
 				}
 			};
 		return actionDelete;

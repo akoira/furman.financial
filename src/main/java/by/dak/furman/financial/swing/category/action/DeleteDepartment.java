@@ -1,10 +1,8 @@
 package by.dak.furman.financial.swing.category.action;
 
-import by.dak.furman.financial.Category;
-import by.dak.furman.financial.swing.ADeleteAction;
+import by.dak.furman.financial.Department;
 import by.dak.furman.financial.swing.ATreeTableNode;
-import by.dak.furman.financial.swing.category.CategoriesPanel;
-import by.dak.furman.financial.swing.category.CategoryNode;
+import by.dak.furman.financial.swing.category.DepartmentNode;
 
 import java.util.ArrayList;
 
@@ -13,23 +11,24 @@ import java.util.ArrayList;
  * Date: 4/25/13
  * Time: 1:59 PM
  */
-public class DeleteCategory extends ADeleteAction<CategoriesPanel, CategoryNode> {
-	private Category category;
+public class DeleteDepartment extends ACAction<DepartmentNode> {
+
+	private Department department;
 
 	@Override
 	protected void before() {
 		super.before();
-		category = getNode().getCategory();
+		department = getNode().getDepartment();
 	}
 
 	@Override
 	protected boolean validate() {
-		if (category.getId() == null) {
-			setMessage("category id is null");
+		if (department.getId() == null) {
+			setMessage("department.id is null");
 			return false;
 		}
-		if (getItemTypeService().getAllBy(category).size() > 0) {
-			setMessage(String.format("ItemType > 0 for category %s", category.getName()));
+		if (getCategoryService().getAllBy(department).size() > 0) {
+			setMessage(String.format("Category > 0 for department %s", department.getName()));
 			return false;
 		}
 		return true;
@@ -37,12 +36,12 @@ public class DeleteCategory extends ADeleteAction<CategoriesPanel, CategoryNode>
 
 	@Override
 	protected void makeAction() {
-		getCategoryService().delete(category);
+		getDepartmentService().delete(department);
 		final ArrayList<ATreeTableNode> result = new ArrayList<ATreeTableNode>();
 		NodeIterator iterator = new NodeIterator() {
 			@Override
 			protected boolean action(ATreeTableNode child) {
-				if (child.getValue() == category)
+				if (child instanceof DepartmentNode && department.getId().equals(child.getDepartment().getId()))
 					result.add(child);
 				return true;
 			}

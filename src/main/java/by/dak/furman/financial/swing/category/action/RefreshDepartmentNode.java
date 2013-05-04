@@ -4,6 +4,7 @@ import by.dak.furman.financial.Category;
 import by.dak.furman.financial.swing.category.CategoryNode;
 import by.dak.furman.financial.swing.category.DepartmentNode;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -34,9 +35,19 @@ public class RefreshDepartmentNode extends ACRefreshAction<DepartmentNode, Categ
 	@Override
 	protected void after() {
 		super.after();
-		AddNewCategory addNewCategory = new AddNewCategory();
-		addNewCategory.setNode(getNode());
-		addNewCategory.setPanel(getPanel());
-		addNewCategory.action();
+		if (getNode().getPeriod().isCurrent()) {
+			AddNewCategory addNewCategory = new AddNewCategory();
+			addNewCategory.setNode(getNode());
+			addNewCategory.setPanel(getPanel());
+			addNewCategory.action();
+		}
+	}
+
+	@Override
+	public void reloadNode() {
+		if (getNode().getValue().getId() == null)
+			getNode().setAmount(BigDecimal.ZERO);
+		else
+			super.reloadNode();
 	}
 }

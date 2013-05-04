@@ -20,8 +20,11 @@ public class RefreshActionFactory {
 			action = new RefreshYearNode();
 		else if (node instanceof RootNode)
 			action = new RefreshRootNode();
+		else if (node instanceof DepartmentNode)
+			action = new RefreshDepartmentNode();
 		else
 			throw new IllegalArgumentException();
+
 		action.setNode(node);
 		action.setPanel(getPanel());
 		return action;

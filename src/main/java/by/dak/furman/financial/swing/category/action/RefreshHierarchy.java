@@ -3,8 +3,6 @@ package by.dak.furman.financial.swing.category.action;
 import by.dak.furman.financial.swing.category.ACNode;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 
-import javax.swing.tree.TreePath;
-
 /**
  * User: akoyro
  * Date: 4/28/13
@@ -17,7 +15,7 @@ public class RefreshHierarchy extends ACAction<ACNode> {
 		for (TreeTableNode node : tableNodes) {
 			ACRefreshAction action = getPanel().getRefreshActionFactory().getActionBy((ACNode) node);
 			action.reloadNode();
-			getModel().getModelSupport().firePathChanged(new TreePath(getModel().getPathToRoot(node)));
+			getPanel().getTreeTable().repaint();
 			action.reloadChildren();
 		}
 

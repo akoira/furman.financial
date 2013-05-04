@@ -14,4 +14,7 @@ import java.util.List;
 public interface ICategoryService extends IService<Category> {
 	@Transactional(readOnly = true)
 	public List<Category> getAllBy(Department department);
+
+	@Transactional(readOnly = true)
+	public Category getByDepartmentName(Department department, String name);
 }

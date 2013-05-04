@@ -1,7 +1,5 @@
 package by.dak.furman.financial.swing;
 
-import by.dak.furman.financial.service.IItemService;
-
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -35,10 +33,6 @@ public abstract class ARefreshAction<P extends ATreeTablePanel, N extends ATreeT
 		for (ATreeTableNode node : nodes) {
 			getModel().removeNodeFromParent(node);
 		}
-	}
-
-	public IItemService getItemService() {
-		return getPanel().getAppConfig().getItemService();
 	}
 
 	@Override

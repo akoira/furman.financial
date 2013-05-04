@@ -36,7 +36,16 @@ public class SaveDepartment extends ACAction<DepartmentNode> {
 	}
 
 	protected boolean validate() {
-		return StringUtils.stripToNull(department.getName()) != null && getDepartmentService().getByName(department.getName()) == null;
+		if (StringUtils.stripToNull(department.getName()) == null) {
+			setMessage("department.name cannot be null");
+			return false;
+		}
+		Department found = getDepartmentService().getByName(department.getName());
+		if (found != null && (department.getId() == null || department.getId().equals(found.getId()))) {
+			setMessage(String.format("Department with name %s already exist", department.getName()));
+			return false;
+		}
+		return true;
 	}
 
 	private void addDepartmentNodes() {

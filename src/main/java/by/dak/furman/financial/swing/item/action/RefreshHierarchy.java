@@ -4,8 +4,6 @@ import by.dak.furman.financial.swing.item.AINode;
 import by.dak.furman.financial.swing.item.RootNode;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 
-import javax.swing.tree.TreePath;
-
 /**
  * User: akoyro
  * Date: 4/28/13
@@ -19,7 +17,7 @@ public class RefreshHierarchy extends AIAction<AINode> {
 			getPanel().getRefreshActionFactory().getActionBy((AINode) node).reloadNode();
 
 			if (node != getNode())
-				getModel().getModelSupport().firePathChanged(new TreePath(getModel().getPathToRoot(node)));
+				getPanel().getTreeTable().repaint();
 		}
 
 		if (getPanel().getDelegate() != null) {

@@ -2,10 +2,9 @@ package by.dak.furman.financial.swing.item.action;
 
 import by.dak.furman.financial.AObject;
 import by.dak.furman.financial.swing.category.ACNode;
-import by.dak.furman.financial.swing.item.AINode;
-import by.dak.furman.financial.swing.item.CategoryNode;
-import by.dak.furman.financial.swing.item.ItemTypeNode;
-import by.dak.furman.financial.swing.item.RootNode;
+import by.dak.furman.financial.swing.category.APeriodNode;
+import by.dak.furman.financial.swing.category.DepartmentNode;
+import by.dak.furman.financial.swing.item.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,40 +23,53 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 	@Override
 	protected void before() {
 		super.before();
+		getNode().setDepartment(acNode.getDepartment());
 		getNode().setCategory(acNode.getCategory());
-		getNode().setValue(acNode);
 		getNode().setPeriod(acNode.getPeriod());
 		getNode().setItemType(null);
+		getNode().setValue(acNode);
 	}
 
 	@Override
 	public List<AObject> getChildValues() {
-		if (getNode().getCategory() == null)
-			return new ArrayList<AObject>(getCategoryService().getAll());
-		else if (getNode().getCategory().getId() != null)
-			return new ArrayList<AObject>(getItemTypeService().getAllBy(getNode().getCategory()));
-		else
-			return Collections.emptyList();
+		if (acNode instanceof DepartmentNode) {
+			if (getNode().getDepartment() != null && getNode().getDepartment().getId() != null)
+				return new ArrayList<AObject>(getCategoryService().getAllBy(getNode().getDepartment()));
+		} else if (acNode instanceof by.dak.furman.financial.swing.category.CategoryNode) {
+			if (getNode().getCategory() != null && getNode().getCategory().getId() != null)
+				return new ArrayList<AObject>(getItemTypeService().getAllBy(getNode().getCategory()));
+		} else if (acNode instanceof APeriodNode)
+			return new ArrayList<AObject>(getItemService().getAllBy(getItemService().getSearchFilter(
+					acNode.getDepartment(),
+					acNode.getCategory(),
+					null,
+					acNode.getPeriod())));
+		return Collections.emptyList();
+
 	}
 
 
 	@Override
 	public AINode createChildNode() {
-		if (getNode().getCategory() == null)
+		if (acNode instanceof DepartmentNode)
 			return new CategoryNode();
-		else
+		else if (acNode instanceof by.dak.furman.financial.swing.category.CategoryNode)
 			return new ItemTypeNode();
+		else if (acNode instanceof APeriodNode)
+			return new ItemNode();
+		return null;
 	}
 
 	@Override
 	public void refreshChildNode(AINode childNode) {
-		childNode.setAmount(getItemService().getSumBy(getSearchFilter(childNode)));
-		if (getNode().getCategory() == null) {
+		if (acNode instanceof DepartmentNode) {
+			childNode.setAmount(getItemService().getSumBy(getSearchFilter(childNode)));
 			RefreshCategoryNode refreshCategoryNode = new RefreshCategoryNode();
 			refreshCategoryNode.setNode((CategoryNode) childNode);
 			refreshCategoryNode.setPanel(getPanel());
 			refreshCategoryNode.action();
-		} else {
+		} else if (acNode instanceof by.dak.furman.financial.swing.category.CategoryNode) {
+			childNode.setAmount(getItemService().getSumBy(getSearchFilter(childNode)));
 			RefreshItemTypeNode refreshItemTypeNode = new RefreshItemTypeNode();
 			refreshItemTypeNode.setNode((ItemTypeNode) childNode);
 			refreshItemTypeNode.setPanel(getPanel());

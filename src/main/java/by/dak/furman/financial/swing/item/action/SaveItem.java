@@ -24,7 +24,7 @@ public class SaveItem extends AIAction<ItemNode> {
 			addNewItem.action();
 
 			if (addNewItem.getResult() != null) {
-				selectColumn(addNewItem.getResult(), Item.PROPERTY_amount);
+				selectColumn(addNewItem.getResult(), Item.PROPERTY_name);
 			}
 		} else
 			getItemService().save(item);

@@ -1,8 +1,8 @@
 package by.dak.furman.financial.swing.category.action;
 
-import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Department;
-import by.dak.furman.financial.swing.category.*;
+import by.dak.furman.financial.swing.category.DepartmentNode;
+import by.dak.furman.financial.swing.category.RootNode;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -22,13 +22,13 @@ public class SaveDepartment extends ACAction<DepartmentNode> {
 		if (department.getId() == null) {
 			getDepartmentService().add(department);
 			getModel().removeNodeFromParent(getNode());
+			addDepartmentNodes();
 
 			AddNewDepartment addNewDepartment = new AddNewDepartment();
 			addNewDepartment.setNode((RootNode) getRootNode());
 			addNewDepartment.setPanel(getPanel());
 			addNewDepartment.action();
 
-			addDepartmentNodes();
 		} else {
 			getDepartmentService().save(department);
 		}
@@ -49,38 +49,15 @@ public class SaveDepartment extends ACAction<DepartmentNode> {
 	}
 
 	private void addDepartmentNodes() {
-		int count = getRootNode().getChildCount();
-		for (int i = 0; i < count; i++) {
-			if (getRootNode().getChildAt(i) instanceof APeriodNode) {
-				APeriodNode yearNode = (APeriodNode) getRootNode().getChildAt(i);
-				int yCount = yearNode.getChildCount();
-				for (int k = 0; k < yCount; k++) {
-					APeriodNode monthNode = (APeriodNode) yearNode.getChildAt(k);
-					DepartmentNode departmentNode = new DepartmentNode();
-					departmentNode.setValue(department);
-					monthNode.fillChildNode(departmentNode);
-					getModel().insertNodeInto(departmentNode, monthNode, monthNode.getChildCount());
+		DepartmentNode departmentNode = new DepartmentNode();
+		departmentNode.setValue(department);
+		getRootNode().fillChildNode(departmentNode);
+		getModel().insertNodeInto(departmentNode, getRootNode(), getRootNode().getChildCount());
 
-					RefreshDepartmentNode refreshDepartmentNode = new RefreshDepartmentNode();
-					refreshDepartmentNode.setNode(departmentNode);
-					refreshDepartmentNode.setPanel(getPanel());
-					refreshDepartmentNode.action();
-
-					if (monthNode.getPeriod().isCurrent()) {
-						ExpandNode expandNode = new ExpandNode();
-						expandNode.setPanel(getPanel());
-						expandNode.setNode(departmentNode);
-						expandNode.action();
-					}
-				}
-			}
-		}
+		RefreshDepartmentNode refreshDepartmentNode = new RefreshDepartmentNode();
+		refreshDepartmentNode.setNode(departmentNode);
+		refreshDepartmentNode.setPanel(getPanel());
+		refreshDepartmentNode.action();
 	}
 
-	public static CategoryNode createCategoryNode(Category category, ACNode parent) {
-		CategoryNode categoryNode = new CategoryNode();
-		categoryNode.setValue(category);
-		parent.fillChildNode(categoryNode);
-		return categoryNode;
-	}
 }

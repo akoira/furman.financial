@@ -1,10 +1,14 @@
 package by.dak.furman.financial.swing.category.action;
 
-import by.dak.furman.financial.Category;
-import by.dak.furman.financial.swing.category.CategoryNode;
+import by.dak.furman.financial.Period;
+import by.dak.furman.financial.PeriodType;
 import by.dak.furman.financial.swing.category.DepartmentNode;
+import by.dak.furman.financial.swing.category.YearNode;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,24 +16,24 @@ import java.util.List;
  * Date: 4/27/13
  * Time: 2:42 PM
  */
-public class RefreshDepartmentNode extends ACRefreshAction<DepartmentNode, Category, CategoryNode> {
+public class RefreshDepartmentNode extends ACRefreshAction<DepartmentNode, Period, YearNode> {
 
 	@Override
-	public List<Category> getChildValues() {
-		return getCategoryService().getAllBy(getNode().getValue());
+	public List<Period> getChildValues() {
+		return Collections.singletonList(createYearPeriod(new Date()));
 	}
 
 	@Override
-	public CategoryNode createChildNode() {
-		return new CategoryNode();
+	public YearNode createChildNode() {
+		return new YearNode();
 	}
 
 	@Override
-	public void refreshChildNode(CategoryNode childNode) {
-		RefreshCategoryNode refreshCategoryNode = new RefreshCategoryNode();
-		refreshCategoryNode.setNode(childNode);
-		refreshCategoryNode.setPanel(getPanel());
-		refreshCategoryNode.action();
+	public void refreshChildNode(YearNode childNode) {
+		RefreshYearNode refreshYearNode = new RefreshYearNode();
+		refreshYearNode.setNode(childNode);
+		refreshYearNode.setPanel(getPanel());
+		refreshYearNode.action();
 	}
 
 	@Override
@@ -49,5 +53,23 @@ public class RefreshDepartmentNode extends ACRefreshAction<DepartmentNode, Categ
 			getNode().setAmount(BigDecimal.ZERO);
 		else
 			super.reloadNode();
+	}
+
+
+	private Period createYearPeriod(Date date) {
+		Period period = new Period();
+		period.setPeriodType(PeriodType.YEAR);
+		period.setCurrent(true);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		Period.resetTime(calendar);
+
+		calendar.set(Calendar.DAY_OF_YEAR, 1);
+		period.setStartDate(calendar.getTime());
+
+		calendar.add(Calendar.YEAR, 1);
+		period.setEndDate(calendar.getTime());
+		return period;
 	}
 }

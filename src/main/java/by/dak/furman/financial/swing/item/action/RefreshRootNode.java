@@ -4,7 +4,10 @@ import by.dak.furman.financial.AObject;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.APeriodNode;
 import by.dak.furman.financial.swing.category.DepartmentNode;
-import by.dak.furman.financial.swing.item.*;
+import by.dak.furman.financial.swing.item.AINode;
+import by.dak.furman.financial.swing.item.CategoryNode;
+import by.dak.furman.financial.swing.item.ItemTypeNode;
+import by.dak.furman.financial.swing.item.RootNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,11 +42,7 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 			if (getNode().getCategory() != null && getNode().getCategory().getId() != null)
 				return new ArrayList<AObject>(getItemTypeService().getAllBy(getNode().getCategory()));
 		} else if (acNode instanceof APeriodNode)
-			return new ArrayList<AObject>(getItemService().getAllBy(getItemService().getSearchFilter(
-					acNode.getDepartment(),
-					acNode.getCategory(),
-					null,
-					acNode.getPeriod())));
+			return new ArrayList<AObject>(getCategoryService().getAllBy(getNode().getDepartment()));
 		return Collections.emptyList();
 
 	}
@@ -56,13 +55,13 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 		else if (acNode instanceof by.dak.furman.financial.swing.category.CategoryNode)
 			return new ItemTypeNode();
 		else if (acNode instanceof APeriodNode)
-			return new ItemNode();
+			return new CategoryNode();
 		return null;
 	}
 
 	@Override
 	public void refreshChildNode(AINode childNode) {
-		if (acNode instanceof DepartmentNode) {
+		if (acNode instanceof DepartmentNode || acNode instanceof APeriodNode) {
 			childNode.setAmount(getItemService().getSumBy(getSearchFilter(childNode)));
 			RefreshCategoryNode refreshCategoryNode = new RefreshCategoryNode();
 			refreshCategoryNode.setNode((CategoryNode) childNode);

@@ -2,14 +2,12 @@ package by.dak.furman.financial.swing;
 
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.app.AppConfig;
+import by.dak.furman.financial.swing.category.APeriodNode;
 import by.dak.furman.financial.swing.category.DefaultTreeTableRenderer;
 import org.jdesktop.swingx.JXFormattedTextField;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.decorator.ColorHighlighter;
-import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.jdesktop.swingx.decorator.*;
 import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.StringValue;
 import org.jdesktop.swingx.table.ColumnFactory;
@@ -71,17 +69,39 @@ public abstract class ATreeTablePanel extends JXPanel {
 		});
 		getTreeTable().addHighlighter(colorHighlighter);
 
+		AbstractHighlighter currentNodeH = new AbstractHighlighter() {
+			private Font orig;
 
+			@Override
+			protected Component doHighlight(Component component, ComponentAdapter adapter) {
+				if (adapter.column == 0) {
+					if (orig == null)
+						orig = component.getFont();
+
+					TreePath path = getTreeTable().getPathForRow(adapter.row);
+					ATreeTableNode treeTableNode = (ATreeTableNode) path.getLastPathComponent();
+					if ((treeTableNode instanceof APeriodNode && ((APeriodNode) treeTableNode).getValue().isCurrent()))
+						component.setFont(orig.deriveFont(Font.BOLD));
+					else
+						component.setFont(orig);
+				}
+				return component;
+			}
+		};
+
+		getTreeTable().addHighlighter(currentNodeH);
 		AbstractAction expendPathAction = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
+				if (getTreeTable().getCellEditor() != null)
+					getTreeTable().getCellEditor().stopCellEditing();
 				TreePath treePath = getTreeTable().getTreeSelectionModel().getLeadSelectionPath();
 				getTreeTable().expandPath(treePath);
 			}
 		};
 
-		getTreeTable().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "expendPath");
+		getTreeTable().getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "expendPath");
 		getTreeTable().getActionMap().put("expendPath", expendPathAction);
 
 		getTreeTable().setColumnFactory(new ColumnFactory() {

@@ -5,6 +5,7 @@ import by.dak.common.persistence.SearchFilter;
 import by.dak.furman.financial.AObject;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -62,7 +63,7 @@ public abstract class ADao<O extends AObject> implements IDao<O> {
 
 	public List<O> getAll() {
 		Criteria criteria = createCriteria(getObjectClass());
-
+		criteria.addOrder(Order.asc(AObject.PROPERTY_created));
 		return criteria.list();
 	}
 

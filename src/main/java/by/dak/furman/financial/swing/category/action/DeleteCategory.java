@@ -42,12 +42,12 @@ public class DeleteCategory extends ADeleteAction<CategoriesPanel, CategoryNode>
 		NodeIterator iterator = new NodeIterator() {
 			@Override
 			protected boolean action(ATreeTableNode child) {
-				if (child.getValue() == category)
+				if (child instanceof CategoryNode && category.getId().equals(((CategoryNode) child).getValue().getId()))
 					result.add(child);
 				return true;
 			}
 		};
-		iterator.iterate(getRootNode());
+		iterator.iterate((ATreeTableNode) getNode().getParent().getParent().getParent());
 		for (ATreeTableNode node : result) {
 			getModel().removeNodeFromParent(node);
 		}

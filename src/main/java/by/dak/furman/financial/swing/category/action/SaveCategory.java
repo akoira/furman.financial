@@ -53,26 +53,20 @@ public class SaveCategory extends ACAction<CategoryNode> {
 	}
 
 	private void addCategoryNode() {
-		int count = getRootNode().getChildCount();
+		int count = departmentNode.getChildCount();
 		for (int i = 0; i < count; i++) {
-			if (getRootNode().getChildAt(i) instanceof APeriodNode) {
-				APeriodNode yearNode = (APeriodNode) getRootNode().getChildAt(i);
+			if (departmentNode.getChildAt(i) instanceof APeriodNode) {
+				APeriodNode yearNode = (APeriodNode) departmentNode.getChildAt(i);
 				int yCount = yearNode.getChildCount();
 				for (int k = 0; k < yCount; k++) {
 					APeriodNode monthNode = (APeriodNode) yearNode.getChildAt(k);
-					int mCount = monthNode.getChildCount();
-					for (int m = 0; m < mCount; m++) {
-						DepartmentNode dChild = (DepartmentNode) monthNode.getChildAt(m);
-						if (departmentNode.getDepartment().getId().equals(dChild.getDepartment().getId())) {
-							CategoryNode categoryNode = createCategoryNode(category, dChild);
-							getModel().insertNodeInto(categoryNode, dChild, dChild.getChildCount());
-							if (monthNode.getPeriod().isCurrent()) {
-								ExpandNode expandNode = new ExpandNode();
-								expandNode.setPanel(getPanel());
-								expandNode.setNode(categoryNode);
-								expandNode.action();
-							}
-						}
+					CategoryNode categoryNode = createCategoryNode(category, monthNode);
+					getModel().insertNodeInto(categoryNode, monthNode, monthNode.getChildCount());
+					if (monthNode.getPeriod().isCurrent()) {
+						ExpandNode expandNode = new ExpandNode();
+						expandNode.setPanel(getPanel());
+						expandNode.setNode(categoryNode);
+						expandNode.action();
 					}
 				}
 			}

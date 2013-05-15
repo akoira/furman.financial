@@ -11,7 +11,6 @@ import by.dak.furman.financial.swing.category.CategoriesPanel;
 import by.dak.furman.financial.swing.category.ICategoriesPanelDelegate;
 import by.dak.furman.financial.swing.category.RootNode;
 import by.dak.furman.financial.swing.category.action.AddNewDepartment;
-import by.dak.furman.financial.swing.category.action.ExpandNode;
 import by.dak.furman.financial.swing.category.action.RefreshHierarchy;
 import by.dak.furman.financial.swing.item.IItemsPanelDelegate;
 import by.dak.furman.financial.swing.item.ItemsPanel;
@@ -127,10 +126,6 @@ public class FinancialApp extends SingleFrameApplication {
 			addNewDepartment.setNode((RootNode) addNewDepartment.getRootNode());
 			addNewDepartment.action();
 
-			ExpandNode expandNode = new ExpandNode();
-			expandNode.setPanel(categoriesPanel);
-			expandNode.setNode(((RootNode) expandNode.getRootNode()).getCurrentNode());
-			expandNode.action();
 		}
 		return categoriesPanel;
 	}

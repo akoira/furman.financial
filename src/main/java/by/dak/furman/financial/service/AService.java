@@ -61,6 +61,16 @@ public abstract class AService<O extends AObject> implements IService<O> {
 	public O getByName(String name) {
 		return getDao().getByName(name);
 	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<O> getAllSortedBy(String... property) {
+		SearchFilter filter = SearchFilter.instanceUnbound();
+		for (String s : property) {
+			filter.addAscOrder(s);
+		}
+		return getAllBy(filter);
+	}
 }
 
 

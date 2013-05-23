@@ -1,9 +1,13 @@
 package by.dak.furman.financial.swing.category.action;
 
+import by.dak.common.lang.Utils;
 import by.dak.furman.financial.Department;
+import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.DepartmentNode;
 import by.dak.furman.financial.swing.category.RootNode;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Comparator;
 
 /**
  * User: akoyro
@@ -52,12 +56,27 @@ public class SaveDepartment extends ACAction<DepartmentNode> {
 		DepartmentNode departmentNode = new DepartmentNode();
 		departmentNode.setValue(department);
 		getRootNode().fillChildNode(departmentNode);
-		getModel().insertNodeInto(departmentNode, getRootNode(), getRootNode().getChildCount());
+		getModel().insertNodeInto(departmentNode, getRootNode(), calcIndexForNewDepartmentNode(departmentNode));
+
+		ExpandNode expandNode = new ExpandNode();
+		expandNode.setPanel(getPanel());
+		expandNode.setNode(departmentNode);
+		expandNode.action();
 
 		RefreshDepartmentNode refreshDepartmentNode = new RefreshDepartmentNode();
 		refreshDepartmentNode.setNode(departmentNode);
 		refreshDepartmentNode.setPanel(getPanel());
 		refreshDepartmentNode.action();
 	}
+
+	private int calcIndexForNewDepartmentNode(DepartmentNode departmentNode) {
+		return Utils.getIndexInSortedList(getRootNode(), departmentNode, new Comparator<ACNode>() {
+			@Override
+			public int compare(ACNode o1, ACNode o2) {
+				return o1.getDepartment().getName().compareTo(o2.getDepartment().getName());
+			}
+		});
+	}
+
 
 }

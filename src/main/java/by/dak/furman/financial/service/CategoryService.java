@@ -28,6 +28,7 @@ public class CategoryService extends AService<Category> implements ICategoryServ
 
 		SearchFilter searchFilter = SearchFilter.instanceUnbound();
 		searchFilter.eq(Category.PROPERTY_department, department);
+		searchFilter.addAscOrder(Category.PROPERTY_name);
 		return getDao().getAllBy(searchFilter);
 	}
 

@@ -1,11 +1,14 @@
 package by.dak.furman.financial.swing.category.action;
 
+import by.dak.common.lang.Utils;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.APeriodNode;
 import by.dak.furman.financial.swing.category.CategoryNode;
 import by.dak.furman.financial.swing.category.DepartmentNode;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Comparator;
 
 /**
  * User: akoyro
@@ -61,7 +64,8 @@ public class SaveCategory extends ACAction<CategoryNode> {
 				for (int k = 0; k < yCount; k++) {
 					APeriodNode monthNode = (APeriodNode) yearNode.getChildAt(k);
 					CategoryNode categoryNode = createCategoryNode(category, monthNode);
-					getModel().insertNodeInto(categoryNode, monthNode, monthNode.getChildCount());
+					int index = calcIndexForNewCategoryNode(monthNode, categoryNode);
+					getModel().insertNodeInto(categoryNode, monthNode, index);
 					if (monthNode.getPeriod().isCurrent()) {
 						ExpandNode expandNode = new ExpandNode();
 						expandNode.setPanel(getPanel());
@@ -72,6 +76,16 @@ public class SaveCategory extends ACAction<CategoryNode> {
 			}
 		}
 	}
+
+	private int calcIndexForNewCategoryNode(APeriodNode monthNode, CategoryNode categoryNode) {
+		return Utils.getIndexInSortedList(monthNode, categoryNode, new Comparator<ACNode>() {
+			@Override
+			public int compare(ACNode o1, ACNode o2) {
+				return o1.getCategory().getName().compareTo(o2.getCategory().getName());
+			}
+		});
+	}
+
 
 	public static CategoryNode createCategoryNode(Category category, ACNode parent) {
 		CategoryNode categoryNode = new CategoryNode();

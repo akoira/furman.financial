@@ -1,5 +1,6 @@
 package by.dak.furman.financial.swing;
 
+import by.dak.common.lang.ItemList;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Department;
 import by.dak.furman.financial.Item;
@@ -19,7 +20,7 @@ import java.util.List;
  * Date: 4/24/13
  * Time: 8:47 PM
  */
-public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends AbstractMutableTreeTableNode {
+public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends AbstractMutableTreeTableNode implements ItemList<C> {
 	public static final String PROPERTY_amount = Item.PROPERTY_amount;
 
 	private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
@@ -142,5 +143,16 @@ public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends Abstra
 
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+
+
+	@Override
+	public C get(int i) {
+		return (C) getChildAt(i);
+	}
+
+	@Override
+	public int size() {
+		return getChildCount();
 	}
 }

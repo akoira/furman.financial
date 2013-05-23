@@ -14,6 +14,8 @@ import java.util.List;
 public interface IService<O extends AObject> {
 	List<O> getAll();
 
+	List<O> getAllSortedBy(String... property);
+
 	List<O> getAllBy(SearchFilter filter);
 
 	void add(O object);

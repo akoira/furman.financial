@@ -29,6 +29,7 @@ public class ItemTypeService extends AService<ItemType> implements IItemTypeServ
 	public List<ItemType> getAllBy(Category value) {
 		SearchFilter filter = SearchFilter.instanceUnbound();
 		filter.eq(ItemType.PROPERTY_category, value);
+		filter.addAscOrder(ItemType.PROPERTY_name);
 		return getAllBy(filter);
 	}
 

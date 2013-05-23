@@ -1,5 +1,6 @@
 package by.dak.furman.financial.swing.category.action;
 
+import by.dak.furman.financial.AObject;
 import by.dak.furman.financial.Department;
 import by.dak.furman.financial.swing.category.DepartmentNode;
 import by.dak.furman.financial.swing.category.RootNode;
@@ -14,7 +15,7 @@ import java.util.List;
 public class RefreshRootNode extends ACRefreshAction<RootNode, Department, DepartmentNode> {
 	@Override
 	public List<Department> getChildValues() {
-		return getPanel().getAppConfig().getDepartmentService().getAll();
+		return getPanel().getAppConfig().getDepartmentService().getAllSortedBy(AObject.PROPERTY_name);
 	}
 
 	@Override

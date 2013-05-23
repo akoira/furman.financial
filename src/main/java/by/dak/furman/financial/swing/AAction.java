@@ -9,6 +9,7 @@ import org.jdesktop.application.ResourceMap;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -30,7 +31,13 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 		before();
 		if (validate()) {
 			makeAction();
-			after();
+
+			Runnable runnable = new Runnable() {
+				public void run() {
+					after();
+				}
+			};
+			SwingUtilities.invokeLater(runnable);
 		} else if (message != null)
 			JXErrorPane.showDialog(getPanel(),
 					new ErrorInfo(message,
@@ -109,9 +116,14 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 	}
 
 
-	public void selectColumn(ATreeTableNode node, String property) {
-		int column = getPanel().getTreeTable().getColumnModel().getColumnIndex(property);
-		selectColumn(node, column);
+	public void selectColumn(final ATreeTableNode node, final String property) {
+		Runnable runnable = new Runnable() {
+			public void run() {
+				int column = getPanel().getTreeTable().getColumnModel().getColumnIndex(property);
+				selectColumn(node, column);
+			}
+		};
+		SwingUtilities.invokeLater(runnable);
 	}
 
 	public String getMessage() {

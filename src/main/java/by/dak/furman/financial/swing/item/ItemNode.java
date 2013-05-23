@@ -14,7 +14,7 @@ public class ItemNode extends AINode<Item> {
 	private String name;
 
 	public void setName(String string) {
-		getValue().getItemType().setName(string);
+		getValue().setName(string);
 	}
 
 	public String getName() {

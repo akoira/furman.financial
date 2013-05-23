@@ -166,7 +166,12 @@ public abstract class ATreeTablePanel extends JXPanel {
 	protected void initActions() {
 		getTreeTable().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,
 				0), ACTION_deleteCategory);
+		getTreeTable().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE,
+				KeyEvent.ALT_MASK), ACTION_deleteCategory);
+
 		getTreeTable().getActionMap().put(ACTION_deleteCategory, getActionDelete());
+
+
 	}
 
 	protected abstract Action getActionDelete();

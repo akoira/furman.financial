@@ -1,7 +1,9 @@
 package by.dak.furman.financial.swing.category.action;
 
 import by.dak.furman.financial.Department;
+import by.dak.furman.financial.swing.ADeleteAction;
 import by.dak.furman.financial.swing.ATreeTableNode;
+import by.dak.furman.financial.swing.category.CategoriesPanel;
 import by.dak.furman.financial.swing.category.DepartmentNode;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
  * Date: 4/25/13
  * Time: 1:59 PM
  */
-public class DeleteDepartment extends ACAction<DepartmentNode> {
+public class DeleteDepartment extends ADeleteAction<CategoriesPanel, DepartmentNode> {
 
 	private Department department;
 

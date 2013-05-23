@@ -3,6 +3,7 @@ package by.dak.furman.financial.swing.item.action;
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.swing.item.ItemNode;
 import by.dak.furman.financial.swing.item.ItemTypeNode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 
@@ -15,6 +16,8 @@ public class SaveItem extends AIAction<ItemNode> {
 	@Override
 	protected void makeAction() {
 		Item item = getNode().getValue();
+		if (StringUtils.trimToNull(item.getName()) == null)
+			item.setName(item.getItemType().getName());
 		if (item.getId() == null) {
 			getItemService().add(item);
 
@@ -24,7 +27,7 @@ public class SaveItem extends AIAction<ItemNode> {
 			addNewItem.action();
 
 			if (addNewItem.getResult() != null) {
-				selectColumn(addNewItem.getResult(), Item.PROPERTY_name);
+				selectColumn(addNewItem.getResult(), Item.PROPERTY_amount);
 			}
 		} else
 			getItemService().save(item);

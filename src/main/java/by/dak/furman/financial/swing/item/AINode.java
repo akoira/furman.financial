@@ -24,7 +24,7 @@ public abstract class AINode<V> extends ATreeTableNode<V, AINode> {
 	protected List<Property> createProperties(Object value) {
 		ArrayList<Property> properties = new ArrayList<Property>();
 		if (value instanceof Item) {
-			properties.add(Property.valueOf(Item.PROPERTY_name, false));
+			properties.add(Property.valueOf(Item.PROPERTY_name, true));
 			properties.add(Property.valueOf(Item.PROPERTY_amount, true));
 			properties.add(Property.valueOf(Item.PROPERTY_created, true));
 		} else if (value instanceof ItemType) {

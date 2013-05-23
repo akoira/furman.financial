@@ -2,6 +2,7 @@ package by.dak.furman.financial.converter;
 
 import by.dak.common.lang.ToStringConverter;
 import by.dak.furman.financial.AObject;
+import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.application.ResourceMap;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ public class AObjectRenderer<O extends AObject> implements ToStringConverter<O> 
 
 	@Override
 	public String convert(O entity) {
-		if (entity.getId() == null)
+		if (entity.getId() == null && StringUtils.trimToNull(entity.getName()) == null)
 			return getResourceMap().getString("label.new");
 		return entity.getName();
 	}

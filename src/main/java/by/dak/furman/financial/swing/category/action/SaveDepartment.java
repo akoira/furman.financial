@@ -58,15 +58,16 @@ public class SaveDepartment extends ACAction<DepartmentNode> {
 		getRootNode().fillChildNode(departmentNode);
 		getModel().insertNodeInto(departmentNode, getRootNode(), calcIndexForNewDepartmentNode(departmentNode));
 
-		ExpandNode expandNode = new ExpandNode();
-		expandNode.setPanel(getPanel());
-		expandNode.setNode(departmentNode);
-		expandNode.action();
-
 		RefreshDepartmentNode refreshDepartmentNode = new RefreshDepartmentNode();
 		refreshDepartmentNode.setNode(departmentNode);
 		refreshDepartmentNode.setPanel(getPanel());
 		refreshDepartmentNode.action();
+
+		ExpandNode expandNode = new ExpandNode();
+		expandNode.setPanel(getPanel());
+		expandNode.setNode((ACNode) departmentNode.getCurrentNode());
+		expandNode.action();
+
 	}
 
 	private int calcIndexForNewDepartmentNode(DepartmentNode departmentNode) {

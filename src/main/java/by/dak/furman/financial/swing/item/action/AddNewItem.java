@@ -18,7 +18,6 @@ public class AddNewItem extends AIAction<ItemTypeNode> {
 	@Override
 	protected void makeAction() {
 		Item item = new Item();
-		item.setName(getNode().getItemType().getName());
 		item.setItemType(getNode().getItemType());
 		if (getNode().getPeriod() == null || getNode().getPeriod().isCurrent())
 			item.setCreated(new Date());

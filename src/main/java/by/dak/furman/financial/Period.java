@@ -2,6 +2,7 @@ package by.dak.furman.financial;
 
 import by.dak.common.lang.StringValue;
 import by.dak.furman.financial.converter.PeriodRenderer;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -51,9 +52,6 @@ public class Period extends AObject {
 	}
 
 	public static void resetTime(Calendar calendar) {
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
+		DateUtils.ceiling(calendar, Calendar.MONTH);
 	}
 }

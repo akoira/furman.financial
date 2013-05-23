@@ -4,6 +4,7 @@ import by.dak.furman.financial.Period;
 import by.dak.furman.financial.PeriodType;
 import by.dak.furman.financial.swing.category.DepartmentNode;
 import by.dak.furman.financial.swing.category.YearNode;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -62,10 +63,8 @@ public class RefreshDepartmentNode extends ACRefreshAction<DepartmentNode, Perio
 		period.setCurrent(true);
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		Period.resetTime(calendar);
+		calendar = DateUtils.truncate(calendar, Calendar.YEAR);
 
-		calendar.set(Calendar.DAY_OF_YEAR, 1);
 		period.setStartDate(calendar.getTime());
 
 		calendar.add(Calendar.YEAR, 1);

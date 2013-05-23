@@ -15,6 +15,7 @@ public class RefreshItemTypeNode extends AIRefreshAction<ItemTypeNode, Item, Ite
 
 	@Override
 	protected void after() {
+		super.after();
 		AddNewItem addNewItem = new AddNewItem();
 		addNewItem.setNode(getNode());
 		addNewItem.setPanel(getPanel());

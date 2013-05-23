@@ -33,7 +33,6 @@ import java.text.NumberFormat;
  */
 public abstract class ATreeTablePanel extends JXPanel {
 	public static final String ACTION_deleteCategory = "deleteCategory";
-
 	private JXTreeTable treeTable;
 	private FTreeTableModel model;
 	private AppConfig appConfig;
@@ -90,16 +89,17 @@ public abstract class ATreeTablePanel extends JXPanel {
 		};
 
 		getTreeTable().addHighlighter(currentNodeH);
-		AbstractAction expendPathAction = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		AbstractAction expendPathAction = new
+				AbstractAction() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
 
-				if (getTreeTable().getCellEditor() != null)
-					getTreeTable().getCellEditor().stopCellEditing();
-				TreePath treePath = getTreeTable().getTreeSelectionModel().getLeadSelectionPath();
-				getTreeTable().expandPath(treePath);
-			}
-		};
+						if (getTreeTable().getCellEditor() != null)
+							getTreeTable().getCellEditor().stopCellEditing();
+						TreePath treePath = getTreeTable().getTreeSelectionModel().getLeadSelectionPath();
+						getTreeTable().expandPath(treePath);
+					}
+				};
 
 		getTreeTable().getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "expendPath");
 		getTreeTable().getActionMap().put("expendPath", expendPathAction);

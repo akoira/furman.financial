@@ -4,6 +4,7 @@ import by.dak.furman.financial.Period;
 import by.dak.furman.financial.PeriodType;
 import by.dak.furman.financial.swing.category.MonthNode;
 import by.dak.furman.financial.swing.category.YearNode;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +27,7 @@ public class RefreshYearNode extends ACRefreshAction<YearNode, Period, MonthNode
 			int current = calendar.get(Calendar.MONTH);
 			period.setCurrent(current == month);
 			calendar.setTime(getNode().getValue().getStartDate());
-			Period.resetTime(calendar);
+			calendar = DateUtils.truncate(calendar, Calendar.MONTH);
 			calendar.set(Calendar.MONTH, month);
 			period.setStartDate(calendar.getTime());
 			calendar.add(Calendar.MONTH, 1);

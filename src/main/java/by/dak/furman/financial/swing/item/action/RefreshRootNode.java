@@ -77,7 +77,8 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 	}
 
 	@Override
-	protected void after() {
+	protected void makeAction() {
+		super.makeAction();
 		if (getNode().getCategory() != null && getNode().getCategory().getId() != null) {
 			reloadNode();
 

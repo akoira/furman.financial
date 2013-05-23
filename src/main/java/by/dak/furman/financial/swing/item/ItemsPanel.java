@@ -15,10 +15,7 @@ import org.jdesktop.swingx.table.TableColumnExt;
 import org.jdesktop.swingx.treetable.TreeTableCellEditor;
 
 import javax.swing.*;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.*;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
@@ -48,6 +45,22 @@ public class ItemsPanel extends ATreeTablePanel {
 		super.init();
 		refreshActionFactory = new RefreshActionFactory();
 		getRefreshActionFactory().setPanel(this);
+		getTreeTable().addTreeExpansionListener(new TreeExpansionListener() {
+			@Override
+			public void treeExpanded(TreeExpansionEvent event) {
+				if (event.getPath().getLastPathComponent() instanceof ItemTypeNode) {
+					ItemTypeNode node = (ItemTypeNode) event.getPath().getLastPathComponent();
+					SelectLastItem selectLastItem = new SelectLastItem();
+					selectLastItem.setNode(node);
+					selectLastItem.setPanel(ItemsPanel.this);
+					selectLastItem.action();
+				}
+			}
+
+			@Override
+			public void treeCollapsed(TreeExpansionEvent event) {
+			}
+		});
 		getModel().addTreeModelListener(new TreeModelListener() {
 			@Override
 			public void treeNodesChanged(TreeModelEvent e) {

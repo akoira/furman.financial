@@ -4,6 +4,7 @@ import by.dak.furman.financial.Item;
 import by.dak.furman.financial.app.AppConfig;
 import by.dak.furman.financial.swing.category.APeriodNode;
 import by.dak.furman.financial.swing.category.DefaultTreeTableRenderer;
+import com.jidesoft.swing.JideScrollPane;
 import org.jdesktop.swingx.JXFormattedTextField;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTreeTable;
@@ -38,6 +39,7 @@ public abstract class ATreeTablePanel extends JXPanel {
 	private AppConfig appConfig;
 
 	public void init() {
+		setName(this.getClass().getSimpleName());
 		setLayout(new BorderLayout());
 		treeTable = new JXTreeTable() {
 			@Override
@@ -48,6 +50,7 @@ public abstract class ATreeTablePanel extends JXPanel {
 				return component;
 			}
 		};
+		treeTable.setName(JXTreeTable.class.getSimpleName());
 		getTreeTable().setTreeCellRenderer(new DefaultTreeTableRenderer());
 		getTreeTable().setScrollsOnExpand(true);
 		getTreeTable().setExpandsSelectedPaths(true);
@@ -112,7 +115,8 @@ public abstract class ATreeTablePanel extends JXPanel {
 			}
 		});
 
-		JScrollPane scrollPane = new JScrollPane(getTreeTable());
+		JideScrollPane scrollPane = new JideScrollPane(getTreeTable());
+		scrollPane.setName(JScrollPane.class.getSimpleName());
 		add(scrollPane, BorderLayout.CENTER);
 
 		model = new FTreeTableModel(createRootNode());

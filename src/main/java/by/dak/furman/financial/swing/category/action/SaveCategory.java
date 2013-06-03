@@ -2,11 +2,9 @@ package by.dak.furman.financial.swing.category.action;
 
 import by.dak.common.lang.Utils;
 import by.dak.furman.financial.Category;
-import by.dak.furman.financial.swing.category.ACNode;
-import by.dak.furman.financial.swing.category.APeriodNode;
-import by.dak.furman.financial.swing.category.CategoryNode;
-import by.dak.furman.financial.swing.category.DepartmentNode;
+import by.dak.furman.financial.swing.category.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.treetable.TreeTableNode;
 
 import java.util.Comparator;
 
@@ -22,7 +20,13 @@ public class SaveCategory extends ACAction<CategoryNode> {
 	@Override
 	protected void before() {
 		category = getNode().getValue();
-		departmentNode = (DepartmentNode) getNode().getParent();
+		TreeTableNode node = getNode().getParent();
+		if (node instanceof DepartmentNode)
+			departmentNode = (DepartmentNode) getNode().getParent();
+		else if (node instanceof MonthNode)
+			departmentNode = (DepartmentNode) node.getParent().getParent();
+		else
+			throw new IllegalArgumentException();
 	}
 
 	protected void makeAction() {
@@ -38,6 +42,7 @@ public class SaveCategory extends ACAction<CategoryNode> {
 			addNewCategory.action();
 		} else {
 			getCategoryService().save(category);
+			refreshCategoryNode();
 		}
 
 	}
@@ -54,6 +59,29 @@ public class SaveCategory extends ACAction<CategoryNode> {
 		}
 		return true;
 	}
+
+	private void refreshCategoryNode() {
+		int count = departmentNode.getChildCount();
+		for (int i = 0; i < count; i++) {
+			if (departmentNode.getChildAt(i) instanceof APeriodNode) {
+				APeriodNode yearNode = (APeriodNode) departmentNode.getChildAt(i);
+				int yCount = yearNode.getChildCount();
+				for (int k = 0; k < yCount; k++) {
+					APeriodNode monthNode = (APeriodNode) yearNode.getChildAt(k);
+					int mCount = monthNode.getChildCount();
+					for (int c = 0; c < mCount; c++) {
+						if (monthNode.get(c).getCategory().getId().equals(category.getId())) {
+							monthNode.setCategory(category);
+							break;
+						}
+					}
+
+				}
+			}
+		}
+		getPanel().getTreeTable().repaint();
+	}
+
 
 	private void addCategoryNode() {
 		int count = departmentNode.getChildCount();
@@ -75,6 +103,7 @@ public class SaveCategory extends ACAction<CategoryNode> {
 				}
 			}
 		}
+
 	}
 
 	private int calcIndexForNewCategoryNode(APeriodNode monthNode, CategoryNode categoryNode) {

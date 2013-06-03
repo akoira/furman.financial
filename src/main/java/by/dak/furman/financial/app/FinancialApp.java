@@ -16,21 +16,34 @@ import by.dak.furman.financial.swing.item.IItemsPanelDelegate;
 import by.dak.furman.financial.swing.item.ItemsPanel;
 import by.dak.furman.financial.swing.item.action.RefreshRootNode;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.apache.derby.drda.NetworkServerControl;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.Task;
+import org.jdesktop.application.session.TableProperty;
 import org.jdesktop.swingx.JXFrame;
 
 import java.awt.*;
 import java.net.InetAddress;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class FinancialApp extends SingleFrameApplication {
+
+	private static final Log LOGGER = LogFactoryImpl.getLog(FinancialApp.class);
 
 	private JXFrame mainFrame;
 	private AppConfig appConfig;
 	private CategoriesPanel categoriesPanel;
 	private ItemsPanel itemsPanel;
+	private DockController dockController;
+
+	public static void main(String[] args) {
+		Application.launch(FinancialApp.class, args);
+	}
 
 	@Override
 	protected void startup() {
@@ -42,6 +55,7 @@ public class FinancialApp extends SingleFrameApplication {
 		mainFrame = new JXFrame("Financial Manager");
 
 		SplitDockStation splitDockStation = initDocking();
+		restoreComponents();
 
 		setMainFrame(mainFrame);
 
@@ -49,10 +63,49 @@ public class FinancialApp extends SingleFrameApplication {
 		content.setLayout(new BorderLayout());
 		content.add(splitDockStation.getComponent(), BorderLayout.CENTER);
 		show(getMainView());
+		getContext().getTaskService().execute(getLeftPanelRefreshTask());
+	}
+
+	private void restoreComponents() {
+		try {
+
+			Object o = getContext().getLocalStorage().load("FinancialApp.ini");
+			if (o instanceof Map) {
+				TableProperty property = new TableProperty();
+				Map<String, Object> map = (Map<String, Object>) o;
+
+				Object state = map.get(getCategoriesPanel().getName());
+				property.setSessionState(getCategoriesPanel().getTreeTable(), state);
+
+				state = map.get(getItemsPanel().getName());
+				property.setSessionState(getItemsPanel().getTreeTable(), state);
+			}
+		} catch (Exception e) {
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(e.getMessage(), e);
+		}
+	}
+
+	private void saveComponents() {
+		try {
+			Map<String, Object> stateMap = new HashMap<String, Object>();
+			TableProperty property = new TableProperty();
+
+			Object state = property.getSessionState(getCategoriesPanel().getTreeTable());
+			stateMap.put(getCategoriesPanel().getName(), state);
+
+			state = property.getSessionState(getItemsPanel().getTreeTable());
+			stateMap.put(getItemsPanel().getName(), state);
+
+			getContext().getLocalStorage().save(stateMap, "FinancialApp.ini");
+		} catch (Exception e) {
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(e.getMessage(), e);
+		}
 	}
 
 	private SplitDockStation initDocking() {
-		DockController dockController = new DockController();
+		dockController = new DockController();
 		dockController.setRootWindow(mainFrame);
 		dockController.setTheme(new EclipseTheme());
 
@@ -88,14 +141,10 @@ public class FinancialApp extends SingleFrameApplication {
 		}
 	}
 
-
 	@Override
 	protected void shutdown() {
+		saveComponents();
 		super.shutdown();
-	}
-
-	public static void main(String[] args) {
-		Application.launch(FinancialApp.class, args);
 	}
 
 	public CategoriesPanel getCategoriesPanel() {
@@ -115,17 +164,6 @@ public class FinancialApp extends SingleFrameApplication {
 				}
 			});
 			categoriesPanel.init();
-
-			by.dak.furman.financial.swing.category.action.RefreshRootNode action = new by.dak.furman.financial.swing.category.action.RefreshRootNode();
-			action.setPanel(categoriesPanel);
-			action.setNode((RootNode) action.getRootNode());
-			action.action();
-
-			AddNewDepartment addNewDepartment = new AddNewDepartment();
-			addNewDepartment.setPanel(categoriesPanel);
-			addNewDepartment.setNode((RootNode) addNewDepartment.getRootNode());
-			addNewDepartment.action();
-
 		}
 		return categoriesPanel;
 	}
@@ -146,5 +184,23 @@ public class FinancialApp extends SingleFrameApplication {
 			itemsPanel.init();
 		}
 		return itemsPanel;
+	}
+
+	private Task getLeftPanelRefreshTask() {
+		return new Task(this) {
+			@Override
+			protected Object doInBackground() throws Exception {
+				by.dak.furman.financial.swing.category.action.RefreshRootNode action = new by.dak.furman.financial.swing.category.action.RefreshRootNode();
+				action.setPanel(categoriesPanel);
+				action.setNode((RootNode) action.getRootNode());
+				action.action();
+
+				AddNewDepartment addNewDepartment = new AddNewDepartment();
+				addNewDepartment.setPanel(categoriesPanel);
+				addNewDepartment.setNode((RootNode) addNewDepartment.getRootNode());
+				addNewDepartment.action();
+				return null;
+			}
+		};
 	}
 }

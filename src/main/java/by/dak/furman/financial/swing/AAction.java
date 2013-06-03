@@ -28,24 +28,35 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 	private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
 
 	public void action() {
-		before();
-		if (validate()) {
-			makeAction();
+		try {
+			before();
+			if (validate()) {
+				makeAction();
 
-			Runnable runnable = new Runnable() {
-				public void run() {
-					after();
-				}
-			};
-			SwingUtilities.invokeLater(runnable);
-		} else if (message != null)
+				Runnable runnable = new Runnable() {
+					public void run() {
+						after();
+					}
+				};
+				SwingUtilities.invokeLater(runnable);
+			} else if (message != null)
+				JXErrorPane.showDialog(getPanel(),
+						new ErrorInfo(message,
+								message,
+								message,
+								message,
+								null,
+								Level.WARNING, Collections.EMPTY_MAP));
+		} catch (Exception e) {
 			JXErrorPane.showDialog(getPanel(),
-					new ErrorInfo(message,
-							message,
-							message,
-							message,
-							null,
-							Level.WARNING, Collections.EMPTY_MAP));
+					new ErrorInfo("Unexpected Exception",
+							"Unexpected Exception",
+							"Unexpected Exception",
+							"Unexpected Exception",
+							e,
+							Level.SEVERE, Collections.EMPTY_MAP));
+
+		}
 
 	}
 

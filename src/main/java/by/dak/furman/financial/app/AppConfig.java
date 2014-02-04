@@ -4,6 +4,7 @@ import by.dak.furman.financial.service.ICategoryService;
 import by.dak.furman.financial.service.IDepartmentService;
 import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IItemTypeService;
+import by.dak.furman.financial.service.export.IExportService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -42,5 +43,9 @@ public class AppConfig {
 
 	public IDepartmentService getDepartmentService() {
 		return applicationContext.getBean(IDepartmentService.class);
+	}
+
+	public IExportService getExportService() {
+		return applicationContext.getBean(IExportService.class);
 	}
 }

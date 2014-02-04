@@ -2,9 +2,7 @@ package by.dak.furman.financial;
 
 import by.dak.common.lang.StringValue;
 import by.dak.furman.financial.converter.PeriodRenderer;
-import org.apache.commons.lang3.time.DateUtils;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -49,9 +47,5 @@ public class Period extends AObject {
 
 	public void setCurrent(boolean current) {
 		this.current = current;
-	}
-
-	public static void resetTime(Calendar calendar) {
-		DateUtils.ceiling(calendar, Calendar.MONTH);
 	}
 }

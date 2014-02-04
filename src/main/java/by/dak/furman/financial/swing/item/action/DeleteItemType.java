@@ -20,10 +20,10 @@ public class DeleteItemType extends AIDeleteAction<ItemTypeNode> {
 			setMessage("ItemType.id is null");
 			return false;
 		}
-		if (getItemService().getAllBy(getNode().getValue()).size() > 0) {
-			setMessage(String.format("Item > 0  for itemType %s", getNode().getValue().getName()));
-			return false;
-		}
+//		if (getItemService().getAllBy(getNode().getValue()).size() > 0) {
+//			setMessage(String.format("Item > 0  for itemType %s", getNode().getValue().getName()));
+//			return false;
+//		}
 		return true;
 	}
 

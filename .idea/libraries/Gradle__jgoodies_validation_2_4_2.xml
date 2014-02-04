@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: jgoodies-validation-2.4.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-validation/2.4.2/b9074d65c97e19a8ec0f59abe1e1a52ff2fad0e/jgoodies-validation-2.4.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-validation/2.4.2/f25510e4ad8c4a47916052d1fa7c4b08f5269565/jgoodies-validation-2.4.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

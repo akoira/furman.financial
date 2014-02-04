@@ -1,6 +1,7 @@
 package by.dak.furman.financial.swing.item.action;
 
 import by.dak.furman.financial.AObject;
+import by.dak.furman.financial.ItemType;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.APeriodNode;
 import by.dak.furman.financial.swing.category.DepartmentNode;
@@ -9,6 +10,7 @@ import by.dak.furman.financial.swing.item.CategoryNode;
 import by.dak.furman.financial.swing.item.ItemTypeNode;
 import by.dak.furman.financial.swing.item.RootNode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,10 +41,24 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 			if (getNode().getDepartment() != null && getNode().getDepartment().getId() != null)
 				return new ArrayList<AObject>(getCategoryService().getAllBy(getNode().getDepartment()));
 		} else if (acNode instanceof by.dak.furman.financial.swing.category.CategoryNode) {
-			if (getNode().getCategory() != null && getNode().getCategory().getId() != null)
-				return new ArrayList<AObject>(getItemTypeService().getAllBy(getNode().getCategory()));
-		} else if (acNode instanceof APeriodNode)
+			if (getNode().getCategory() != null && getNode().getCategory().getId() != null) {
+
+				ArrayList<AObject> result = new ArrayList<AObject>();
+				List<ItemType> itemTypes = getItemTypeService().getAllBy(getNode().getCategory());
+				for (ItemType itemType : itemTypes) {
+					if (!itemType.getDeleted())
+						result.add(itemType);
+					else {
+						BigDecimal bigDecimal = getItemService().getSumBy(getItemService().getSearchFilter(null, null, itemType, getNode().getPeriod()));
+						if (bigDecimal.compareTo(BigDecimal.ZERO) > 0)
+							result.add(itemType);
+					}
+				}
+				return result;
+			}
+		} else if (acNode instanceof APeriodNode) {
 			return new ArrayList<AObject>(getCategoryService().getAllBy(getNode().getDepartment()));
+		}
 		return Collections.emptyList();
 
 	}

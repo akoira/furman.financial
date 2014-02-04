@@ -13,6 +13,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +34,7 @@ public class CategoriesPanel extends ATreeTablePanel {
 	private TreeModelListener treeModelListener;
 
 	private Action actionDelete;
+	private Action actionExport;
 
 	@Override
 	public ATreeTableNode createRootNode() {
@@ -156,5 +158,18 @@ public class CategoriesPanel extends ATreeTablePanel {
 
 	public RefreshActionFactory getRefreshActionFactory() {
 		return refreshActionFactory;
+	}
+
+	public void export() {
+		TreePath selection = getTreeTable().getTreeSelectionModel().getLeadSelectionPath();
+		if (selection != null) {
+			Object node = selection.getLastPathComponent();
+			if (node instanceof CategoryNode) {
+				ActionExport export = new ActionExport();
+				export.setPanel(this);
+				export.setNode((CategoryNode) node);
+				export.action();
+			}
+		}
 	}
 }

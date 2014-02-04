@@ -20,6 +20,7 @@ import java.util.logging.Level;
  * Time: 4:15 PM
  */
 public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNode> {
+
 	private P panel;
 	private N node;
 
@@ -48,6 +49,8 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 								null,
 								Level.WARNING, Collections.EMPTY_MAP));
 		} catch (Exception e) {
+			e.printStackTrace();
+
 			JXErrorPane.showDialog(getPanel(),
 					new ErrorInfo("Unexpected Exception",
 							"Unexpected Exception",

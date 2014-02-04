@@ -25,6 +25,9 @@ public abstract class ADao<O extends AObject> implements IDao<O> {
 
 	private Class<O> objectClass;
 
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
 
 	public Class<O> getObjectClass() {
 		if (objectClass == null) {
@@ -53,7 +56,6 @@ public abstract class ADao<O extends AObject> implements IDao<O> {
 		object.setModified(new Date());
 		object.setDeleted(Boolean.TRUE);
 		sessionFactory.getCurrentSession().delete(object);
-//        sessionFactory.getCurrentSession().update(object);
 	}
 
 

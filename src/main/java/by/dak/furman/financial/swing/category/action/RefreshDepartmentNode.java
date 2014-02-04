@@ -7,9 +7,8 @@ import by.dak.furman.financial.swing.category.YearNode;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,7 +20,26 @@ public class RefreshDepartmentNode extends ACRefreshAction<DepartmentNode, Perio
 
 	@Override
 	public List<Period> getChildValues() {
-		return Collections.singletonList(createYearPeriod(new Date()));
+		Calendar today = Calendar.getInstance();
+
+		ArrayList<Period> result = new ArrayList<Period>();
+		boolean next = true;
+		int index = -1;
+		while (next) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(DateUtils.addYears(today.getTime(), index));
+			Period period = createYearPeriod(calendar, false);
+			if (getItemService().getSumBy(getItemService().getSearchFilter(null, null, null, period)).compareTo(BigDecimal.ZERO) == 1) {
+				result.add(period);
+				index -= 1;
+			} else {
+				next = false;
+			}
+		}
+
+		result.add(createYearPeriod(today, true));
+
+		return result;
 	}
 
 	@Override
@@ -57,12 +75,11 @@ public class RefreshDepartmentNode extends ACRefreshAction<DepartmentNode, Perio
 	}
 
 
-	private Period createYearPeriod(Date date) {
+	private Period createYearPeriod(Calendar calendar, boolean current) {
 		Period period = new Period();
 		period.setPeriodType(PeriodType.YEAR);
-		period.setCurrent(true);
+		period.setCurrent(current);
 
-		Calendar calendar = Calendar.getInstance();
 		calendar = DateUtils.truncate(calendar, Calendar.YEAR);
 
 		period.setStartDate(calendar.getTime());

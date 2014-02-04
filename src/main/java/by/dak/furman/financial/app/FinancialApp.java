@@ -5,7 +5,10 @@ import bibliothek.extension.gui.dock.theme.EclipseTheme;
 import bibliothek.gui.DockController;
 import bibliothek.gui.dock.DefaultDockable;
 import bibliothek.gui.dock.SplitDockStation;
+import bibliothek.gui.dock.ToolbarDockStation;
+import bibliothek.gui.dock.ToolbarItemDockable;
 import bibliothek.gui.dock.station.split.SplitDockGrid;
+import bibliothek.gui.dock.toolbar.expand.ExpandedState;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.CategoriesPanel;
 import by.dak.furman.financial.swing.category.ICategoriesPanelDelegate;
@@ -23,9 +26,13 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.session.TableProperty;
+import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
+import org.jdesktop.swingx.action.AbstractActionExt;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Locale;
@@ -40,9 +47,14 @@ public class FinancialApp extends SingleFrameApplication {
 	private CategoriesPanel categoriesPanel;
 	private ItemsPanel itemsPanel;
 	private DockController dockController;
+	private ToolbarDockStation toolbarDockStation;
 
 	public static void main(String[] args) {
 		Application.launch(FinancialApp.class, args);
+	}
+
+	public FinancialApp() {
+		getContext().getResourceManager().setResourceFolder(StringUtils.EMPTY);
 	}
 
 	@Override
@@ -50,11 +62,11 @@ public class FinancialApp extends SingleFrameApplication {
 		Locale.setDefault(new Locale("ru", "RU"));
 		initDbServer();
 		appConfig = AppConfig.getAppConfig();
-		getContext().getResourceManager().setResourceFolder(StringUtils.EMPTY);
 
 		mainFrame = new JXFrame("Financial Manager");
 
 		SplitDockStation splitDockStation = initDocking();
+		initToolBar();
 		restoreComponents();
 
 		setMainFrame(mainFrame);
@@ -111,9 +123,9 @@ public class FinancialApp extends SingleFrameApplication {
 
 
 		SplitDockGrid splitDockGrid = new SplitDockGrid();
-		DefaultDockable dockable = new DefaultDockable(getCategoriesPanel(), "Отделы");
+		DefaultDockable dockable = new DefaultDockable(getCategoriesPanel(), getContext().getResourceMap().getString("title.departments"));
 		splitDockGrid.addDockable(0, 0, 1, 1, dockable);
-		splitDockGrid.addDockable(1, 0, 3, 3, new DefaultDockable(getItemsPanel(), "Платежи"));
+		splitDockGrid.addDockable(1, 0, 3, 3, new DefaultDockable(getItemsPanel(), getContext().getResourceMap().getString("title.payments")));
 		SplitDockStation splitDockStation = new SplitDockStation();
 		splitDockStation.dropTree(splitDockGrid.toTree());
 
@@ -129,6 +141,46 @@ public class FinancialApp extends SingleFrameApplication {
 
 		dockController.add(splitDockStation);
 		return splitDockStation;
+	}
+
+	private void initToolBar() {
+		toolbarDockStation = new ToolbarDockStation();
+		toolbarDockStation.setExpandedState(ExpandedState.SHRUNK);
+		dockController.add(toolbarDockStation);
+		categoriesPanel.add(toolbarDockStation.getComponent(), BorderLayout.NORTH);
+
+		addAction(getActionExport());
+	}
+
+	private Action getActionExport() {
+		AbstractActionExt action = new AbstractActionExt() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getContext().getTaskService().execute(new Task(FinancialApp.this) {
+					@Override
+					protected Object doInBackground() throws Exception {
+						getCategoriesPanel().export();
+						return null;
+					}
+				});
+			}
+		};
+		action.setLargeIcon(getContext().getResourceMap().getIcon("icon.export"));
+		action.setSmallIcon(getContext().getResourceMap().getIcon("icon.export"));
+		action.setLongDescription(getContext().getResourceMap().getString("label.export"));
+		return action;
+	}
+
+	private void addAction(Action action) {
+		ToolbarItemDockable item = new ToolbarItemDockable();
+
+		JXButton button = new JXButton(action);
+		button.setBorderPainted(false);
+		button.setFocusable(false);
+
+		button.setPreferredSize(new Dimension(18, 18));
+		item.setComponent(button, ExpandedState.SHRUNK);
+		toolbarDockStation.drop(item);
 	}
 
 	private void initDbServer() {

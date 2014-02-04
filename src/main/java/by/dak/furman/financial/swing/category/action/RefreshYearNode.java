@@ -16,6 +16,13 @@ import java.util.List;
  * Time: 3:59 PM
  */
 public class RefreshYearNode extends ACRefreshAction<YearNode, Period, MonthNode> {
+
+	private boolean isSameMonth(Calendar calendar1, Calendar calendar2) {
+		return calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
+				calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR);
+	}
+
+
 	@Override
 	public List<Period> getChildValues() {
 		ArrayList<Period> periods = new ArrayList<Period>();
@@ -23,15 +30,18 @@ public class RefreshYearNode extends ACRefreshAction<YearNode, Period, MonthNode
 		for (int month = 0; month < 12; month++) {
 			Period period = new Period();
 			period.setPeriodType(PeriodType.MONTH);
-			Calendar calendar = Calendar.getInstance();
-			int current = calendar.get(Calendar.MONTH);
-			period.setCurrent(current == month);
-			calendar.setTime(getNode().getValue().getStartDate());
-			calendar = DateUtils.truncate(calendar, Calendar.MONTH);
-			calendar.set(Calendar.MONTH, month);
-			period.setStartDate(calendar.getTime());
-			calendar.add(Calendar.MONTH, 1);
-			period.setEndDate(calendar.getTime());
+			Calendar current = Calendar.getInstance();
+
+			Calendar start = Calendar.getInstance();
+			start.setTime(getNode().getValue().getStartDate());
+			start = DateUtils.truncate(start, Calendar.MONTH);
+			start.set(Calendar.MONTH, month);
+			period.setCurrent(isSameMonth(current, start));
+
+			period.setStartDate(start.getTime());
+			start.add(Calendar.MONTH, 1);
+			period.setEndDate(start.getTime());
+
 			periods.add(period);
 		}
 		return periods;

@@ -43,10 +43,14 @@ allprojects {
 		compile 'org.apache.commons:commons-lang3:3.1'
 		compile 'commons-dbcp:commons-dbcp:1.4'
 		compile 'commons-beanutils:commons-beanutils:1.8.3'
+		compile 'commons-io:commons-io:2.4'
 
 		compile 'org.apache.derby:derby:10.10.1.1'
 		compile 'org.apache.derby:derbyclient:10.10.1.1'
 		compile 'org.apache.derby:derbynet:10.10.1.1'
 		compile 'net.java.dev.glazedlists:glazedlists_java15:1.9.0'
+		compile 'org.liquibase:liquibase-core:3.0.0-rc2'
+
+		compile 'com.thoughtworks.xstream:xstream:1.4.2'
 	}
 }

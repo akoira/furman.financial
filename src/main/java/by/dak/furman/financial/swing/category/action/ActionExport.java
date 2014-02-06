@@ -4,21 +4,24 @@ import by.dak.common.persistence.SearchFilter;
 import by.dak.furman.financial.Category;
 import by.dak.furman.financial.Item;
 import by.dak.furman.financial.swing.category.CategoryNode;
+import by.dak.furman.financial.swing.category.RootNode;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-public class ActionExport extends ACAction<CategoryNode> {
+public class ActionExport extends ACAction<RootNode> {
 
 	@Override
 	protected void makeAction() {
+		List<Item> items = getItemService().getAll();
 
-		Category category = getNode().getCategory();
-		SearchFilter searchFilter = getItemService().getSearchFilter(null, category, null, null);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+		String fileName = String.format("%s-export.xml", dateFormat.format(new Date()));
 
-		List<Item> items = getItemService().getAllBy(searchFilter);
-
-		getPanel().getAppConfig().getExportService().export(items, new File("/Users/akoyro/temp/export.xml"));
+		File file = new File(fileName);
+		getPanel().getAppConfig().getExportService().export(items, file);
 	}
 
 }

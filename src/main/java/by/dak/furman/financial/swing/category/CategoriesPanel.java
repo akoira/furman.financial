@@ -13,7 +13,6 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +33,6 @@ public class CategoriesPanel extends ATreeTablePanel {
 	private TreeModelListener treeModelListener;
 
 	private Action actionDelete;
-	private Action actionExport;
 
 	@Override
 	public ATreeTableNode createRootNode() {
@@ -160,16 +158,32 @@ public class CategoriesPanel extends ATreeTablePanel {
 		return refreshActionFactory;
 	}
 
-	public void export() {
-		TreePath selection = getTreeTable().getTreeSelectionModel().getLeadSelectionPath();
-		if (selection != null) {
-			Object node = selection.getLastPathComponent();
-			if (node instanceof CategoryNode) {
-				ActionExport export = new ActionExport();
-				export.setPanel(this);
-				export.setNode((CategoryNode) node);
-				export.action();
-			}
-		}
+	public void exportData() {
+		ActionExport export = new ActionExport();
+		export.setPanel(this);
+		export.setNode((RootNode) getTreeTable().getTreeTableModel().getRoot());
+		export.action();
+
+		refreshData();
 	}
+
+	public void importData() {
+		ActionImport actionImport = new ActionImport();
+		actionImport.setPanel(this);
+		actionImport.setNode((RootNode) getTreeTable().getTreeTableModel().getRoot());
+		actionImport.action();
+
+		refreshData();
+	}
+
+	public void refreshData()
+	{
+		delegate.selectNode(null);
+
+		RefreshRootNode refreshRootNode = new RefreshRootNode();
+		refreshRootNode.setNode((RootNode) getTreeTable().getTreeTableModel().getRoot());
+		refreshRootNode.setPanel(this);
+		refreshRootNode.action();
+	}
+
 }

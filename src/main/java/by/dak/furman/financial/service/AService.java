@@ -62,6 +62,12 @@ public abstract class AService<O extends AObject> implements IService<O> {
 		return getDao().getByName(name);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public O getByUuid(String uuid) {
+		return getDao().getByUuid(uuid);
+	}
+
 	@Transactional(readOnly = true)
 	@Override
 	public List<O> getAllSortedBy(String... property) {

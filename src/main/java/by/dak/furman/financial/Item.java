@@ -2,6 +2,8 @@ package by.dak.furman.financial;
 
 import by.dak.common.lang.StringValue;
 import by.dak.furman.financial.converter.ItemRenderer;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +26,7 @@ public class Item extends AObject {
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
+	@Cascade(value = {CascadeType.SAVE_UPDATE})
 	private ItemType itemType;
 
 	@Column(nullable = false)

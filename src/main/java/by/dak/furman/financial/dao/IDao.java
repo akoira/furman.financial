@@ -29,4 +29,6 @@ public interface IDao<O extends AObject> {
 	O getByName(String name);
 
 	O getBy(SearchFilter searchFilter);
+
+	O getByUuid(String uuid);
 }

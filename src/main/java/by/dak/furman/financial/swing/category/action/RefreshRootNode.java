@@ -30,4 +30,15 @@ public class RefreshRootNode extends ACRefreshAction<RootNode, Department, Depar
 		departmentNode.setNode(childNode);
 		departmentNode.action();
 	}
+
+	@Override
+	protected void after() {
+		super.after();
+		if (getNode().getPeriod().isCurrent()) {
+			AddNewDepartment addNewDepartment = new AddNewDepartment();
+			addNewDepartment.setPanel(getPanel());
+			addNewDepartment.setNode((RootNode) addNewDepartment.getRootNode());
+			addNewDepartment.action();
+		}
+	}
 }

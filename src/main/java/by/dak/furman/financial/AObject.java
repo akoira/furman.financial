@@ -1,5 +1,7 @@
 package by.dak.furman.financial;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,6 +18,8 @@ public abstract class AObject {
 	public static final String PROPERTY_modified = "modified";
 	public static final String PROPERTY_deleted = "deleted";
 	public static final String PROPERTY_name = "name";
+	public static final String PROPERTY_uuid = "uuid";
+	public static final String PROPERTY_exported = "exported";
 
 	@Id
 	@SequenceGenerator(name = "IDGenerator", sequenceName = "HIBERNATE_SEQUENCE")
@@ -35,6 +39,12 @@ public abstract class AObject {
 	@Column(nullable = false)
 	private String name;
 
+	@Column(nullable = true, unique = true)
+	private String uuid;
+
+	@Column(nullable = false, columnDefinition = "BOOLEAN default false")
+	@XStreamOmitField
+	private Boolean exported = false;
 
 	public Long getId() {
 		return id;
@@ -74,5 +84,21 @@ public abstract class AObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public Boolean getExported() {
+		return exported;
+	}
+
+	public void setExported(Boolean exported) {
+		this.exported = exported;
 	}
 }

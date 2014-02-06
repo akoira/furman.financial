@@ -50,6 +50,7 @@ public class FinancialApp extends SingleFrameApplication {
 	private ToolbarDockStation toolbarDockStation;
 
 	public static void main(String[] args) {
+		Locale.setDefault(new Locale("ru", "RU"));
 		Application.launch(FinancialApp.class, args);
 	}
 
@@ -59,23 +60,24 @@ public class FinancialApp extends SingleFrameApplication {
 
 	@Override
 	protected void startup() {
-		Locale.setDefault(new Locale("ru", "RU"));
 		initDbServer();
 		appConfig = AppConfig.getAppConfig();
 
-		mainFrame = new JXFrame("Financial Manager");
+		mainFrame = new JXFrame(getContext().getResourceMap().getString("Application.title"));
+		mainFrame.setIconImage(getContext().getResourceMap().getImageIcon("Application.icon").getImage());
+		setMainFrame(mainFrame);
 
 		SplitDockStation splitDockStation = initDocking();
 		initToolBar();
 		restoreComponents();
 
-		setMainFrame(mainFrame);
 
 		Container content = mainFrame.getContentPane();
 		content.setLayout(new BorderLayout());
 		content.add(splitDockStation.getComponent(), BorderLayout.CENTER);
 		show(getMainView());
 		getContext().getTaskService().execute(getLeftPanelRefreshTask());
+
 	}
 
 	private void restoreComponents() {
@@ -123,9 +125,12 @@ public class FinancialApp extends SingleFrameApplication {
 
 
 		SplitDockGrid splitDockGrid = new SplitDockGrid();
-		DefaultDockable dockable = new DefaultDockable(getCategoriesPanel(), getContext().getResourceMap().getString("title.departments"));
+		DefaultDockable dockable = new DefaultDockable(getCategoriesPanel(), getContext().getResourceMap().getString("departments.label"));
+		dockable.setTitleIcon(getContext().getResourceMap().getIcon("departments.icon"));
 		splitDockGrid.addDockable(0, 0, 1, 1, dockable);
-		splitDockGrid.addDockable(1, 0, 3, 3, new DefaultDockable(getItemsPanel(), getContext().getResourceMap().getString("title.payments")));
+		dockable = new DefaultDockable(getItemsPanel(), getContext().getResourceMap().getString("payments.label"));
+		dockable.setTitleIcon(getContext().getResourceMap().getIcon("payments.icon"));
+		splitDockGrid.addDockable(1, 0, 3, 3, dockable);
 		SplitDockStation splitDockStation = new SplitDockStation();
 		splitDockStation.dropTree(splitDockGrid.toTree());
 
@@ -150,26 +155,45 @@ public class FinancialApp extends SingleFrameApplication {
 		categoriesPanel.add(toolbarDockStation.getComponent(), BorderLayout.NORTH);
 
 		addAction(getActionExport());
+		addAction(getActionImport());
+		addAction(getActionRefresh());
 	}
 
-	private Action getActionExport() {
+
+	private Action createActionBy(final Object target, final String method, String keyPrefix) {
+
 		AbstractActionExt action = new AbstractActionExt() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getContext().getTaskService().execute(new Task(FinancialApp.this) {
+				final Task task = new Task(FinancialApp.this) {
 					@Override
 					protected Object doInBackground() throws Exception {
-						getCategoriesPanel().export();
+						target.getClass().getMethod(method).invoke(target);
 						return null;
 					}
-				});
+				};
+				getContext().getTaskService().execute(task);
 			}
 		};
-		action.setLargeIcon(getContext().getResourceMap().getIcon("icon.export"));
-		action.setSmallIcon(getContext().getResourceMap().getIcon("icon.export"));
-		action.setLongDescription(getContext().getResourceMap().getString("label.export"));
+		action.setLargeIcon(getContext().getResourceMap().getIcon(keyPrefix + "icon"));
+		action.setSmallIcon(getContext().getResourceMap().getIcon(keyPrefix + "icon"));
+		action.setLongDescription(getContext().getResourceMap().getString(keyPrefix + "label"));
 		return action;
 	}
+
+	private Action getActionExport() {
+		return createActionBy(getCategoriesPanel(), "exportData", "export.");
+	}
+
+	private Action getActionImport() {
+
+		return createActionBy(getCategoriesPanel(), "importData", "import.");
+	}
+
+	private Action getActionRefresh() {
+		return createActionBy(getCategoriesPanel(), "refreshData", "refresh.");
+	}
+
 
 	private void addAction(Action action) {
 		ToolbarItemDockable item = new ToolbarItemDockable();
@@ -182,6 +206,7 @@ public class FinancialApp extends SingleFrameApplication {
 		item.setComponent(button, ExpandedState.SHRUNK);
 		toolbarDockStation.drop(item);
 	}
+
 
 	private void initDbServer() {
 		try {
@@ -242,15 +267,7 @@ public class FinancialApp extends SingleFrameApplication {
 		return new Task(this) {
 			@Override
 			protected Object doInBackground() throws Exception {
-				by.dak.furman.financial.swing.category.action.RefreshRootNode action = new by.dak.furman.financial.swing.category.action.RefreshRootNode();
-				action.setPanel(categoriesPanel);
-				action.setNode((RootNode) action.getRootNode());
-				action.action();
-
-				AddNewDepartment addNewDepartment = new AddNewDepartment();
-				addNewDepartment.setPanel(categoriesPanel);
-				addNewDepartment.setNode((RootNode) addNewDepartment.getRootNode());
-				addNewDepartment.action();
+				categoriesPanel.refreshData();
 				return null;
 			}
 		};

@@ -28,5 +28,7 @@ public interface IService<O extends AObject> {
 
 	O getByName(String name);
 
+	O getByUuid(String uuid);
+
 	BigDecimal getSum(String property);
 }

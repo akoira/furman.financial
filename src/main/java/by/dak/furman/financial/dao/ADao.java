@@ -49,6 +49,7 @@ public abstract class ADao<O extends AObject> implements IDao<O> {
 
 	public void save(O object) {
 		object.setModified(new Date());
+		object.setExported(false);
 		sessionFactory.getCurrentSession().update(object);
 	}
 
@@ -57,6 +58,8 @@ public abstract class ADao<O extends AObject> implements IDao<O> {
 		object.setDeleted(Boolean.TRUE);
 		sessionFactory.getCurrentSession().delete(object);
 	}
+
+
 
 
 	public O getById(Long id) {
@@ -93,6 +96,13 @@ public abstract class ADao<O extends AObject> implements IDao<O> {
 	public O getByName(String name) {
 		SearchFilter searchFilter = SearchFilter.instanceSingle();
 		searchFilter.ilike(AObject.PROPERTY_name, name);
+		return getBy(searchFilter);
+	}
+
+	@Override
+	public O getByUuid(String uuid) {
+		SearchFilter searchFilter = SearchFilter.instanceSingle();
+		searchFilter.ilike(AObject.PROPERTY_uuid, uuid);
 		return getBy(searchFilter);
 	}
 

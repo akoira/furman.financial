@@ -22,17 +22,21 @@ import java.util.List;
  */
 public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> {
 
+	//can be null
 	private ACNode acNode;
 
 
 	@Override
 	protected void before() {
 		super.before();
-		getNode().setDepartment(acNode.getDepartment());
-		getNode().setCategory(acNode.getCategory());
-		getNode().setPeriod(acNode.getPeriod());
-		getNode().setItemType(null);
-		getNode().setValue(acNode);
+		if (acNode != null)
+		{
+			getNode().setDepartment(acNode.getDepartment());
+			getNode().setCategory(acNode.getCategory());
+			getNode().setPeriod(acNode.getPeriod());
+			getNode().setItemType(null);
+			getNode().setValue(acNode);
+		}
 	}
 
 	@Override

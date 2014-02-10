@@ -34,7 +34,7 @@ allprojects {
 
 		compile 'com.jidesoft:jide-oss:3.5.3'
 
-		compile 'org.hibernate:hibernate-core:4.2.0.Final'
+		compile 'org.hibernate:hibernate-core:4.3.1.Final'
 
 		compile 'org.springframework:spring-aspects:3.2.2.RELEASE'
 		compile 'org.springframework:spring-orm:3.2.2.RELEASE'

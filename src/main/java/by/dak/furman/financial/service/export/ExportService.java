@@ -8,6 +8,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,10 @@ import java.util.UUID;
 
 @Service
 public class ExportService implements IExportService {
+
+
+	@Value("${export.delete}")
+	private boolean delete;
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -62,8 +67,10 @@ public class ExportService implements IExportService {
 			DomDriver domDriver = new DomDriver();
 			XStream xStream = new XStream(domDriver);
 			xStream.toXML(items, out);
-			for (Item item : items) {
-				itemService.delete(item);
+			if (delete) {
+				for (Item item : items) {
+					itemService.delete(item);
+				}
 			}
 
 		} catch (FileNotFoundException e) {
@@ -71,5 +78,13 @@ public class ExportService implements IExportService {
 		} finally {
 			IOUtils.closeQuietly(out);
 		}
+	}
+
+	public boolean isDelete() {
+		return delete;
+	}
+
+	public void setDelete(boolean delete) {
+		this.delete = delete;
 	}
 }

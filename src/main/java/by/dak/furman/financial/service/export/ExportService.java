@@ -64,7 +64,7 @@ public class ExportService implements IExportService {
 			}
 			out = new FileOutputStream(file);
 
-			DomDriver domDriver = new DomDriver();
+			DomDriver domDriver = new DomDriver("UTF-8");
 			XStream xStream = new XStream(domDriver);
 			xStream.toXML(items, out);
 			if (delete) {

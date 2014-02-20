@@ -5,7 +5,6 @@ import by.dak.furman.financial.service.*;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +33,10 @@ public class ImportService implements IImportService {
 	@Transactional(readOnly = false)
 	public void importData(File file) {
 		ImportedFile importedFile = importedFileService.getByName(file.getName());
-		if(importedFile != null)
+		if (importedFile != null)
 			return;
 
-		XStream xStream = new XStream(new DomDriver());
+		XStream xStream = new XStream(new DomDriver("UTF-8"));
 		xStream.omitField(Item.class, Item.PROPERTY_id);
 		xStream.omitField(ItemType.class, ItemType.PROPERTY_id);
 		xStream.omitField(Category.class, Category.PROPERTY_id);

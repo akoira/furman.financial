@@ -35,14 +35,4 @@ public class RefreshItemTypeNode extends AIRefreshAction<ItemTypeNode, Item, Ite
 	@Override
 	public void refreshChildNode(ItemNode childNode) {
 	}
-
-	@Override
-	public void reloadNode() {
-		if (getNode().getItemType().getId() != null)
-			getNode().setAmount(getItemService().getSumBy(getItemService().getSearchFilter(
-					getNode().getDepartment(),
-					getNode().getCategory(),
-					getNode().getItemType(),
-					getNode().getPeriod())));
-	}
 }

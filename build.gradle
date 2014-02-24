@@ -1,55 +1,59 @@
 buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-	}
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+  }
 }
 
 allprojects {
-	apply plugin: 'java'
-	apply plugin: 'maven'
-	apply plugin: 'application'
+  apply plugin: 'java'
+  apply plugin: 'maven'
+  apply plugin: 'application'
 
-	mainClassName = "by.dak.furman.financial.app.FinancialApp"
+  mainClassName = "by.dak.furman.financial.app.FinancialApp"
 
-	repositories {
-		mavenCentral()
-	}
+  repositories {
+    mavenCentral()
+  }
 
-	dependencies {
-		compile 'org.jdesktop.bsaf:bsaf:1.9.2'
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+  }
 
-		compile 'org.dockingframes:docking-frames-common:1.1.1'
-		compile 'org.dockingframes:docking-frames-ext-toolbar-common:1.1.1'
-		compile 'org.dockingframes:docking-frames-demo-app:1.1.0'
-		compile 'org.dockingframes:docking-frames-demo-app-ice:1.1.0'
+  dependencies {
+    compile 'org.jdesktop.bsaf:bsaf:1.9.2'
 
-		compile 'org.swinglabs.swingx:swingx-all:1.6.5-1'
+    compile 'org.dockingframes:docking-frames-common:1.1.1'
+    compile 'org.dockingframes:docking-frames-ext-toolbar-common:1.1.1'
+    compile 'org.dockingframes:docking-frames-demo-app:1.1.0'
+    compile 'org.dockingframes:docking-frames-demo-app-ice:1.1.0'
 
-		compile 'com.jgoodies:jgoodies-animation:1.4.2'
-		compile 'com.jgoodies:jgoodies-validation:2.4.2'
-		compile 'com.jgoodies:jgoodies-forms:1.6.0'
-		compile 'com.jgoodies:jgoodies-binding:2.7.0'
+    compile 'org.swinglabs.swingx:swingx-all:1.6.5-1'
 
-		compile 'com.jidesoft:jide-oss:3.5.3'
+    compile 'com.jgoodies:jgoodies-animation:1.4.2'
+    compile 'com.jgoodies:jgoodies-validation:2.4.2'
+    compile 'com.jgoodies:jgoodies-forms:1.6.0'
+    compile 'com.jgoodies:jgoodies-binding:2.7.0'
 
-		compile 'org.hibernate:hibernate-core:4.2.0.Final'
+    compile 'com.jidesoft:jide-oss:3.5.3'
 
-		compile 'org.springframework:spring-context:4.0.1.RELEASE'
-		compile 'org.springframework.data:spring-data-jpa:1.4.3.RELEASE'
+    compile 'org.hibernate:hibernate-core:4.2.0.Final'
 
-		compile 'org.apache.commons:commons-lang3:3.1'
-		compile 'commons-dbcp:commons-dbcp:1.4'
-		compile 'commons-beanutils:commons-beanutils:1.8.3'
-		compile 'commons-io:commons-io:2.4'
+    compile 'org.springframework:spring-context:4.0.1.RELEASE'
+    compile 'org.springframework.data:spring-data-jpa:1.4.3.RELEASE'
 
-		compile 'org.apache.derby:derby:10.10.1.1'
-		compile 'org.apache.derby:derbyclient:10.10.1.1'
-		compile 'org.apache.derby:derbynet:10.10.1.1'
-		compile 'net.java.dev.glazedlists:glazedlists_java15:1.9.0'
-		compile 'org.liquibase:liquibase-core:3.0.0-rc2'
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'commons-dbcp:commons-dbcp:1.4'
+    compile 'commons-beanutils:commons-beanutils:1.8.3'
+    compile 'commons-io:commons-io:2.4'
 
-		compile 'com.thoughtworks.xstream:xstream:1.4.2'
-	}
+    compile 'org.apache.derby:derby:10.10.1.1'
+    compile 'org.apache.derby:derbyclient:10.10.1.1'
+    compile 'org.apache.derby:derbynet:10.10.1.1'
+    compile 'net.java.dev.glazedlists:glazedlists_java15:1.9.0'
+    compile 'org.liquibase:liquibase-core:3.0.0-rc2'
+
+    compile 'com.thoughtworks.xstream:xstream:1.4.2'
+  }
 }

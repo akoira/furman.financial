@@ -2,10 +2,12 @@
   <library name="Gradle: docking-frames-ext-toolbar-common-1.1.1">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-ext-toolbar-common/1.1.1/4fa6b15bd4623572d3afbeb0ecf64e74a3cc87e6/docking-frames-ext-toolbar-common-1.1.1.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-ext-toolbar-common/1.1.1/4fa6b15bd4623572d3afbeb0ecf64e74a3cc87e6/docking-frames-ext-toolbar-common-1.1.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-ext-toolbar-common/1.1.1/7a62080e2e74daefc529b18a20dfc4c12e5e7a6b/docking-frames-ext-toolbar-common-1.1.1-sources.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-ext-toolbar-common/1.1.1/7a62080e2e74daefc529b18a20dfc4c12e5e7a6b/docking-frames-ext-toolbar-common-1.1.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

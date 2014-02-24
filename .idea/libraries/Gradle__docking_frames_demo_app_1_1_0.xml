@@ -2,10 +2,12 @@
   <library name="Gradle: docking-frames-demo-app-1.1.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-demo-app/1.1.0/4133f6b8d626f57515c9fed475536eef02d39633/docking-frames-demo-app-1.1.0.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-demo-app/1.1.0/4133f6b8d626f57515c9fed475536eef02d39633/docking-frames-demo-app-1.1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-demo-app/1.1.0/4c812ff48fb8d938b5d8f17aba17c8611285b47/docking-frames-demo-app-1.1.0-sources.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/org.dockingframes/docking-frames-demo-app/1.1.0/4c812ff48fb8d938b5d8f17aba17c8611285b47/docking-frames-demo-app-1.1.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

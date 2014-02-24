@@ -2,10 +2,12 @@
   <library name="Gradle: jgoodies-binding-2.7.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-binding/2.7.0/dc3ff59b21d9976427d0d8a7cbad925776456e09/jgoodies-binding-2.7.0.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-binding/2.7.0/dc3ff59b21d9976427d0d8a7cbad925776456e09/jgoodies-binding-2.7.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-binding/2.7.0/c717651818daaf8d1c4d0cb21415a969e53e4131/jgoodies-binding-2.7.0-sources.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-binding/2.7.0/c717651818daaf8d1c4d0cb21415a969e53e4131/jgoodies-binding-2.7.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

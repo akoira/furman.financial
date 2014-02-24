@@ -39,7 +39,7 @@ public abstract class AObject {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = true, unique = true)
+	@Column(nullable = true)
 	private String uuid;
 
 	@Column(nullable = false, columnDefinition = "BOOLEAN default false")

@@ -2,6 +2,7 @@
   <library name="Gradle: derbynet-10.10.1.1">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.derby/derbynet/10.10.1.1/912b08dca73663d4665e09cd317be1218412d93e/derbynet-10.10.1.1.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/org.apache.derby/derbynet/10.10.1.1/912b08dca73663d4665e09cd317be1218412d93e/derbynet-10.10.1.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

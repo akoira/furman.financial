@@ -22,7 +22,7 @@ public abstract class AIRefreshAction<N extends AINode, V, C extends AINode> ext
 
 	@Override
 	public void reloadNode() {
-		if (getNode().getValue() instanceof AObject && ((AObject) getNode().getValue()).getId() != null)
+		if (getNode().getValue() instanceof AObject && ((AObject) getNode().getValue()).getId() == null)
 			return;
 		getNode().setAmount(getItemService().getSumBy(getItemService().getSearchFilter(
 				getNode().getDepartment(),

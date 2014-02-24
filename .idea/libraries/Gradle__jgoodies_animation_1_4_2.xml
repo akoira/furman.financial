@@ -2,10 +2,12 @@
   <library name="Gradle: jgoodies-animation-1.4.2">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-animation/1.4.2/237db42b946db8e2edec7cd2d2acf9bc6861953d/jgoodies-animation-1.4.2.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-animation/1.4.2/237db42b946db8e2edec7cd2d2acf9bc6861953d/jgoodies-animation-1.4.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-animation/1.4.2/567d6b8a930fe7700fda0f1976f0d3fa70339c3/jgoodies-animation-1.4.2-sources.jar!/" />
+      <root url="jar://D:/_settings/admin/.gradle/caches/modules-2/files-2.1/com.jgoodies/jgoodies-animation/1.4.2/567d6b8a930fe7700fda0f1976f0d3fa70339c3/jgoodies-animation-1.4.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

@@ -13,39 +13,42 @@ import java.util.concurrent.Executors;
  * Time: 11:22 PM
  */
 public class RefreshHierarchy extends ACAction<ACNode> {
-	private Executor executor = Executors.newCachedThreadPool();
+	private Executor executor = Executors.newSingleThreadExecutor();
 
 	@Override
 	protected void makeAction() {
+		boolean needToRepaint = false;
 		TreeTableNode[] tableNodes = getModel().getPathToRoot(getNode());
 		for (TreeTableNode node : tableNodes) {
 			refreshNode((ACNode) node);
+			needToRepaint = true;
+		}
+		repaint(needToRepaint);
+	}
+
+	private void repaint(boolean needRepaint) {
+		if (needRepaint)
+		{
+			final Runnable runnable = () -> {
+                Runnable swingR = () -> getPanel().getTreeTable().repaint();
+                try {
+                    SwingUtilities.invokeAndWait(swingR);
+                } catch (Exception e) {
+
+                }
+            };
+			executor.execute(runnable);
 		}
 	}
 
 
 	private void refreshNode(final ACNode node) {
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				ACRefreshAction action = getPanel().getRefreshActionFactory().getActionBy(node);
-				action.reloadNode();
-				getPanel().getTreeTable().repaint();
-				action.reloadChildren();
-			}
-		};
-
-		Runnable oRunnable = new Runnable() {
-			@Override
-			public void run() {
-				try {
-					SwingUtilities.invokeAndWait(runnable);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		executor.execute(oRunnable);
+		final Runnable runnable = () -> {
+            ACRefreshAction action = getPanel().getRefreshActionFactory().getActionBy(node);
+            action.reloadNode();
+            action.reloadChildren();
+        };
+		executor.execute(runnable);
 	}
 
 

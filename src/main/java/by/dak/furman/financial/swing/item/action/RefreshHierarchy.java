@@ -14,17 +14,44 @@ import java.util.concurrent.Executors;
  * Time: 11:22 PM
  */
 public class RefreshHierarchy extends AIAction<AINode> {
-	private Executor executor = Executors.newCachedThreadPool();
+	private Executor executor = Executors.newSingleThreadExecutor();
 
 	@Override
 	protected void makeAction() {
+		boolean needRepaint = false;
 		TreeTableNode[] tableNodes = getModel().getPathToRoot(getNode());
 		for (TreeTableNode node : tableNodes) {
 			refreshNode((AINode) node);
+			needRepaint = true;
 		}
 
 		if (getPanel().getDelegate() != null) {
 			getPanel().getDelegate().refreshACNode(((RootNode) getRootNode()).getValue());
+		}
+
+		repaint(needRepaint);
+	}
+
+	private void repaint(boolean needRepaint) {
+		if (needRepaint)
+		{
+			final Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					Runnable swingR = new Runnable() {
+						@Override
+						public void run() {
+							getPanel().getTreeTable().repaint();
+						}
+					};
+					try {
+						SwingUtilities.invokeAndWait(swingR);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			executor.execute(runnable);
 		}
 	}
 
@@ -33,23 +60,9 @@ public class RefreshHierarchy extends AIAction<AINode> {
 			@Override
 			public void run() {
 				getPanel().getRefreshActionFactory().getActionBy(node).reloadNode();
-
-				if (node != getNode())
-					getPanel().getTreeTable().repaint();
-
 			}
 		};
 
-		Runnable oRunnable = new Runnable() {
-			@Override
-			public void run() {
-				try {
-					SwingUtilities.invokeAndWait(runnable);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		executor.execute(oRunnable);
+		executor.execute(runnable);
 	}
 }

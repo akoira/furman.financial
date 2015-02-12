@@ -29,13 +29,21 @@ public class RefreshHierarchy extends ACAction<ACNode> {
 	private void repaint(boolean needRepaint) {
 		if (needRepaint)
 		{
-			final Runnable runnable = () -> {
-                Runnable swingR = () -> getPanel().getTreeTable().repaint();
+			final Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					Runnable swingR = new Runnable() {
+						@Override
+						public void run() {
+							RefreshHierarchy.this.getPanel().getTreeTable().repaint();
+						}
+					};
                 try {
                     SwingUtilities.invokeAndWait(swingR);
                 } catch (Exception e) {
 
                 }
+				}
             };
 			executor.execute(runnable);
 		}
@@ -43,10 +51,14 @@ public class RefreshHierarchy extends ACAction<ACNode> {
 
 
 	private void refreshNode(final ACNode node) {
-		final Runnable runnable = () -> {
+		final Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
             ACRefreshAction action = getPanel().getRefreshActionFactory().getActionBy(node);
             action.reloadNode();
             action.reloadChildren();
+
+			}
         };
 		executor.execute(runnable);
 	}

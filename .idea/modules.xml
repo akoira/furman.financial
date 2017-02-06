@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/furman.financial.iml" filepath="$PROJECT_DIR$/furman.financial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/furman.financial.iml" filepath="$PROJECT_DIR$/.idea/modules/furman.financial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/furman.financial_main.iml" filepath="$PROJECT_DIR$/.idea/modules/furman.financial_main.iml" group="furman.financial" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/furman.financial_test.iml" filepath="$PROJECT_DIR$/.idea/modules/furman.financial_test.iml" group="furman.financial" />
     </modules>
   </component>
 </project>
-

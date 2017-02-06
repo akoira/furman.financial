@@ -57,3 +57,7 @@ allprojects {
     compile 'com.thoughtworks.xstream:xstream:1.4.2'
   }
 }
+
+task wrapper(type: Wrapper) {
+  gradleVersion = "3.3"
+}

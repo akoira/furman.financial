@@ -77,7 +77,7 @@
 
 	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
 		<property name="dataSource" ref="dataSource"/>
-		<property name="defaultSchema" value="public"/>
+		<property name="defaultSchema" value="FINANCIAL"/>
 		<property name="changeLog" value="/liquibase/db.upgrade.xml"/>
 
 		<!--

@@ -12,8 +12,6 @@ import bibliothek.gui.dock.toolbar.expand.ExpandedState;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.CategoriesPanel;
 import by.dak.furman.financial.swing.category.ICategoriesPanelDelegate;
-import by.dak.furman.financial.swing.category.RootNode;
-import by.dak.furman.financial.swing.category.action.AddNewDepartment;
 import by.dak.furman.financial.swing.category.action.RefreshHierarchy;
 import by.dak.furman.financial.swing.item.IItemsPanelDelegate;
 import by.dak.furman.financial.swing.item.ItemsPanel;
@@ -209,13 +207,7 @@ public class FinancialApp extends SingleFrameApplication {
 
 
 	private void initDbServer() {
-		try {
-			NetworkServerControl server = new NetworkServerControl
-					(InetAddress.getByName("localhost"), 1527);
-			server.start(null);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
+		new DbServer().start();
 	}
 
 	@Override
@@ -272,4 +264,17 @@ public class FinancialApp extends SingleFrameApplication {
 			}
 		};
 	}
+
+	public static class DbServer {
+		public void start() {
+			try {
+				NetworkServerControl server = new NetworkServerControl
+						(InetAddress.getByName("localhost"), 1527);
+				server.start(null);
+			} catch (Exception e) {
+				throw new IllegalArgumentException(e);
+			}
+		}
+	}
 }
+

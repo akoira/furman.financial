@@ -54,7 +54,7 @@ public abstract class ATreeTablePanel extends JXPanel {
 		getTreeTable().setTreeCellRenderer(new DefaultTreeTableRenderer());
 		getTreeTable().setScrollsOnExpand(true);
 		getTreeTable().setExpandsSelectedPaths(true);
-		getTreeTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		getTreeTable().setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		getTreeTable().getColumnModel().getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		getTreeTable().setShowVerticalLines(true);
 		getTreeTable().setShowHorizontalLines(true);

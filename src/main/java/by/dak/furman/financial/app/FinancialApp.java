@@ -16,6 +16,9 @@ import by.dak.furman.financial.swing.category.action.RefreshHierarchy;
 import by.dak.furman.financial.swing.item.IItemsPanelDelegate;
 import by.dak.furman.financial.swing.item.ItemsPanel;
 import by.dak.furman.financial.swing.item.action.RefreshRootNode;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -26,6 +29,7 @@ import org.jdesktop.application.Task;
 import org.jdesktop.application.session.TableProperty;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
+import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.action.AbstractActionExt;
 
 import javax.swing.*;
@@ -117,9 +121,24 @@ public class FinancialApp extends SingleFrameApplication {
 		}
 	}
 
+	private JComponent getProgressBar() {
+		JFXPanel panel = new JFXPanel();
+
+		Group root = new Group();
+		Scene  scene  =  new  Scene(root, javafx.scene.paint.Color.ALICEBLUE);
+		panel.setScene(scene);
+
+	}
+
 	private SplitDockStation initDocking() {
 		dockController = new DockController();
 		dockController.setRootWindow(mainFrame);
+
+
+		JXStatusBar statusBar = new JXStatusBar();
+		statusBar.add();
+		mainFrame.setStatusBar(statusBar);
+
 		dockController.setTheme(new EclipseTheme());
 
 		ItemsPanel itemsPanel = getItemsPanel();

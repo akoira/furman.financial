@@ -13,6 +13,14 @@ import java.util.List;
  * Time: 1:03 PM
  */
 public class RefreshRootNode extends ACRefreshAction<RootNode, Department, DepartmentNode> {
+
+	@Override
+	protected void before() {
+		getPanel().unregisterTreeSelectionEventHandle();
+		getPanel().getTreeTable().getTreeSelectionModel().resetRowSelection();
+		super.before();
+	}
+
 	@Override
 	public List<Department> getChildValues() {
 		return getPanel().getAppConfig().getDepartmentService().getAllSortedBy(AObject.PROPERTY_name);
@@ -39,6 +47,11 @@ public class RefreshRootNode extends ACRefreshAction<RootNode, Department, Depar
 			addNewDepartment.setPanel(getPanel());
 			addNewDepartment.setNode((RootNode) addNewDepartment.getRootNode());
 			addNewDepartment.action();
+		}
+		getPanel().registerTreeSelectionEventHandle();
+
+		if (getPanel().getItemsPanel() != null) {
+			by.dak.furman.financial.swing.item.action.RefreshRootNode.valueOf(getPanel().getItemsPanel(), null).action();
 		}
 	}
 }

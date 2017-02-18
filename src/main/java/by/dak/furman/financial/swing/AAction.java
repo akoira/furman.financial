@@ -4,6 +4,7 @@ import by.dak.furman.financial.service.ICategoryService;
 import by.dak.furman.financial.service.IDepartmentService;
 import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IItemTypeService;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.swingx.JXErrorPane;
@@ -29,16 +30,31 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 	private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
 
 	public void action() {
+		if (SwingUtilities.isEventDispatchThread()) {
+			action0();
+		} else {
+			try {
+				SwingUtilities.invokeAndWait(this::action0);
+			} catch (Exception e) {
+				JXErrorPane.showDialog(panel,
+						new ErrorInfo("Unexpected Exception",
+								"Unexpected Exception",
+								ExceptionUtils.getStackTrace(e),
+								"Unexpected Exception",
+								e,
+								Level.SEVERE, Collections.EMPTY_MAP));
+			}
+		}
+
+	}
+
+	private void action0() {
 		try {
 			before();
 			if (validate()) {
 				makeAction();
 
-				Runnable runnable = new Runnable() {
-					public void run() {
-						after();
-					}
-				};
+				Runnable runnable = this::after;
 				SwingUtilities.invokeLater(runnable);
 			} else if (message != null)
 				JXErrorPane.showDialog(getPanel(),
@@ -54,13 +70,12 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 			JXErrorPane.showDialog(getPanel(),
 					new ErrorInfo("Unexpected Exception",
 							"Unexpected Exception",
-							"Unexpected Exception",
+							ExceptionUtils.getStackTrace(e),
 							"Unexpected Exception",
 							e,
 							Level.SEVERE, Collections.EMPTY_MAP));
 
 		}
-
 	}
 
 	public FTreeTableModel getModel() {
@@ -131,11 +146,9 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 
 
 	public void selectColumn(final ATreeTableNode node, final String property) {
-		Runnable runnable = new Runnable() {
-			public void run() {
-				int column = getPanel().getTreeTable().getColumnModel().getColumnIndex(property);
-				selectColumn(node, column);
-			}
+		Runnable runnable = () -> {
+			int column = getPanel().getTreeTable().getColumnModel().getColumnIndex(property);
+			selectColumn(node, column);
 		};
 		SwingUtilities.invokeLater(runnable);
 	}

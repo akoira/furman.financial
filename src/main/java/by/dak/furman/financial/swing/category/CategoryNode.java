@@ -30,4 +30,9 @@ public class CategoryNode extends ACNode<Category> {
 	public void setCategory(Category category) {
 		super.setValue(category);
 	}
+
+	@Override
+	public boolean isTransient() {
+		return getValue().getId() == null;
+	}
 }

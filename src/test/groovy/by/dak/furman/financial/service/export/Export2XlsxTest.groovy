@@ -160,9 +160,6 @@ class Processor {
         row.createCell(1).cellValue = itemType.name
 
         DecimalFormat df = new DecimalFormat('0.00')
-//        df.setMaximumFractionDigits(2)
-//        df.setMinimumFractionDigits(0)
-//        df.setGroupingUsed(false)
 
         Cell cell = row.createCell(2)
         CellStyle cellStyle = workbook.createCellStyle()

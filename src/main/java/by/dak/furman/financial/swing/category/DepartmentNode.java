@@ -41,4 +41,9 @@ public class DepartmentNode extends ACNode<Department> {
 		}
 		return node;
 	}
+
+	@Override
+	public boolean isTransient() {
+		return getValue().getId() == null;
+	}
 }

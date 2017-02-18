@@ -36,5 +36,11 @@ public class ItemNode extends AINode<Item> {
 	public void setCreated(Date created) {
 		getValue().setCreated(created);
 	}
+
+
+	@Override
+	public boolean isTransient() {
+		return getValue().getId() == null;
+	}
 }
 

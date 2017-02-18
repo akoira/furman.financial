@@ -42,4 +42,9 @@ public class ItemTypeNode extends AINode<ItemType> {
 	public void setCategory(Category category) {
 		getValue().setCategory(category);
 	}
+
+	@Override
+	public boolean isTransient() {
+		return getValue().getId() == null;
+	}
 }

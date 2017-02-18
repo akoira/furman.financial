@@ -5,10 +5,7 @@ import by.dak.furman.financial.ItemType;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.APeriodNode;
 import by.dak.furman.financial.swing.category.DepartmentNode;
-import by.dak.furman.financial.swing.item.AINode;
-import by.dak.furman.financial.swing.item.CategoryNode;
-import by.dak.furman.financial.swing.item.ItemTypeNode;
-import by.dak.furman.financial.swing.item.RootNode;
+import by.dak.furman.financial.swing.item.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,8 +26,7 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 	@Override
 	protected void before() {
 		super.before();
-		if (acNode != null)
-		{
+		if (acNode != null) {
 			getNode().setDepartment(acNode.getDepartment());
 			getNode().setCategory(acNode.getCategory());
 			getNode().setPeriod(acNode.getPeriod());
@@ -41,27 +37,25 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 
 	@Override
 	public List<AObject> getChildValues() {
+		if (acNode == null || acNode.isTransient())
+			return Collections.emptyList();
 		if (acNode instanceof DepartmentNode) {
-			if (getNode().getDepartment() != null && getNode().getDepartment().getId() != null)
-				return new ArrayList<AObject>(getCategoryService().getAllBy(getNode().getDepartment()));
+			return new ArrayList<>(getCategoryService().getAllBy(getNode().getDepartment()));
 		} else if (acNode instanceof by.dak.furman.financial.swing.category.CategoryNode) {
-			if (getNode().getCategory() != null && getNode().getCategory().getId() != null) {
-
-				ArrayList<AObject> result = new ArrayList<AObject>();
-				List<ItemType> itemTypes = getItemTypeService().getAllBy(getNode().getCategory());
-				for (ItemType itemType : itemTypes) {
-					if (!itemType.getDeleted())
+			ArrayList<AObject> result = new ArrayList<AObject>();
+			List<ItemType> itemTypes = getItemTypeService().getAllBy(getNode().getCategory());
+			for (ItemType itemType : itemTypes) {
+				if (!itemType.getDeleted())
+					result.add(itemType);
+				else {
+					BigDecimal bigDecimal = getItemService().getSumBy(getItemService().getSearchFilter(null, null, itemType, getNode().getPeriod()));
+					if (bigDecimal.compareTo(BigDecimal.ZERO) > 0)
 						result.add(itemType);
-					else {
-						BigDecimal bigDecimal = getItemService().getSumBy(getItemService().getSearchFilter(null, null, itemType, getNode().getPeriod()));
-						if (bigDecimal.compareTo(BigDecimal.ZERO) > 0)
-							result.add(itemType);
-					}
 				}
 				return result;
 			}
 		} else if (acNode instanceof APeriodNode) {
-			return new ArrayList<AObject>(getCategoryService().getAllBy(getNode().getDepartment()));
+			return new ArrayList<>(getCategoryService().getAllBy(getNode().getDepartment()));
 		}
 		return Collections.emptyList();
 
@@ -99,6 +93,7 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 	@Override
 	protected void makeAction() {
 		super.makeAction();
+
 		if (getNode().getCategory() != null && getNode().getCategory().getId() != null) {
 			reloadNode();
 
@@ -109,11 +104,23 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 		}
 	}
 
+
 	public ACNode getACNode() {
 		return acNode;
 	}
 
 	public void setACNode(ACNode acNode) {
 		this.acNode = acNode;
+	}
+
+
+	public static RefreshRootNode valueOf(ItemsPanel panel, ACNode node) {
+		RefreshRootNode refreshRootNode = new RefreshRootNode();
+		refreshRootNode.setPanel(panel);
+		refreshRootNode.setNode((by.dak.furman.financial.swing.item.RootNode) panel.getModel().getRoot());
+		if (node != null && !node.isTransient()) {
+			refreshRootNode.setACNode(node);
+		}
+		return refreshRootNode;
 	}
 }

@@ -6,13 +6,12 @@ import by.dak.furman.financial.PeriodType;
 import by.dak.furman.financial.swing.ATreeTableNode;
 import by.dak.furman.financial.swing.ATreeTablePanel;
 import by.dak.furman.financial.swing.category.action.*;
+import by.dak.furman.financial.swing.item.ItemsPanel;
 import org.jdesktop.swingx.JXTextField;
 
 import javax.swing.*;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,12 +23,13 @@ import java.util.Date;
  */
 public class CategoriesPanel extends ATreeTablePanel {
 
+	private ItemsPanel itemsPanel;
 
 	private RefreshActionFactory refreshActionFactory;
 
 	private ICategoriesPanelDelegate delegate;
 
-	private TreeSelectionListener treeSelectionListener;
+	private TreeSelectionEventHandle treeSelectionEventHandle;
 	private TreeModelListener treeModelListener;
 
 	private Action actionDelete;
@@ -61,7 +61,7 @@ public class CategoriesPanel extends ATreeTablePanel {
 		getTreeTable().setDefaultEditor(Category.class, new DefaultCellEditor(new JXTextField()));
 
 		getModel().addTreeModelListener(getTreeModelListener());
-		getTreeTable().getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionListener());
+		registerTreeSelectionEventHandle();
 	}
 
 
@@ -105,20 +105,13 @@ public class CategoriesPanel extends ATreeTablePanel {
 
 	}
 
-	private TreeSelectionListener getTreeSelectionListener() {
-		if (treeSelectionListener == null)
-			treeSelectionListener = new TreeSelectionListener() {
-				@Override
-				public void valueChanged(TreeSelectionEvent e) {
-					if (delegate != null) {
-						if (e.getNewLeadSelectionPath() != null) {
-							ACNode node = (ACNode) e.getNewLeadSelectionPath().getLastPathComponent();
-							delegate.selectNode(node);
-						}
-					}
-				}
-			};
-		return treeSelectionListener;
+	private TreeSelectionEventHandle getTreeSelectionEventHandle() {
+		if (treeSelectionEventHandle == null) {
+			treeSelectionEventHandle = new TreeSelectionEventHandle();
+			treeSelectionEventHandle.setDelegate(delegate);
+			treeSelectionEventHandle.setTreeSelectionModel(getTreeTable().getTreeSelectionModel());
+		}
+		return treeSelectionEventHandle;
 
 	}
 
@@ -176,14 +169,27 @@ public class CategoriesPanel extends ATreeTablePanel {
 		refreshData();
 	}
 
-	public void refreshData()
-	{
-		delegate.selectNode(null);
-
+	public void refreshData() {
 		RefreshRootNode refreshRootNode = new RefreshRootNode();
 		refreshRootNode.setNode((RootNode) getTreeTable().getTreeTableModel().getRoot());
 		refreshRootNode.setPanel(this);
 		refreshRootNode.action();
 	}
 
+	public void unregisterTreeSelectionEventHandle() {
+		getTreeTable().getTreeSelectionModel().removeTreeSelectionListener(getTreeSelectionEventHandle());
+	}
+
+	public void registerTreeSelectionEventHandle() {
+		getTreeTable().getTreeSelectionModel().addTreeSelectionListener(getTreeSelectionEventHandle());
+	}
+
+
+	public ItemsPanel getItemsPanel() {
+		return itemsPanel;
+	}
+
+	public void setItemsPanel(ItemsPanel itemsPanel) {
+		this.itemsPanel = itemsPanel;
+	}
 }

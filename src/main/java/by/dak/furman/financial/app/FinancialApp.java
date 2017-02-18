@@ -33,6 +33,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -121,12 +122,15 @@ public class FinancialApp extends SingleFrameApplication {
 		dockController.setRootWindow(mainFrame);
 		dockController.setTheme(new EclipseTheme());
 
+		ItemsPanel itemsPanel = getItemsPanel();
+		CategoriesPanel categoriesPanel = getCategoriesPanel();
+		categoriesPanel.setItemsPanel(itemsPanel);
 
 		SplitDockGrid splitDockGrid = new SplitDockGrid();
-		DefaultDockable dockable = new DefaultDockable(getCategoriesPanel(), getContext().getResourceMap().getString("departments.label"));
+		DefaultDockable dockable = new DefaultDockable(categoriesPanel, getContext().getResourceMap().getString("departments.label"));
 		dockable.setTitleIcon(getContext().getResourceMap().getIcon("departments.icon"));
 		splitDockGrid.addDockable(0, 0, 1, 1, dockable);
-		dockable = new DefaultDockable(getItemsPanel(), getContext().getResourceMap().getString("payments.label"));
+		dockable = new DefaultDockable(itemsPanel, getContext().getResourceMap().getString("payments.label"));
 		dockable.setTitleIcon(getContext().getResourceMap().getIcon("payments.icon"));
 		splitDockGrid.addDockable(1, 0, 3, 3, dockable);
 		SplitDockStation splitDockStation = new SplitDockStation();
@@ -154,6 +158,8 @@ public class FinancialApp extends SingleFrameApplication {
 
 		addAction(getActionExport());
 		addAction(getActionImport());
+		addSeparator();
+		addAction(getActionExportExcel());
 		addAction(getActionRefresh());
 	}
 
@@ -178,6 +184,11 @@ public class FinancialApp extends SingleFrameApplication {
 		action.setLongDescription(getContext().getResourceMap().getString(keyPrefix + "label"));
 		return action;
 	}
+
+	private Action getActionExportExcel() {
+		return createActionBy(getCategoriesPanel(), "exportData", "exportExcel.");
+	}
+
 
 	private Action getActionExport() {
 		return createActionBy(getCategoriesPanel(), "exportData", "export.");
@@ -205,6 +216,13 @@ public class FinancialApp extends SingleFrameApplication {
 		toolbarDockStation.drop(item);
 	}
 
+	private void addSeparator() {
+		ToolbarItemDockable item = new ToolbarItemDockable();
+		JSeparator separator = new JSeparator();
+		item.setComponent(separator, ExpandedState.SHRUNK);
+		toolbarDockStation.drop(item);
+	}
+
 
 	private void initDbServer() {
 		new DbServer().start();
@@ -216,7 +234,7 @@ public class FinancialApp extends SingleFrameApplication {
 		super.shutdown();
 	}
 
-	public CategoriesPanel getCategoriesPanel() {
+	private CategoriesPanel getCategoriesPanel() {
 		if (categoriesPanel == null) {
 			categoriesPanel = new CategoriesPanel();
 			categoriesPanel.setAppConfig(appConfig);
@@ -226,10 +244,20 @@ public class FinancialApp extends SingleFrameApplication {
 					RefreshRootNode refreshRootNode = new RefreshRootNode();
 					refreshRootNode.setPanel(getItemsPanel());
 					refreshRootNode.setNode((by.dak.furman.financial.swing.item.RootNode) getItemsPanel().getModel().getRoot());
-					if (node != null) {
+					if (node != null && !node.isTransient()) {
 						refreshRootNode.setACNode(node);
 					}
 					refreshRootNode.action();
+				}
+
+				@Override
+				public void selectNodes(List<ACNode> nodes) {
+					selectNode(null);
+				}
+
+				@Override
+				public void cleanSelection() {
+					selectNode(null);
 				}
 			});
 			categoriesPanel.init();
@@ -237,7 +265,7 @@ public class FinancialApp extends SingleFrameApplication {
 		return categoriesPanel;
 	}
 
-	public ItemsPanel getItemsPanel() {
+	private ItemsPanel getItemsPanel() {
 		if (itemsPanel == null) {
 			itemsPanel = new ItemsPanel();
 			itemsPanel.setAppConfig(appConfig);

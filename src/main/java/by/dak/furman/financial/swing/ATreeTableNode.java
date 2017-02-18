@@ -155,4 +155,8 @@ public abstract class ATreeTableNode<V, C extends ATreeTableNode> extends Abstra
 	public int size() {
 		return getChildCount();
 	}
+
+	public boolean isTransient() {
+		return false;
+	}
 }

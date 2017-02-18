@@ -19,6 +19,7 @@ import by.dak.furman.financial.swing.item.action.RefreshRootNode;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -46,6 +47,9 @@ public class FinancialApp extends SingleFrameApplication {
 	private static final Log LOGGER = LogFactoryImpl.getLog(FinancialApp.class);
 
 	private JXFrame mainFrame;
+	private StatusBar statusBar;
+
+
 	private AppConfig appConfig;
 	private CategoriesPanel categoriesPanel;
 	private ItemsPanel itemsPanel;
@@ -68,6 +72,10 @@ public class FinancialApp extends SingleFrameApplication {
 
 		mainFrame = new JXFrame(getContext().getResourceMap().getString("Application.title"));
 		mainFrame.setIconImage(getContext().getResourceMap().getImageIcon("Application.icon").getImage());
+
+		statusBar = StatusBar.instanceOf();
+		mainFrame.setStatusBar(statusBar.getStatusBar());
+
 		setMainFrame(mainFrame);
 
 		SplitDockStation splitDockStation = initDocking();
@@ -120,24 +128,9 @@ public class FinancialApp extends SingleFrameApplication {
 				LOGGER.debug(e.getMessage(), e);
 		}
 	}
-
-	private JComponent getProgressBar() {
-		JFXPanel panel = new JFXPanel();
-
-		Group root = new Group();
-		Scene  scene  =  new  Scene(root, javafx.scene.paint.Color.ALICEBLUE);
-		panel.setScene(scene);
-
-	}
-
 	private SplitDockStation initDocking() {
 		dockController = new DockController();
 		dockController.setRootWindow(mainFrame);
-
-
-		JXStatusBar statusBar = new JXStatusBar();
-		statusBar.add();
-		mainFrame.setStatusBar(statusBar);
 
 		dockController.setTheme(new EclipseTheme());
 
@@ -205,7 +198,7 @@ public class FinancialApp extends SingleFrameApplication {
 	}
 
 	private Action getActionExportExcel() {
-		return createActionBy(getCategoriesPanel(), "exportData", "exportExcel.");
+		return createActionBy(getCategoriesPanel(), "exportExcel", "exportExcel.");
 	}
 
 
@@ -271,7 +264,9 @@ public class FinancialApp extends SingleFrameApplication {
 
 				@Override
 				public void selectNodes(List<ACNode> nodes) {
-					selectNode(null);
+					cleanSelection();
+
+
 				}
 
 				@Override

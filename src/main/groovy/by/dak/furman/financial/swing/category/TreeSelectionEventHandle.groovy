@@ -2,6 +2,7 @@ package by.dak.furman.financial.swing.category
 
 import javax.swing.event.TreeSelectionEvent
 import javax.swing.event.TreeSelectionListener
+import javax.swing.tree.TreePath
 import javax.swing.tree.TreeSelectionModel
 
 import static by.dak.furman.financial.swing.category.Type.*
@@ -17,7 +18,7 @@ class TreeSelectionEventHandle implements TreeSelectionListener {
 
     @Override
     void valueChanged(TreeSelectionEvent e) {
-        List<ACNode> nodes = treeSelectionModel.getSelectionPaths().collect { (ACNode) it.lastPathComponent }
+        List<ACNode> nodes = TreePathUtils.convert(treeSelectionModel.getSelectionPaths())
         switch (valueOf(nodes)) {
             case single:
                 ACNode node = nodes.first()

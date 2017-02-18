@@ -46,7 +46,7 @@ class Export2XlsxTest {
         }
 
 
-        Processor processor = new Processor().with {
+        ExcelBuilder processor = new ExcelBuilder().with {
             it.workbook = new XSSFWorkbook()
             it.department = department
             it
@@ -88,103 +88,4 @@ class Export2XlsxTest {
         return result
     }
 }
-
-class Processor {
-    Department department
-
-    Workbook workbook
-    Sheet sheet
-    int rowIndex = 0
-
-    void addPeriod(Period period) {
-        String name = format(period.getStartDate(), "MM-yyyy")
-        sheet = workbook.createSheet(name)
-        Row row = sheet.createRow(rowIndex)
-
-
-        CellStyle style = workbook.createCellStyle()
-        style.fillBackgroundColor = IndexedColors.GREY_50_PERCENT.index
-        style.fillPattern = FillPatternType.BIG_SPOTS
-        style.fillForegroundColor = IndexedColors.WHITE.index
-
-        Cell cell = row.createCell(0)
-        cell.cellValue = 'Категория'
-        cell.cellStyle = style
-
-        cell = row.createCell(1)
-        cell.cellValue = 'Тип'
-        cell.cellStyle = style
-
-
-        style = workbook.createCellStyle()
-        style.fillBackgroundColor = IndexedColors.GREY_50_PERCENT.index
-        style.fillPattern = FillPatternType.BIG_SPOTS
-        style.alignment = HorizontalAlignment.RIGHT
-        style.fillForegroundColor = IndexedColors.WHITE.index
-
-        cell = row.createCell(2)
-        cell.cellValue = 'Сумма'
-        cell.cellStyle = style
-
-        rowIndex++
-    }
-
-    void addCategory(Category category) {
-        Row row = sheet.createRow(rowIndex)
-
-        CellStyle style = workbook.createCellStyle()
-        style.fillBackgroundColor = IndexedColors.GREY_25_PERCENT.index
-        style.fillPattern = FillPatternType.BIG_SPOTS
-        style.fillForegroundColor = IndexedColors.WHITE.index
-
-        Cell cell = row.createCell(0)
-        cell.cellValue = category.name
-        cell.cellStyle = style
-
-        cell = row.createCell(1)
-        cell.cellStyle = style
-        cell.cellValue = ''
-
-        cell = row.createCell(2)
-        cell.cellStyle = style
-        cell.cellValue = ''
-
-
-        rowIndex++
-    }
-
-    void addItemType(ItemType itemType, BigDecimal amount) {
-        Row row = sheet.createRow(rowIndex)
-        row.createCell(0).cellValue = ''
-
-        row.createCell(1).cellValue = itemType.name
-
-        DecimalFormat df = new DecimalFormat('0.00')
-
-        Cell cell = row.createCell(2)
-        CellStyle cellStyle = workbook.createCellStyle()
-        cellStyle.alignment = HorizontalAlignment.RIGHT
-        cell.cellStyle = cellStyle
-        cell.cellValue = df.format(amount.toDouble())
-        rowIndex++
-    }
-
-    void save() {
-        FileOutputStream fileOut = null
-        try {
-            fileOut = new FileOutputStream(String.format("%s.xlsx", department.getName()))
-            workbook.sheetIterator().each {
-                sheet.autoSizeColumn(0)
-                sheet.autoSizeColumn(1)
-                sheet.autoSizeColumn(2)
-            }
-            workbook.write(fileOut)
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e)
-        } finally {
-            closeQuietly(fileOut)
-        }
-    }
-}
-
 

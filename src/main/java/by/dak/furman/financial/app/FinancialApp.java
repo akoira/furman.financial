@@ -176,7 +176,7 @@ public class FinancialApp extends SingleFrameApplication {
 	}
 
 
-	private Action createActionBy(final Object target, final String method, String keyPrefix) {
+	private Action createActionBy(Runnable runnable, String keyPrefix) {
 
 		AbstractActionExt action = new AbstractActionExt() {
 			@Override
@@ -184,7 +184,7 @@ public class FinancialApp extends SingleFrameApplication {
 				final Task task = new Task(FinancialApp.this) {
 					@Override
 					protected Object doInBackground() throws Exception {
-						target.getClass().getMethod(method).invoke(target);
+						runnable.run();
 						return null;
 					}
 				};
@@ -200,7 +200,7 @@ public class FinancialApp extends SingleFrameApplication {
 
 	private Action getActionExportExcel() {
 		if (actionExportExcel == null) {
-			actionExportExcel = createActionBy(getCategoriesPanel(), "exportExcel", "exportExcel.");
+			actionExportExcel = createActionBy(() -> getCategoriesPanel().exportExcel(), "exportExcel.");
 		}
 		return actionExportExcel;
 	}
@@ -208,14 +208,14 @@ public class FinancialApp extends SingleFrameApplication {
 
 	private Action getActionExport() {
 		if (actionExport == null) {
-			actionExport = createActionBy(getCategoriesPanel(), "exportData", "export.");
+			actionExport = createActionBy(() -> getCategoriesPanel().exportData(), "export.");
 		}
 		return actionExport;
 	}
 
 	private Action getActionImport() {
 		if (actionImport == null) {
-			actionImport = createActionBy(getCategoriesPanel(), "importData", "import.");
+			actionImport = createActionBy(() -> getCategoriesPanel().importData(), "import.");
 			actionImport.setEnabled(true);
 		}
 		return actionImport;
@@ -223,7 +223,7 @@ public class FinancialApp extends SingleFrameApplication {
 
 	private Action getActionRefresh() {
 		if (actionRefresh == null) {
-			actionRefresh = createActionBy(getCategoriesPanel(), "refreshData", "refresh.");
+			actionRefresh = createActionBy(() -> getCategoriesPanel().refreshData(), "refresh.");
 			actionRefresh.setEnabled(true);
 		}
 		return actionRefresh;
@@ -265,7 +265,7 @@ public class FinancialApp extends SingleFrameApplication {
 			categoriesPanel = new CategoriesPanel();
 			categoriesPanel.setAppConfig(appConfig);
 			categoriesPanel.setDelegate(nodes -> {
-				ACNode node = nodes.size() != 1 ? null: nodes.get(0);
+				ACNode node = nodes.size() != 1 ? null : nodes.get(0);
 				updateActions(nodes);
 				RefreshRootNode refreshRootNode = new RefreshRootNode();
 				refreshRootNode.setPanel(getItemsPanel());
@@ -276,7 +276,12 @@ public class FinancialApp extends SingleFrameApplication {
 				refreshRootNode.action();
 
 			});
+
 			categoriesPanel.init();
+			categoriesPanel.getTreeTable().getTreeSelectionModel().addTreeSelectionListener(e -> {
+				List<ACNode> acNode = TreePathUtils.convert(categoriesPanel.getTreeTable().getTreeSelectionModel().getSelectionPaths());
+				updateActions(acNode);
+			});
 		}
 		return categoriesPanel;
 	}

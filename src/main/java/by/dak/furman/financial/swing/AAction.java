@@ -1,19 +1,15 @@
 package by.dak.furman.financial.swing;
 
+import by.dak.furman.financial.app.UIUtils;
 import by.dak.furman.financial.service.ICategoryService;
 import by.dak.furman.financial.service.IDepartmentService;
 import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IItemTypeService;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
-import java.util.Collections;
-import java.util.logging.Level;
 
 /**
  * User: akoyro
@@ -30,22 +26,7 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 	private ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(getClass());
 
 	public void action() {
-		if (SwingUtilities.isEventDispatchThread()) {
-			action0();
-		} else {
-			try {
-				SwingUtilities.invokeAndWait(this::action0);
-			} catch (Exception e) {
-				JXErrorPane.showDialog(panel,
-						new ErrorInfo("Unexpected Exception",
-								"Unexpected Exception",
-								ExceptionUtils.getStackTrace(e),
-								"Unexpected Exception",
-								e,
-								Level.SEVERE, Collections.EMPTY_MAP));
-			}
-		}
-
+		UIUtils.invokeInEventDispatch(this::action0, getPanel());
 	}
 
 	private void action0() {
@@ -57,24 +38,9 @@ public abstract class AAction<P extends ATreeTablePanel, N extends ATreeTableNod
 				Runnable runnable = this::after;
 				SwingUtilities.invokeLater(runnable);
 			} else if (message != null)
-				JXErrorPane.showDialog(getPanel(),
-						new ErrorInfo(message,
-								message,
-								message,
-								message,
-								null,
-								Level.WARNING, Collections.EMPTY_MAP));
+				UIUtils.openWarnDialog(message, getPanel());
 		} catch (Exception e) {
-			e.printStackTrace();
-
-			JXErrorPane.showDialog(getPanel(),
-					new ErrorInfo("Unexpected Exception",
-							"Unexpected Exception",
-							ExceptionUtils.getStackTrace(e),
-							"Unexpected Exception",
-							e,
-							Level.SEVERE, Collections.EMPTY_MAP));
-
+			UIUtils.openErrorDialog(e, getPanel());
 		}
 	}
 

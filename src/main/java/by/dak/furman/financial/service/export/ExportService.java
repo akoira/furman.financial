@@ -1,12 +1,9 @@
 package by.dak.furman.financial.service.export;
 
 import by.dak.furman.financial.AObject;
-import by.dak.furman.financial.Item;
 import by.dak.furman.financial.service.IItemService;
 import by.dak.furman.financial.service.IService;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import org.apache.commons.io.IOUtils;
+import by.dak.furman.financial.service.export.xml.Export2Xml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -14,11 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.UUID;
 
 
 @Service
@@ -43,41 +35,18 @@ public class ExportService implements IExportService {
 		}
 	}
 
-	private void checkUuid(AObject aObject) {
-		if (aObject.getUuid() == null) {
-			aObject.setUuid(UUID.randomUUID().toString());
-		}
-		aObject.setExported(true);
-	}
 
 	@Override
 	@Transactional
-	public void export(List<Item> items, File file) {
-		OutputStream out = null;
-		try {
-			for (Item item : items) {
-				checkUuid(item);
-				checkUuid(item.getItemType());
-				checkUuid(item.getItemType().getCategory());
-				checkUuid(item.getItemType().getCategory().getDepartment());
-				itemService.save(item);
-			}
-			out = new FileOutputStream(file);
+	public File export(ExportRequest request) {
+		Export2Xml export2Xml = new Export2Xml();
+		export2Xml.setItemService(itemService);
 
-			DomDriver domDriver = new DomDriver("UTF-8");
-			XStream xStream = new XStream(domDriver);
-			xStream.toXML(items, out);
-			if (delete) {
-				for (Item item : items) {
-					itemService.delete(item);
-				}
-			}
-
-		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException(e);
-		} finally {
-			IOUtils.closeQuietly(out);
+		export2Xml.export(request);
+		if (delete) {
+			export2Xml.deleteAll();
 		}
+		return export2Xml.getFile();
 	}
 
 	public boolean isDelete() {

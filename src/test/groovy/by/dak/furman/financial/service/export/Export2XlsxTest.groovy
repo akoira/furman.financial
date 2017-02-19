@@ -1,24 +1,18 @@
 package by.dak.furman.financial.service.export
 
 import by.dak.common.persistence.SearchFilter
-import by.dak.furman.financial.Category
 import by.dak.furman.financial.Department
-import by.dak.furman.financial.ItemType
 import by.dak.furman.financial.Period
 import by.dak.furman.financial.app.AppConfig
 import by.dak.furman.financial.app.FinancialApp
+import by.dak.furman.financial.service.export.excel.ExcelBuilder
 import org.apache.commons.lang3.time.DateUtils
-import org.apache.poi.ss.usermodel.*
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Test
-
-import java.text.DecimalFormat
 
 import static by.dak.furman.financial.PeriodType.MONTH
 import static java.util.Calendar.DAY_OF_MONTH
 import static java.util.Calendar.YEAR
-import static org.apache.commons.io.IOUtils.closeQuietly
-import static org.apache.commons.lang3.time.DateFormatUtils.format
 import static org.apache.commons.lang3.time.DateUtils.parseDate
 
 /**

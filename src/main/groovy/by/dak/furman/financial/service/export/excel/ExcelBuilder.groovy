@@ -1,4 +1,4 @@
-package by.dak.furman.financial.service.export
+package by.dak.furman.financial.service.export.excel
 
 import by.dak.furman.financial.Category
 import by.dak.furman.financial.Department

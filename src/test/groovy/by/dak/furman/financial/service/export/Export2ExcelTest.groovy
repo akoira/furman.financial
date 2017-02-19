@@ -16,7 +16,7 @@ class Export2ExcelTest {
         DepartmentNode departmentNode
         ICategoryService categoryService
 
-        Export2ExcelRequest request = new Export2ExcelRequest()
+        ExportRequest request = new ExportRequest()
         request.department = departmentNode.department
         request.periods = {
             List<Period> periods = new LinkedList<>()

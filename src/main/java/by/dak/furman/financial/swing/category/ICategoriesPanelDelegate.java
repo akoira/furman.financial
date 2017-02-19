@@ -8,9 +8,5 @@ import java.util.List;
  * Time: 5:26 PM
  */
 public interface ICategoriesPanelDelegate {
-	void selectNode(ACNode node);
-
-	void selectNodes(List<ACNode> nodes);
-
-	void cleanSelection();
+	void refreshSelection(List<ACNode> nodes);
 }

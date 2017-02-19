@@ -9,17 +9,13 @@ import bibliothek.gui.dock.ToolbarDockStation;
 import bibliothek.gui.dock.ToolbarItemDockable;
 import bibliothek.gui.dock.station.split.SplitDockGrid;
 import bibliothek.gui.dock.toolbar.expand.ExpandedState;
+import by.dak.furman.financial.service.export.ExportRequest;
 import by.dak.furman.financial.swing.category.ACNode;
 import by.dak.furman.financial.swing.category.CategoriesPanel;
-import by.dak.furman.financial.swing.category.ICategoriesPanelDelegate;
+import by.dak.furman.financial.swing.category.TreePathUtils;
 import by.dak.furman.financial.swing.category.action.RefreshHierarchy;
-import by.dak.furman.financial.swing.item.IItemsPanelDelegate;
 import by.dak.furman.financial.swing.item.ItemsPanel;
 import by.dak.furman.financial.swing.item.action.RefreshRootNode;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
@@ -30,7 +26,6 @@ import org.jdesktop.application.Task;
 import org.jdesktop.application.session.TableProperty;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
-import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.action.AbstractActionExt;
 
 import javax.swing.*;
@@ -49,6 +44,10 @@ public class FinancialApp extends SingleFrameApplication {
 	private JXFrame mainFrame;
 	private StatusBar statusBar;
 
+	private Action actionExportExcel;
+	private Action actionExport;
+	private Action actionImport;
+	private Action actionRefresh;
 
 	private AppConfig appConfig;
 	private CategoriesPanel categoriesPanel;
@@ -128,6 +127,7 @@ public class FinancialApp extends SingleFrameApplication {
 				LOGGER.debug(e.getMessage(), e);
 		}
 	}
+
 	private SplitDockStation initDocking() {
 		dockController = new DockController();
 		dockController.setRootWindow(mainFrame);
@@ -194,25 +194,39 @@ public class FinancialApp extends SingleFrameApplication {
 		action.setLargeIcon(getContext().getResourceMap().getIcon(keyPrefix + "icon"));
 		action.setSmallIcon(getContext().getResourceMap().getIcon(keyPrefix + "icon"));
 		action.setLongDescription(getContext().getResourceMap().getString(keyPrefix + "label"));
+		action.setEnabled(false);
 		return action;
 	}
 
 	private Action getActionExportExcel() {
-		return createActionBy(getCategoriesPanel(), "exportExcel", "exportExcel.");
+		if (actionExportExcel == null) {
+			actionExportExcel = createActionBy(getCategoriesPanel(), "exportExcel", "exportExcel.");
+		}
+		return actionExportExcel;
 	}
 
 
 	private Action getActionExport() {
-		return createActionBy(getCategoriesPanel(), "exportData", "export.");
+		if (actionExport == null) {
+			actionExport = createActionBy(getCategoriesPanel(), "exportData", "export.");
+		}
+		return actionExport;
 	}
 
 	private Action getActionImport() {
-
-		return createActionBy(getCategoriesPanel(), "importData", "import.");
+		if (actionImport == null) {
+			actionImport = createActionBy(getCategoriesPanel(), "importData", "import.");
+			actionImport.setEnabled(true);
+		}
+		return actionImport;
 	}
 
 	private Action getActionRefresh() {
-		return createActionBy(getCategoriesPanel(), "refreshData", "refresh.");
+		if (actionRefresh == null) {
+			actionRefresh = createActionBy(getCategoriesPanel(), "refreshData", "refresh.");
+			actionRefresh.setEnabled(true);
+		}
+		return actionRefresh;
 	}
 
 
@@ -250,47 +264,41 @@ public class FinancialApp extends SingleFrameApplication {
 		if (categoriesPanel == null) {
 			categoriesPanel = new CategoriesPanel();
 			categoriesPanel.setAppConfig(appConfig);
-			categoriesPanel.setDelegate(new ICategoriesPanelDelegate() {
-				@Override
-				public void selectNode(ACNode node) {
-					RefreshRootNode refreshRootNode = new RefreshRootNode();
-					refreshRootNode.setPanel(getItemsPanel());
-					refreshRootNode.setNode((by.dak.furman.financial.swing.item.RootNode) getItemsPanel().getModel().getRoot());
-					if (node != null && !node.isTransient()) {
-						refreshRootNode.setACNode(node);
-					}
-					refreshRootNode.action();
+			categoriesPanel.setDelegate(nodes -> {
+				ACNode node = nodes.size() != 1 ? null: nodes.get(0);
+				updateActions(nodes);
+				RefreshRootNode refreshRootNode = new RefreshRootNode();
+				refreshRootNode.setPanel(getItemsPanel());
+				refreshRootNode.setNode((by.dak.furman.financial.swing.item.RootNode) getItemsPanel().getModel().getRoot());
+				if (node != null && !node.isTransient()) {
+					refreshRootNode.setACNode(node);
 				}
+				refreshRootNode.action();
 
-				@Override
-				public void selectNodes(List<ACNode> nodes) {
-					cleanSelection();
-
-
-				}
-
-				@Override
-				public void cleanSelection() {
-					selectNode(null);
-				}
 			});
 			categoriesPanel.init();
 		}
 		return categoriesPanel;
 	}
 
+	private void updateActions(List<ACNode> nodes) {
+		actionRefresh.setEnabled(true);
+		actionImport.setEnabled(true);
+
+		ExportRequest exportRequest = TreePathUtils.buildRequest(nodes);
+		getActionExport().setEnabled(exportRequest.isValid());
+		getActionExportExcel().setEnabled(exportRequest.isValid());
+	}
+
 	private ItemsPanel getItemsPanel() {
 		if (itemsPanel == null) {
 			itemsPanel = new ItemsPanel();
 			itemsPanel.setAppConfig(appConfig);
-			itemsPanel.setDelegate(new IItemsPanelDelegate() {
-				@Override
-				public void refreshACNode(ACNode acNode) {
-					RefreshHierarchy action = new RefreshHierarchy();
-					action.setPanel(getCategoriesPanel());
-					action.setNode(acNode);
-					action.action();
-				}
+			itemsPanel.setDelegate(acNode -> {
+				RefreshHierarchy action = new RefreshHierarchy();
+				action.setPanel(getCategoriesPanel());
+				action.setNode(acNode);
+				action.action();
 			});
 			itemsPanel.init();
 		}

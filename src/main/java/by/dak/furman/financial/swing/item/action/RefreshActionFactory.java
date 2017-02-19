@@ -19,7 +19,7 @@ public class RefreshActionFactory {
 		else if (node instanceof CategoryNode)
 			action = new RefreshCategoryNode();
 		else if (node instanceof RootNode)
-			action = new RefreshRootNode();
+			action = RefreshRootNode.valueOf(panel, null);
 		else
 			throw new IllegalArgumentException();
 		action.setNode(node);

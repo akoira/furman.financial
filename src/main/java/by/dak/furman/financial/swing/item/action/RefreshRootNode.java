@@ -22,6 +22,9 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 	//can be null
 	private ACNode acNode;
 
+	private RefreshRootNode() {
+
+	}
 
 	@Override
 	protected void before() {
@@ -52,8 +55,8 @@ public class RefreshRootNode extends AIRefreshAction<RootNode, AObject, AINode> 
 					if (bigDecimal.compareTo(BigDecimal.ZERO) > 0)
 						result.add(itemType);
 				}
-				return result;
 			}
+			return result;
 		} else if (acNode instanceof APeriodNode) {
 			return new ArrayList<>(getCategoryService().getAllBy(getNode().getDepartment()));
 		}

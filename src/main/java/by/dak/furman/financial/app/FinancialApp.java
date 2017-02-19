@@ -265,16 +265,9 @@ public class FinancialApp extends SingleFrameApplication {
 			categoriesPanel = new CategoriesPanel();
 			categoriesPanel.setAppConfig(appConfig);
 			categoriesPanel.setDelegate(nodes -> {
-				ACNode node = nodes.size() != 1 ? null : nodes.get(0);
+				ACNode node = nodes.size() == 1 && !nodes.get(0).isTransient() ? nodes.get(0) : null;
 				updateActions(nodes);
-				RefreshRootNode refreshRootNode = new RefreshRootNode();
-				refreshRootNode.setPanel(getItemsPanel());
-				refreshRootNode.setNode((by.dak.furman.financial.swing.item.RootNode) getItemsPanel().getModel().getRoot());
-				if (node != null && !node.isTransient()) {
-					refreshRootNode.setACNode(node);
-				}
-				refreshRootNode.action();
-
+				RefreshRootNode.valueOf(getItemsPanel(), node).action();
 			});
 
 			categoriesPanel.init();

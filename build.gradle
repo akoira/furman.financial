@@ -60,10 +60,20 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDir 'src/main/java'
+
+sourceSets.test.java.srcDirs = []
+sourceSets.test.groovy.srcDir 'src/test/java'
+
+
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
 mainClassName = "by.dak.furman.financial.app.FinancialApp"
+
+
+
 
 
 

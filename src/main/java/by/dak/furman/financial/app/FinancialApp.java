@@ -72,8 +72,8 @@ public class FinancialApp extends SingleFrameApplication {
 		mainFrame = new JXFrame(getContext().getResourceMap().getString("Application.title"));
 		mainFrame.setIconImage(getContext().getResourceMap().getImageIcon("Application.icon").getImage());
 
-		statusBar = StatusBar.instanceOf();
-		mainFrame.setStatusBar(statusBar.getStatusBar());
+//		statusBar = StatusBar.instanceOf();
+//		mainFrame.setStatusBar(statusBar.getStatusBar());
 
 		setMainFrame(mainFrame);
 

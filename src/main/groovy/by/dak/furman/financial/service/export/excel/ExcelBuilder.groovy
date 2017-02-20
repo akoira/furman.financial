@@ -4,13 +4,13 @@ import by.dak.furman.financial.Category
 import by.dak.furman.financial.Department
 import by.dak.furman.financial.ItemType
 import by.dak.furman.financial.Period
+import org.apache.poi.hssf.usermodel.HSSFDataFormat
 import org.apache.poi.ss.usermodel.*
 
 import java.text.DecimalFormat
 
 import static org.apache.commons.io.IOUtils.closeQuietly
 import static org.apache.commons.lang3.time.DateFormatUtils.format
-
 
 class ExcelBuilder {
 
@@ -87,9 +87,10 @@ class ExcelBuilder {
 
         Cell cell = row.createCell(2)
         CellStyle cellStyle = workbook.createCellStyle()
+        cellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat('#,##0.00'))
         cellStyle.alignment = HorizontalAlignment.RIGHT
         cell.cellStyle = cellStyle
-        cell.cellValue = df.format(amount.toDouble())
+        cell.cellValue = amount.toDouble()
         rowIndex++
     }
 
